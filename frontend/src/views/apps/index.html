@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ConvoAI - Intelligent Customer Support Chatbots</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.global.prod.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .chat-message {
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .gradient-bg {
+      background: linear-gradient(90deg, #4F46E5 0%, #7C3AED 100%);
+    }
+
+    .chat-container {
+      height: 300px;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50">
+  <div id="app"></div>
+
+  <script>
+    const { createApp, ref, reactive, computed, onMounted } = Vue;
+
+    const ChatDemo = {
+      setup() {
+        const messages = ref([
+          { id: 1, type: 'user', text: 'Hello! I have a question about my recent order #12345.' },
+          { id: 2, type: 'bot', text: 'Hi there! I\'d be happy to help with your order #12345. It was shipped yesterday and should arrive by Thursday. Is there anything specific you\'d like to know?' },
+          { id: 3, type: 'user', text: 'Can I change the shipping address?' }
+        ]);
+
+        const userInput = ref('');
+        const isTyping = ref(false);
+
+        const sendMessage = () => {
+          if (!userInput.value.trim()) return;
+
+          // Add user message
+          messages.value.push({
+            id: messages.value.length + 1,
+            type: 'user',
+            text: userInput.value
+          });
+
+          userInput.value = '';
+
+          // Simulate AI response
+          isTyping.value = true;
+          setTimeout(() => {
+            isTyping.value = false;
+            messages.value.push({
+              id: messages.value.length + 1,
+              type: 'bot',
+              text: 'I\'ve updated your shipping address for order #12345. The changes have been applied successfully. Your package will now be delivered to the new address. Is there anything else you need help with?'
+            });
+          }, 1500);
+        };
+
+        return {
+          messages,
+          userInput,
+          isTyping,
+          sendMessage
+        };
+      },
+      template: `
+        <div class="bg-white rounded-lg shadow-md p-4">
+          <div class="flex items-center mb-3">
+            <div class="h-10 w-10 rounded-full gradient-bg flex items-center justify-center text-white">
+              <i class="fas fa-robot"></i>
+            </div>
+            <div class="ml-3">
+              <div class="font-medium">ConvoAI Assistant</div>
+              <div class="text-sm text-green-500">Online</div>
+            </div>
+          </div>
+          
+          <div class="chat-container overflow-y-auto mb-4 p-2">
+            <div v-for="message in messages" :key="message.id" class="chat-message mb-3">
+              <div :class="message.type === 'user' ? 'flex justify-end' : 'flex'">
+                <div :class="message.type === 'user' ? 'bg-indigo-100 rounded-lg p-3 max-w-xs' : 'bg-gray-100 rounded-lg p-3 max-w-xs'">
+                  {{ message.text }}
+                </div>
+              </div>
+            </div>
+            <div v-if="isTyping" class="flex items-center text-gray-500 text-sm">
+              <div class="bg-gray-100 rounded-lg p-3">
+                <div class="flex space-x-1">
+                  <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                  <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                  <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex">
+            <input 
+              v-model="userInput" 
+              @keyup.enter="sendMessage"
+              class="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="Type your message..."
+            />
+            <button 
+              @click="sendMessage"
+              class="gradient-bg text-white px-4 py-2 rounded-r-lg hover:opacity-90 transition"
+            >
+              <i class="fas fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+      `
+    };
+
+    const App = {
+      components: {
+        ChatDemo
+      },
+      setup() {
+        const features = reactive([
+          {
+            icon: 'fa-comments',
+            title: 'Real-time Customer Engagement',
+            description: 'Provide instant responses to customer inquiries 24/7, enhancing satisfaction and reducing wait times.'
+          },
+          {
+            icon: 'fa-chart-line',
+            title: 'Order & Payment Status Updates',
+            description: 'Allow customers to track orders and verify payment status in real-time without waiting for support staff.'
+          },
+          {
+            icon: 'fa-box-open',
+            title: 'Product Information',
+            description: 'Instantly deliver accurate product details, availability, and specifications to interested customers.'
+          },
+          {
+            icon: 'fa-brain',
+            title: 'AI-Powered Intelligence',
+            description: 'Our advanced AI learns from each interaction to provide increasingly personalized responses.'
+          }
+        ]);
+
+        const stats = reactive([
+          { value: '85%', label: 'Reduction in Support Costs' },
+          { value: '24/7', label: 'Customer Support' },
+          { value: '95%', label: 'Customer Satisfaction' },
+          { value: '3 min', label: 'Average Integration Time' }
+        ]);
+
+        const testimonials = reactive([
+          {
+            quote: "Implementing ConvoAI increased our conversion rate by 35% and drastically reduced our customer service workload.",
+            author: "Sarah Johnson",
+            company: "E-commerce Director, FashionRetail"
+          },
+          {
+            quote: "Our customers love getting instant answers about their orders. Support tickets dropped by 65% in the first month.",
+            author: "Michael Chen",
+            company: "CTO, TechGadgets Inc."
+          }
+        ]);
+
+        const currentTestimonial = ref(0);
+
+        const rotateTestimonials = () => {
+          currentTestimonial.value = (currentTestimonial.value + 1) % testimonials.length;
+        };
+
+        onMounted(() => {
+          setInterval(rotateTestimonials, 8000);
+        });
+
+        return {
+          features,
+          stats,
+          testimonials,
+          currentTestimonial
+        };
+      },
+      template: `
+        <div>
+          <!-- Hero Section -->
+          <header class="gradient-bg text-white">
+            <div class="container mx-auto px-4 py-16 md:py-32">
+              <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                  <h1 class="text-4xl md:text-5xl font-bold mb-6">Transform Customer Support with AI-Powered Chat</h1>
+                  <p class="text-xl mb-8">Real-time answers for orders, payments, and product information. Enhance customer experience while reducing support costs.</p>
+                  <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                    <button class="bg-white text-indigo-700 py-3 px-8 rounded-lg font-semibold hover:bg-opacity-90 transition">Get Started</button>
+                    <button class="border-2 border-white py-3 px-8 rounded-lg font-semibold hover:bg-white hover:bg-opacity-10 transition">Watch Demo</button>
+                  </div>
+                </div>
+                <div class="md:w-1/2 md:pl-12">
+                  <div class="bg-white p-4 rounded-lg shadow-lg">
+                    <ChatDemo />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </header>
+          
+          <!-- Stats Section -->
+          <section class="py-12 bg-white">
+            <div class="container mx-auto px-4">
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div v-for="(stat, index) in stats" :key="index" class="p-6">
+                  <div class="text-3xl md:text-4xl font-bold text-indigo-600 mb-2">{{ stat.value }}</div>
+                  <div class="text-gray-500">{{ stat.label }}</div>
+                </div>
+              </div>
+            </div>
+          </section>
+          
+          <!-- Features Section -->
+          <section class="py-16 bg-gray-50">
+            <div class="container mx-auto px-4">
+              <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4">Power Up Your Customer Support</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Our AI chatbot integrates seamlessly with your existing systems to provide real-time information and support.</p>
+              </div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div v-for="(feature, index) in features" :key="index" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition">
+                  <div class="w-12 h-12 gradient-bg rounded-full flex items-center justify-center text-white mb-4">
+                    <i :class="'fas ' + feature.icon"></i>
+                  </div>
+                  <h3 class="text-xl font-semibold mb-3">{{ feature.title }}</h3>
+                  <p class="text-gray-600">{{ feature.description }}</p>
+                </div>
+              </div>
+            </div>
+          </section>
+          
+          <!-- How It Works -->
+          <section class="py-16 bg-white">
+            <div class="container mx-auto px-4">
+              <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4">How It Works</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Simple integration, powerful results. Get up and running in minutes.</p>
+              </div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center p-6">
+                  <div class="w-16 h-16 gradient-bg rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-4">1</div>
+                  <h3 class="text-xl font-semibold mb-3">Connect Your Data</h3>
+                  <p class="text-gray-600">Integrate with your existing CRM, e-commerce platform, and knowledge base.</p>
+                </div>
+                
+                <div class="text-center p-6">
+                  <div class="w-16 h-16 gradient-bg rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-4">2</div>
+                  <h3 class="text-xl font-semibold mb-3">Customize Your Bot</h3>
+                  <p class="text-gray-600">Tailor responses, branding, and conversation flows to match your business needs.</p>
+                </div>
+                
+                <div class="text-center p-6">
+                  <div class="w-16 h-16 gradient-bg rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-4">3</div>
+                  <h3 class="text-xl font-semibold mb-3">Go Live</h3>
+                  <p class="text-gray-600">Deploy on your website, mobile app, or social media channels with a single click.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+          
+          <!-- Testimonials -->
+          <section class="py-16 bg-gray-50">
+            <div class="container mx-auto px-4">
+              <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">What Our Clients Say</h2>
+              </div>
+              
+              <div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-md">
+                <div class="testimonial-slider">
+                  <div v-for="(testimonial, index) in testimonials" :key="index" v-show="index === currentTestimonial" class="transition-opacity duration-500">
+                    <p class="text-xl italic mb-6">"{{ testimonial.quote }}"</p>
+                    <div class="flex items-center">
+                      <div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-500">
+                        <i class="fas fa-user"></i>
+                      </div>
+                      <div class="ml-4">
+                        <div class="font-semibold">{{ testimonial.author }}</div>
+                        <div class="text-gray-600 text-sm">{{ testimonial.company }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          
+          <!-- CTA Section -->
+          <section class="py-16 gradient-bg text-white">
+            <div class="container mx-auto px-4 text-center">
+              <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Transform Your Customer Support?</h2>
+              <p class="text-xl mb-8 max-w-2xl mx-auto">Join hundreds of businesses already using ConvoAI to improve customer satisfaction and reduce support costs.</p>
+              <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <button class="bg-white text-indigo-700 py-3 px-8 rounded-lg font-semibold hover:bg-opacity-90 transition">Start Free Trial</button>
+                <button class="border-2 border-white py-3 px-8 rounded-lg font-semibold hover:bg-white hover:bg-opacity-10 transition">Schedule Demo</button>
+              </div>
+            </div>
+          </section>
+          
+          <!-- Footer -->
+          <footer class="bg-gray-800 text-white py-12">
+            <div class="container mx-auto px-4">
+              <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                  <h3 class="text-xl font-bold mb-4">ConvoAI</h3>
+                  <p class="text-gray-400">Intelligent AI chatbots for modern customer support.</p>
+                </div>
+                
+                <div>
+                  <h4 class="font-semibold mb-4">Product</h4>
+                  <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white transition">Features</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition">Pricing</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition">Integrations</a></li>
+                  </ul>
+                </div>
+                
+                <div>
+                  <h4 class="font-semibold mb-4">Resources</h4>
+                  <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white transition">Documentation</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition">Blog</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition">Support</a></li>
+                  </ul>
+                </div>
+                
+                <div>
+                  <h4 class="font-semibold mb-4">Company</h4>
+                  <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white transition">About</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition">Careers</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition">Contact</a></li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="border-t border-gray-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <div class="text-gray-400 mb-4 md:mb-0">© 2025 ConvoAI. All rights reserved.</div>
+                <div class="flex space-x-4">
+                  <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter"></i></a>
+                  <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-linkedin"></i></a>
+                  <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook"></i></a>
+                </div>
+              </div>
+            </div>
+          </footer>
+        </div>
+      `
+    };
+
+    const app = createApp(App);
+    app.mount('#app');
+  </script>
+  <script src="http://localhost:8080/embed.js" data-id="8279e726-33fe-481b-807c-fe097c1a0b0f"
+     data-width="400px" data-height="550px">
+    </script>
+
+</body>
+
+</html>
