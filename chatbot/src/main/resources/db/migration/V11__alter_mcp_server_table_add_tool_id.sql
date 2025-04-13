@@ -1,0 +1,1 @@
+ALTER TABLE mcp_servers ADD COLUMN tool_id UUID NOT NULL;

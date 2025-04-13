@@ -1,0 +1,1 @@
+import{af as v,N as e}from"./index-B-4Jq8Ft.js";const b=v("snackbar",()=>{const a=e(!1),o=e(""),s=e(""),n=e("info"),t=e(3e3);function c(u,f="info",l=3e3,i="Success"){o.value=u,n.value=f,t.value=l,s.value=i,a.value=!0}function r(){a.value=!1}return{show:a,message:o,color:n,timeout:t,header:s,showSnackbar:c,hideSnackbar:r}});export{b as u};
