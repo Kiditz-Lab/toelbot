@@ -1,0 +1,108 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.4.4'
+	id 'io.spring.dependency-management' version '1.1.7'
+//	id 'org.graalvm.buildtools.native' version '0.10.6'
+	id 'idea'
+
+}
+
+group = 'com.toelbox'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenLocal()
+	mavenCentral()
+}
+
+ext {
+	set('springAiVersion', "1.0.0-M6")
+	set('springModulithVersion', "1.3.3")
+	set('querydslVersion', '5.1.0')
+
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-authorization-server'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.flywaydb:flyway-core'
+	implementation 'org.flywaydb:flyway-database-postgresql'
+	implementation 'org.jsoup:jsoup:1.19.1'
+	implementation 'org.apache.commons:commons-text:1.13.0'
+	implementation 'org.springframework.boot:spring-boot-starter-batch'
+	implementation 'org.springframework.modulith:spring-modulith-starter-core'
+	implementation 'org.springframework.modulith:spring-modulith-starter-jdbc'
+	implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter'
+	implementation 'org.springframework.ai:spring-ai-pgvector-store-spring-boot-starter'
+	implementation 'org.springframework.ai:spring-ai-mcp-client-webflux-spring-boot-starter'
+//	implementation 'org.springframework.ai:spring-ai-mistral-ai-spring-boot-starter'
+	implementation 'com.vladsch.flexmark:flexmark-html2md-converter:0.50.42'
+	implementation 'commons-codec:commons-codec'
+	// Integration
+	implementation 'org.springframework.boot:spring-boot-starter-integration'
+	implementation 'org.springframework.integration:spring-integration-file'
+	implementation 'org.springframework.ai:spring-ai-tika-document-reader'
+	implementation 'org.springframework.ai:spring-ai-pdf-document-reader'
+	implementation 'org.springframework.ai:spring-ai-markdown-document-reader'
+
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
+	runtimeOnly 'org.postgresql:postgresql'
+
+	implementation "com.querydsl:querydsl-core:${querydslVersion}"
+//	implementation "com.querydsl:querydsl-apt:${querydslVersion}"
+	implementation "com.querydsl:querydsl-sql-spring:${querydslVersion}"
+	implementation "com.github.ben-manes.caffeine:caffeine"
+//	annotationProcessor "com.querydsl:querydsl-apt:${querydslVersion}:general"
+//	annotationProcessor "jakarta.annotation:jakarta.annotation-api:2.1.1"
+
+
+	implementation "io.netty:netty-resolver-dns-native-macos:4.1.100.Final:osx-aarch_64"
+
+	developmentOnly 'org.springframework.ai:spring-ai-spring-boot-docker-compose'
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.modulith:spring-modulith-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+
+
+//sourceSets {
+//	main {
+//		java {
+//			srcDirs += "$buildDir/generated/sources/annotationProcessor/java/main"
+//		}
+//	}
+//}
+
+
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.ai:spring-ai-bom:${springAiVersion}"
+		mavenBom "org.springframework.modulith:spring-modulith-bom:${springModulithVersion}"
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

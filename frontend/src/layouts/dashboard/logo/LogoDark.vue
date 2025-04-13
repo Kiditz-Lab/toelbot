@@ -2,10 +2,11 @@
   <div class="logo">
     <RouterLink to="/agents" aria-label="logo" class="text-decoration-none text-black">
       <div class="d-flex align-center">
-        <v-avatar color="indigo" class="mr-3 ml-0">
-          <v-icon color="white" :icon="mdiRobot"></v-icon>
+        <v-avatar color="white" class="mr-3 ml-0">
+          
+          <img src="@/assets/logo.svg" width="42px" height="42px" class="mx-3" />
         </v-avatar>
-        <v-toolbar-title class="font-weight-bold">Toelbot AI</v-toolbar-title>
+        <v-toolbar-title class="font-weight-bold">Toelbot</v-toolbar-title>
       </div>
       <!-- <svg width="150" height="48" viewBox="0 0 148 48" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M33.0036 22.5455C32.3345 16.48 27.52 11.6655 21.4545 10.9964V8H18.5455V10.9964C12.48 11.6655 7.66545 16.48 6.99636 22.5455H4V25.4545H6.99636C7.66545 31.52 12.48 36.3345 18.5455 37.0036V40H21.4545V37.0036C27.52 36.3345 32.3345 31.52 33.0036 25.4545H36V22.5455H33.0036ZM20 34.1818C14.3709 34.1818 9.81818 29.6291 9.81818 24C9.81818 18.3709 14.3709 13.8182 20 13.8182C25.6291 13.8182 30.1818 18.3709 30.1818 24C30.1818 29.6291 25.6291 34.1818 20 34.1818Z" fill="#2759CD"/>

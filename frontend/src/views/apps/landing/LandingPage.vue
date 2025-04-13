@@ -1,18 +1,26 @@
 <script setup>
 import { ref } from 'vue';
+import ToolScroll from './ToolScroll.vue';
 import {
   mdiRobot,
   mdiSend,
-  mdiChatProcessing,
-  mdiChartLine,
-  mdiPackageVariantClosed,
-  mdiBrain,
   mdiAccount,
   mdiTwitter,
   mdiLinkedin,
   mdiFacebook,
-  mdiCheckCircle
+  mdiCheckCircle,
+  mdiPuzzle,
+  mdiOfficeBuildingCog,
+  mdiChat,
+  mdiLightningBolt,
+  mdiTimerSand,
+  mdiWeb,
+  mdiWhatsapp,
+  mdiFacebookMessenger,
+  mdiSlack,
+  mdiInstagram
 } from '@mdi/js';
+
 // Drawer & UI state
 const drawer = ref(false);
 const userInput = ref('');
@@ -20,44 +28,85 @@ const isTyping = ref(false);
 
 // Messages
 const messages = ref([
-  { id: 1, type: 'user', text: 'Hello! I have a question about my recent order #12345.' },
+  { id: 1, type: 'user', text: 'What’s the status of order #123?' },
   {
     id: 2,
     type: 'bot',
-    text: "Hi there! I'd be happy to help with your order #12345. It was shipped yesterday and should arrive by Thursday. Is there anything specific you'd like to know?"
+    text: 'It’s been shipped — here’s the tracking.'
   },
-  { id: 3, type: 'user', text: 'Can I change the shipping address?' }
+  {
+    id: 3,
+    type: 'user',
+    text: 'Create a new product called Chill T-shirt, $29'
+  },
+  {
+    id: 4,
+    type: 'bot',
+    text: 'Product added successfully.'
+  },
+  {
+    id: 5,
+    type: 'user',
+    text: 'Send that to my slack channel.'
+  },
+  {
+    id: 6,
+    type: 'bot',
+    text: 'Done.'
+  }
 ]);
 
 // Stats
 const stats = ref([
-  { value: '85%', label: 'Reduction in Support Costs' },
-  { value: '24/7', label: 'Customer Support' },
-  { value: '95%', label: 'Customer Satisfaction' },
-  { value: '3 min', label: 'Average Integration Time' }
+  {
+    value: '95%',
+    label: 'Lower support costs with automated conversations'
+  },
+  {
+    value: '24/7',
+    label: 'Always-on AI for global customer support'
+  },
+  {
+    value: '95%',
+    label: 'Satisfaction rate across sales and support interactions'
+  },
+  {
+    value: '3 min',
+    label: 'To plug and play with your favorite tools'
+  }
 ]);
 
 // Features
 const features = ref([
   {
-    icon: mdiChatProcessing,
-    title: 'Real-time Customer Engagement',
-    description: 'Provide instant responses to customer inquiries 24/7, enhancing satisfaction and reducing wait times.'
+    icon: mdiRobot,
+    title: 'Smart Conversations That Get Things Done',
+    description: 'Ask about orders, create products, or send updates — Toelbot understands and acts instantly.'
   },
   {
-    icon: mdiChartLine,
-    title: 'Order & Payment Status Updates',
-    description: 'Allow customers to track orders and verify payment status in real-time without waiting for support staff.'
+    icon: mdiPuzzle,
+    title: 'Plug-and-Play Tool Integrations',
+    description: 'Connect Slack, WhatsApp, Odoo, Gmail, Figma and more — no technical setup needed.'
   },
   {
-    icon: mdiPackageVariantClosed,
-    title: 'Product Information',
-    description: 'Instantly deliver accurate product details, availability, and specifications to interested customers.'
+    icon: mdiOfficeBuildingCog,
+    title: 'One Chatbot, All Departments',
+    description: 'From customer support to inventory and invoicing — Toelbot automates everything.'
   },
   {
-    icon: mdiBrain,
-    title: 'AI-Powered Intelligence',
-    description: 'Our advanced AI learns from each interaction to provide increasingly personalized responses.'
+    icon: mdiChat,
+    title: 'Actions Across Channels',
+    description: 'Chat with customers on WhatsApp, IG DMs, Facebook, or Slack — Toelbot works everywhere.'
+  },
+  {
+    icon: mdiLightningBolt,
+    title: 'Natural Commands, Real Automation',
+    description: 'Just type what you need — no workflows, forms, or extra steps.'
+  },
+  {
+    icon: mdiTimerSand,
+    title: 'Fast Setup, Powerful Automation',
+    description: 'Get started in under 3 minutes and let Toelbot do the heavy lifting for your business.'
   }
 ]);
 
@@ -65,7 +114,7 @@ const features = ref([
 const steps = ref([
   {
     title: 'Connect Your Data',
-    description: 'Integrate with your existing CRM, e-commerce platform, and knowledge base in minutes.'
+    description: 'Add any Website, DOCX,TXT, PDF,CSV files, or even YouTube videos securely into your chatbot in minutes.'
   },
   {
     title: 'Customize Your Bot',
@@ -80,7 +129,7 @@ const steps = ref([
 // Testimonials
 const testimonials = ref([
   {
-    quote: 'Implementing ConvoAI increased our conversion rate by 35% and drastically reduced our customer service workload.',
+    quote: 'Implementing Toelbot increased our conversion rate by 35% and drastically reduced our customer service workload.',
     author: 'Sarah Johnson',
     company: 'E-commerce Director, FashionRetail'
   },
@@ -122,34 +171,79 @@ const plans = ref([
   }
 ]);
 
-// FAQs
-// const faqs = ref([
-//   {
-//     question: 'How quickly can I get started with ConvoAI?',
-//     answer:
-//       'Most customers have their chatbot up and running within hours. Our setup wizard will guide you through the process, and our team is available to help if you need assistance.'
-//   },
-//   {
-//     question: 'Do I need technical knowledge to use ConvoAI?',
-//     answer:
-//       'No technical knowledge is required. Our platform is designed to be user-friendly and intuitive. If you can use a web browser, you can set up and manage your AI chatbot.'
-//   },
-//   {
-//     question: 'Can I customize the chatbot to match my brand?',
-//     answer:
-//       'Absolutely! You can customize the appearance, tone, and behavior of your chatbot to match your brand guidelines and voice. Upload your logo, choose your colors, and even adjust the conversational style.'
-//   },
-//   {
-//     question: 'What systems can ConvoAI integrate with?',
-//     answer:
-//       'ConvoAI integrates with popular e-commerce platforms (Shopify, WooCommerce, Magento), CRMs (Salesforce, HubSpot), helpdesks (Zendesk, Freshdesk), and payment processors. We also offer a robust API for custom integrations.'
-//   },
-//   {
-//     question: 'How accurate is the AI in answering customer questions?',
-//     answer:
-//       'Our AI typically achieves 95%+ accuracy rates for industry-specific queries after initial training. The system continues to learn from interactions, becoming more accurate over time.'
-//   }
-// ]);
+const integrations = ref([
+  {
+    title: 'Website',
+    icon: mdiWeb
+    // description: 'Engage with website visitors in real-time, offer instant support, and drive conversions.'
+  },
+  {
+    title: 'WhatsApp',
+    icon: mdiWhatsapp
+    // description: 'Reach your customers on WhatsApp with automated replies and smooth interactions.'
+  },
+  {
+    title: 'Messenger',
+    icon: mdiFacebookMessenger
+    // description: ''
+  },
+  {
+    title: 'Slack',
+    icon: mdiSlack
+    // description: ''
+  },
+  {
+    title: 'Instagram',
+    icon: mdiInstagram
+    // description: 'Manage DMs, product recommendations, and support on Instagram directly.'
+  }
+]);
+
+const getCardColor = (icon) => {
+  switch (icon) {
+    case mdiWeb:
+      return 'blue lighten-4';
+    case mdiWhatsapp:
+      return 'green lighten-4';
+    case mdiFacebookMessenger:
+      return 'blue darken-1';
+    case mdiSlack:
+      return 'purple lighten-4';
+    case mdiInstagram:
+      return 'pink lighten-4';
+    default:
+      return 'grey lighten-4';
+  }
+};
+
+const getTextColor = (icon) => {
+  switch (icon) {
+    case mdiWeb:
+      return 'blue darken-2';
+    case mdiWhatsapp:
+      return 'green darken-2';
+    case mdiFacebookMessenger:
+      return 'blue darken-3';
+    case mdiSlack:
+      return 'purple darken-3';
+    case mdiInstagram:
+      return 'pink darken-3';
+    default:
+      return 'grey darken-2';
+  }
+};
+
+const imageModules = import.meta.glob('@/assets/tools/*.{png,jpg,jpeg,svg}', {
+  eager: true,
+  import: 'default'
+});
+// const tools = ref(Object.values(imageModules));
+
+// const midpoint = Math.ceil(tools.value.length / 2);
+// const leftTools = computed(() => tools.value.slice(0, midpoint));
+// const rightTools = computed(() => tools.value.slice(midpoint));
+
+console.log(imageModules);
 
 // Send message method
 function sendMessage() {
@@ -178,19 +272,17 @@ function sendMessage() {
 <template>
   <v-app-bar app color="white" elevation="0" variant="flat" height="60">
     <div class="d-flex align-center">
-      <v-avatar color="indigo" class="mx-3">
-        <v-icon color="white" :icon="mdiRobot"></v-icon>
-      </v-avatar>
-      <v-toolbar-title class="font-weight-bold">Toelbot AI</v-toolbar-title>
+      <img src="@/assets/logo.svg" width="42px" height="42px" class="mx-3" />
+      <v-toolbar-title class="font-weight-bold text-h3">Toelbot</v-toolbar-title>
     </div>
     <v-spacer></v-spacer>
 
     <!-- Desktop Navigation Menu -->
     <div class="d-none d-md-flex mr-3">
       <v-btn variant="text" href="#features" class="text-none">Features</v-btn>
-      <v-btn variant="text" href="#usecase" class="text-none">UseCase</v-btn>
+      <v-btn variant="text" href="#usecase" class="text-none">Use Case</v-btn>
       <v-btn variant="text" href="#pricing" class="text-none">Pricing</v-btn>
-      <v-btn variant="text" href="#faq" class="text-none">FAQ</v-btn>
+      <!-- <v-btn variant="text" href="#faq" class="text-none">FAQ</v-btn> -->
       <v-btn to="/login" class="bg-indigo text-white ml-4" elevation="1">Login</v-btn>
     </div>
 
@@ -205,17 +297,18 @@ function sendMessage() {
     <section id="hero" class="custom-gradient">
       <v-container>
         <v-row align="center" class="py-12">
-          <v-col cols="12" md="6" class="text-white">
-            <h1 class="text-h1 font-weight-bold mb-4">Transform Customer Support with AI-Powered Chat</h1>
+          <v-col cols="12" md="7" class="text-white">
+            <h1 class="text-h1 font-weight-bold mb-4">Turn Conversations into Actions</h1>
             <p class="text-36 mb-6">
-              Real-time answers for orders, payments, and product information. Enhance customer experience while reducing support costs.
+              Let your AI Agents handle everything from customer support and sales to backend processes, with zero code and full
+              flexibility. Connect tools, Ask Agent, and get more done — instantly
             </p>
             <div class="d-flex flex-column flex-sm-row">
-              <v-btn x-large color="white" class="text-none text-indigo font-weight-bold mb-4 mb-sm-0 mr-sm-4">Get Started</v-btn>
+              <v-btn x-large color="white" class="text-none text-indigo font-weight-bold mb-4 mb-sm-0 mr-sm-4">Start Free</v-btn>
               <v-btn x-large variant="outlined" color="white" class="text-none font-weight-bold">Watch Demo</v-btn>
             </div>
           </v-col>
-          <v-col cols="12" md="6">
+          <v-col cols="12" md="5">
             <div class="pa-10">
               <v-card class="mx-auto pa-4" elevation="10" rounded="lg">
                 <!-- Chat Demo Component -->
@@ -288,17 +381,64 @@ function sendMessage() {
         </v-row>
       </v-container>
     </section>
-    <!-- Features Section -->
-    <section id="features" class="grey lighten-4 py-12">
+
+    <!-- Integrations Section -->
+    <section class="py-12 bg-grey-lighten-4">
       <v-container>
         <div class="text-center mb-12">
-          <h2 class="text-h2 font-weight-bold mb-4">Power Up Your Customer Support</h2>
-          <p class="text-h3 text-grey">
-            Our AI chatbot integrates seamlessly with your existing systems to provide real-time information and support.
+          <h2 class="text-h2 font-weight-bold mb-4">Be Where Your Customers Are</h2>
+          <p class="text-h6 text-grey">
+            Scale your customer interactions without the overhead. Our chatbot manages conversations across multiple platforms — so you
+            don’t have to.
           </p>
         </div>
 
+        <v-row justify="center">
+          <v-col v-for="(integration, index) in integrations" :key="index" cols="12" sm="4" md="2">
+            <v-card class="text-center rounded-lg" rounded outlined :color="getCardColor(integration.icon)">
+              <v-icon :icon="integration.icon" size="64" class="mt-4"> </v-icon>
+              <v-card-title class="headline" :style="{ color: getTextColor(integration.icon) }">
+                {{ integration.title }}
+              </v-card-title>
+              <v-card-text :style="{ color: getTextColor(integration.icon) }">
+                {{ integration.description }}
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </section>
+    <!-- Tools Section -->
+    <section class="py-12">
+      <v-container>
+        <ToolScroll />
+      </v-container>
+    </section>
+    <!-- Features Section -->
+    <section id="features" class="bg-grey-lighten-4 py-12">
+      <v-container>
+        <div class="text-center mb-12">
+          <h2 class="text-h2 font-weight-bold mb-4">Smarter Chats. Instant Actions.</h2>
+          <p class="text-h3 text-grey">
+            Toelbot integrates with your tools and turns customer, sales, and support messages into real business actions — from Slack to
+            sales to support.
+          </p>
+        </div>
         <v-row>
+          <v-col v-for="feature in features" :key="feature.title" cols="12" sm="6" md="4">
+            <v-card class="pa-5" elevation="2">
+              <v-icon :icon="feature.icon" size="36" color="primary" class="mb-4" />
+              <h3 class="text-h6 font-weight-bold mb-2">
+                {{ feature.title }}
+              </h3>
+              <p class="text-body-2 text-grey-darken-1">
+                {{ feature.description }}
+              </p>
+            </v-card>
+          </v-col>
+        </v-row>
+
+        <!-- <v-row>
           <v-col v-for="(feature, i) in features" :key="i" cols="12" sm="6" lg="3">
             <v-card height="100%" class="d-flex flex-column">
               <v-card-text>
@@ -310,7 +450,7 @@ function sendMessage() {
               </v-card-text>
             </v-card>
           </v-col>
-        </v-row>
+        </v-row> -->
       </v-container>
     </section>
     <!-- How It Works Section -->
@@ -320,7 +460,6 @@ function sendMessage() {
           <h2 class="text-h2 font-weight-bold mb-4">How It Works</h2>
           <p class="text-h6 text-grey">Simple integration, powerful results. Get up and running in minutes.</p>
         </div>
-
         <v-row>
           <v-col v-for="(step, i) in steps" :key="i" cols="12" md="4" class="text-center">
             <v-avatar color="indigo" size="64" class="mb-4">
@@ -333,7 +472,7 @@ function sendMessage() {
       </v-container>
     </section>
     <!-- Testimonials Section -->
-    <section class="grey lighten-4 py-12">
+    <section class="bg-grey-lighten-4 py-12">
       <v-container>
         <div class="text-center mb-8">
           <h2 class="text-h4 font-weight-bold mb-4">What Our Clients Say</h2>
@@ -436,7 +575,7 @@ function sendMessage() {
         <v-divider class="grey darken-1"></v-divider>
 
         <div class="d-flex flex-column flex-md-row justify-space-between align-center py-4">
-          <div class="grey--text mb-4 mb-md-0">© 2025 ConvoAI. All rights reserved.</div>
+          <div class="grey--text mb-4 mb-md-0">© 2025 Toelbot. All rights reserved.</div>
           <div>
             <v-btn icon color="grey-lighten-1">
               <v-icon :icon="mdiTwitter" color="indigo"></v-icon>
@@ -474,4 +613,6 @@ function sendMessage() {
   height: 300px;
   overflow-y: auto;
 }
+
+/* Horizontal List Styles */
 </style>

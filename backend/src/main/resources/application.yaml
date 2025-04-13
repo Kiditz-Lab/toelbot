@@ -1,0 +1,72 @@
+spring:
+  ai:
+    mistralai:
+      api-key: Wk6KxCcPSdjLdlS0akpkgsIQg5jfN7g6
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 20MB
+  application:
+    name: chatbot
+  batch:
+    jdbc:
+      initialize-schema: ALWAYS
+    job:
+      enabled: false
+  threads:
+    virtual:
+      enabled: true
+  modulith:
+    events:
+      jdbc:
+        schema-initialization:
+          enabled: true
+      republish-outstanding-events-on-restart: true
+  docker:
+    compose:
+      lifecycle-management: START_ONLY
+  datasource:
+    url: jdbc:postgresql://localhost:5432/mydatabase
+    username: myuser
+    password: secret
+    hikari:
+
+      maximum-pool-size: 30
+      minimum-idle: 5
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com
+  autoconfigure:
+    exclude:
+      - org.springframework.ai.autoconfigure.openai.OpenAiAutoConfiguration
+      - org.springframework.ai.autoconfigure.vectorstore.pgvector.PgVectorStoreAutoConfiguration
+bot:
+  grooq-base-url: https://api.groq.com/openai
+  grooq-api-key: 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
+  open-ai-api-key: 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
+
+springdoc:
+  swagger-ui:
+    operations-sorter: method
+
+
+rag:
+  input:
+    temporary: file:///Users/rifkyaditya/Playground/data/temporary
+    path: file:///Users/rifkyaditya/Playground/data/rag
+    processed: file:///Users/rifkyaditya/Playground/data/processed
+
+logging:
+  level:
+    org.springframework.jdbc.core: ERROR
+    io.modelcontextprotocol.client: TRACE

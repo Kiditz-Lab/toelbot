@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { useCustomizerStore } from '../../../stores/customizer';
-import { mdiRobot } from '@mdi/js';
 // icons
-import { MenuFoldOutlined, SearchOutlined, GithubOutlined } from '@ant-design/icons-vue';
+import { MenuFoldOutlined } from '@ant-design/icons-vue';
 const { user } = useAuthStore();
 // dropdown imports
 // import Searchbar from './SearchBarPanel.vue';
@@ -19,8 +18,8 @@ defineProps({
 </script>
 
 <template>
-  <v-app-bar elevation="0" height="60">
-    <v-btn
+  <v-app-bar elevation="0">
+    <v-btn v-if="!isLogo"
       class="hidden-md-and-down text-secondary mx-3"
       color="darkText"
       icon
@@ -29,13 +28,15 @@ defineProps({
       @click.stop="customizer.SET_MINI_SIDEBAR(!customizer.mini_sidebar)"
       size="small"
     >
-      <!-- <img src="@/assets/images/logo.svg" width="32" height="32" v-if="isLogo" /> -->
-      <v-avatar color="indigo" class="" height="32" width="32" v-if="isLogo" :style="{ fontSize: '16px' }">
-        <v-icon color="white" :icon="mdiRobot"></v-icon>
-      </v-avatar>
-      <MenuFoldOutlined :style="{ fontSize: '16px' }" v-else />
+      <!-- <img  src="@/assets/logo.svg" width="38px" height="38px" class="mx-3" /> -->
+
+      <MenuFoldOutlined :style="{ fontSize: '16px' }" />
     </v-btn>
-    <v-btn
+    <div v-else class="d-flex align-center">
+      <img src="@/assets/logo.svg" width="42px" height="42px" class="mx-3" />
+      <v-toolbar-title class="font-weight-bold text-h3">Toelbot</v-toolbar-title>
+    </div>
+    <v-btn v-if="!isLogo"
       class="hidden-lg-and-up text-secondary ms-3"
       color="darkText"
       icon
@@ -48,7 +49,7 @@ defineProps({
     </v-btn>
 
     <!-- search mobile -->
-    <v-menu :close-on-content-click="false" class="hidden-lg-and-up" offset="10, 0">
+    <!-- <v-menu :close-on-content-click="false" class="hidden-lg-and-up" offset="10, 0">
       <template v-slot:activator="{ props }">
         <v-btn
           class="hidden-lg-and-up text-secondary ml-1"
@@ -69,7 +70,7 @@ defineProps({
           </template>
         </v-text-field>
       </v-sheet>
-    </v-menu>
+    </v-menu> -->
 
     <!-- ---------------------------------------------- -->
     <!-- Search part -->
@@ -95,7 +96,7 @@ defineProps({
     <!-- ---------------------------------------------- -->
     <!-- Github -->
     <!-- ---------------------------------------------- -->
-    <v-btn
+    <!-- <v-btn
       icon
       class="text-secondary hidden-sm-and-down d-flex"
       color="darkText"
@@ -105,7 +106,7 @@ defineProps({
       target="_blank"
     >
       <GithubOutlined :style="{ fontSize: '16px' }" />
-    </v-btn>
+    </v-btn> -->
 
     <!-- ---------------------------------------------- -->
     <!-- Notification -->

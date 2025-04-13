@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+  backend:
+    image: toolbot:0.0.1-SNAPSHOT
+    container_name: toelbot-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://pgvector:5432/
+      - SPRING_DATASOURCE_USERNAME=toelbot
+      - SPRING_DATASOURCE_PASSWORD=wShWPKTwukcCiZj
+      - RAG_INPUT_TEMPORARY=file:///app/temporary
+      - RAG_INPUT_PATH=file:///app/rag
+      - RAG_INPUT_PROCESSED=file:///app/processed
+
+    networks:
+      - toelbot
+    volumes:
+      - ./mcp:/opt/mcp
+      - ./app:/app
+  pgvector:
+    image: 'pgvector/pgvector:pg16'
+    environment:
+      - 'POSTGRES_DB=toelbot'
+      - 'POSTGRES_PASSWORD=wShWPKTwukcCiZj'
+      - 'POSTGRES_USER=toelbot'
+    labels:
+      - "org.springframework.boot.service-connection=postgres"
+    ports:
+      - '5432:5432'
+    networks:
+      - toelbot
+    volumes:
+      - ./pg-data:/var/lib/postgresql/data
+
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: toelbot-frontend
+    ports:
+      - "3000:3000"
+    # volumes:
+    #   - ./vuetify-app:/app
+    environment:
+      - NODE_ENV=production
+      - VITE_API_URL=http://backend:8080/api/v1
+      - VITE_WS_URL=http://backend:8080/api/ws
+    # command: npm run dev
+
+networks:
+  toelbot: 
