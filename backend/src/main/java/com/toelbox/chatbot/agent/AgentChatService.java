@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
+import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.ai.chat.memory.InMemoryChatMemory;
 import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
 import org.springframework.ai.openai.OpenAiChatModel;
@@ -80,7 +81,6 @@ class AgentChatService {
 		var api = openAiApi(isGrooq(model));
 		var clients = mcpService.findAllByAgentClientSync(agent.getId());
 		var tools = SyncMcpToolCallbackProvider.syncToolCallbacks(clients);
-		log.info("Clients: {}", clients.size());
 		var options = OpenAiChatOptions.builder()
 				.model(model.getVersion())
 				.temperature(config.getTemperature())
@@ -90,16 +90,18 @@ class AgentChatService {
 				.openAiApi(api)
 				.defaultOptions(options)
 				.build();
+		List<Advisor> advisors = new ArrayList<>();
+		advisors.add(
+				new QuestionAnswerAdvisor(vectorStore, SearchRequest.builder()
+						.filterExpression("agentId == '%s'".formatted(agent.getId().toString()))
+						.build()
+				)
+		);
+		advisors.add(new MessageChatMemoryAdvisor(chatMemory));
+		
 		var builder = ChatClient.builder(chatModel)
 				.defaultTools(tools)
-				.defaultAdvisors(
-						new QuestionAnswerAdvisor(vectorStore, SearchRequest.builder()
-								.filterExpression("agentId == '%s'".formatted(agent.getId().toString()))
-								.build()
-						),
-						new MessageChatMemoryAdvisor(chatMemory),
-						new ChatLoggingAdvisor(info, publisher)
-				);
+				.defaultAdvisors(advisors);
 		var prompt = config.getPrompt();
 		if (StringUtils.isNoneBlank(prompt)) {
 			builder = builder.defaultSystem(prompt);

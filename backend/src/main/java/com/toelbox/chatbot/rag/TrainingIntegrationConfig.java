@@ -41,7 +41,6 @@ class TrainingIntegrationConfig {
 	private final TrainingDataRepository repository;
 	private final SimpMessagingTemplate template;
 	private final VectorStoreService vectorStoreService;
-	private final HtmlService htmlService;
 
 	@Bean
 	MessageChannel trainingInputChannel(TaskExecutor trainingTaskExecutor) {
