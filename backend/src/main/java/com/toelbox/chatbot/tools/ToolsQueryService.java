@@ -3,6 +3,7 @@ package com.toelbox.chatbot.tools;
 import com.toelbox.chatbot.core.NotFoundException;
 import io.modelcontextprotocol.spec.McpSchema;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 class ToolsQueryService {
 	private final ToolsRepository repository;
-
+	@Cacheable(value = "toolsCache", key = "#id")
 	ToolsResponse findById(UUID id) {
 		Tools tool = repository.findById(id).orElseThrow(() -> new NotFoundException("Tool not found"));
 		var client = tool.toSyncClient();
