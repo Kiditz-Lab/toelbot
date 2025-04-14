@@ -51,7 +51,7 @@ dependencies {
 	implementation 'org.springframework.modulith:spring-modulith-starter-jdbc'
 	implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter'
 	implementation 'org.springframework.ai:spring-ai-pgvector-store-spring-boot-starter'
-	implementation 'org.springframework.ai:spring-ai-mcp-client-webflux-spring-boot-starter'
+	implementation 'org.springframework.ai:spring-ai-mcp-client-spring-boot-starter'
 //	implementation 'org.springframework.ai:spring-ai-mistral-ai-spring-boot-starter'
 	implementation 'com.vladsch.flexmark:flexmark-html2md-converter:0.50.42'
 	implementation 'commons-codec:commons-codec'

@@ -114,6 +114,7 @@ const scrollToBottom = () => {
 
 // Auto-scroll when new messages are added
 onMounted(() => {
+  chatStore.clearChat();
   chatStore.addMessage({
     sender: 'bot',
     text: 'Hi, How can I help you today?',
