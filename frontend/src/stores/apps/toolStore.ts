@@ -87,6 +87,7 @@ export const useToolStore = defineStore(
         tool.formData = {};
         tool.isValid = false;
       }
+      testToolResult.value = undefined;
       const properties = tool.inputSchema?.properties ?? {};
       for (const [key, prop] of Object.entries(properties)) {
         if (!(key in tool.formData)) {
