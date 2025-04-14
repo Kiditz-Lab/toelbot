@@ -13,7 +13,6 @@ services:
       - toelbot
   backend:
     image: toolbot:0.0.1
-    container_name: toelbot-backend
     ports:
       - "8080:8080"
     environment:
@@ -50,11 +49,12 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: frontend
+      args:
+        VITE_API_URL: http://backend:8080/api/v1
+        VITE_WS_URL: http://backend:8080/api/ws
+
     ports:
       - "3000:3000"
-    # volumes:
-    #   - ./vuetify-app:/app
     environment:
       - NODE_ENV=production
       - VITE_API_URL=http://backend:8080/api/v1
