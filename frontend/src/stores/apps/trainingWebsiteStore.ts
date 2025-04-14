@@ -60,7 +60,7 @@ export const useTrainingWebsiteStore = defineStore(
           stompClient.value?.subscribe(`/topic/crawl-chunk/${agentId}`, async (message: IMessage) => {
             try {
               console.log(message.body);
-              // await fetchTrainingWebsite();
+              await fetchTrainingWebsite();
             } catch (error) {
               console.error('Error parsing WebSocket message:', error);
             }
@@ -146,8 +146,13 @@ export const useTrainingWebsiteStore = defineStore(
     }
     async function confirmDelete() {
       dialog.value = false;
-      await api.del(`/training-data`, { ids: selectedItems.value });
-      
+      try {
+        await api.del(`/training-data`, { ids: selectedItems.value });
+        showSnackbar('Url deleted successfully', 'success', 3000, 'Success');
+      } catch (err) {
+        console.log(err);
+        showSnackbar('Url deleted failed', 'error', 3000, 'Error');
+      }
     }
     async function openDeleteDialog() {
       dialog.value = true;
@@ -163,8 +168,6 @@ export const useTrainingWebsiteStore = defineStore(
         fetchTrainingWebsite();
       }, 500);
     });
-
-    
 
     return {
       formRef,
@@ -184,7 +187,7 @@ export const useTrainingWebsiteStore = defineStore(
       totalItems,
       selectedItems,
       openDeleteDialog,
-      confirmDelete,
+      confirmDelete
     };
   },
   {
