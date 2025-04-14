@@ -50,8 +50,8 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        VITE_API_URL: http://backend:8080/api/v1
-        VITE_WS_URL: http://backend:8080/api/ws
+        VITE_API_URL: https://api.toelbox.com/api/v1
+        VITE_WS_URL: https://api.toelbox.com/api/ws
 
     ports:
       - "3000:3000"
