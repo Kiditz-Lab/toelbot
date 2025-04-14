@@ -114,14 +114,21 @@ export const useToolStore = defineStore(
         params: tool.formData
       } as TestTool;
       testToolResult.value = undefined;
-      const res = await api.post<TestToolResult>('/tools/test', testTool);
-      if (res?.isError) {
-        const errorMessage = res.content?.[0]?.text || 'An unknown error occurred.';
-        showSnackbar(errorMessage, 'error', 3000, 'Error');
-        disableTestConnection.value = true;
-      } else {
-        testToolResult.value = res;
-        showSnackbar('Tool tested successfully.', 'success', 3000, 'Success');
+      try {
+        const res = await api.post<TestToolResult>('/tools/test', testTool);
+        if (res?.isError) {
+          const errorMessage = res.content?.[0]?.text || 'An unknown error occurred.';
+          showSnackbar(errorMessage, 'error', 3000, 'Error');
+          disableTestConnection.value = true;
+        } else {
+          testToolResult.value = res;
+          showSnackbar('Tool tested successfully.', 'success', 3000, 'Success');
+          disableTestConnection.value = false;
+        }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error:Error| any) {
+        testToolResult.value = error.message;
+        showSnackbar('Tool tested failed.', 'success', 3000, 'Error');
         disableTestConnection.value = false;
       }
     };
@@ -174,7 +181,7 @@ export const useToolStore = defineStore(
       argsValues,
       fetchMcp,
       findToolById,
-      toolId,
+      toolId
     };
   },
   {
