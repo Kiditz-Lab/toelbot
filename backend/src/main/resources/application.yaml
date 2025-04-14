@@ -70,3 +70,5 @@ logging:
   level:
     org.springframework.jdbc.core: ERROR
     io.modelcontextprotocol.client: TRACE
+    org.springframework.cache: DEBUG
+    com.github.benmanes.caffeine.cache: TRACE

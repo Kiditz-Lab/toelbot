@@ -23,6 +23,7 @@ public class CacheConfig {
                 .maximumSize(500)
                 .build();
     }
+
     @Bean
     public Caffeine<Object, Object> caffeineConfig() {
         return Caffeine.newBuilder()

@@ -14,6 +14,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 class ToolsQueryService {
 	private final ToolsRepository repository;
+
 	@Cacheable(value = "toolsCache", key = "#id")
 	ToolsResponse findById(UUID id) {
 		Tools tool = repository.findById(id).orElseThrow(() -> new NotFoundException("Tool not found"));
