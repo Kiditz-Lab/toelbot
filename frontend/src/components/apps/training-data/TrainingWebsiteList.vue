@@ -4,6 +4,7 @@ import { useTrainingWebsiteStore } from '@/stores/apps/trainingWebsiteStore';
 import { toRefs } from 'vue';
 import { format } from 'date-fns';
 import { useFile } from '@/composables/useFile';
+// const store = useTrainingWebsiteStore();
 const { trainings, options, totalItems, loading, selectedItems } = toRefs(useTrainingWebsiteStore());
 const { formatFileSize } = useFile();
 const getStatusColor = (status) => {

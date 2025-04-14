@@ -12,7 +12,7 @@ import { mdiDelete } from '@mdi/js';
 const tab = ref('overview');
 const dialog = ref(false);
 
-const { selectedTool, testToolResult, loading, agentTools, toolId } = toRefs(useToolStore());
+const { selectedTool, loading, agentTools, toolId } = toRefs(useToolStore());
 const { testConnection, getFields, deleteConnection, fetchMcp, findToolById } = useToolStore();
 
 onMounted(async () => {
@@ -76,10 +76,10 @@ onMounted(async () => {
                     <v-btn :loading="loading" :disabled="!tool.isValid" type="submit" color="primary" variant="tonal"
                       >Test Connection</v-btn
                     >
-                    <v-divider class="my-2" v-if="testToolResult" />
-                    <div v-if="testToolResult">
+                    <v-divider class="my-2" v-if="tool.testResult" />
+                    <div v-if="tool.testResult">
                       <v-card
-                        v-for="content in testToolResult.content"
+                        v-for="content in tool.testResult.content"
                         :key="content.type"
                         variant="outlined"
                         class="my-2"
