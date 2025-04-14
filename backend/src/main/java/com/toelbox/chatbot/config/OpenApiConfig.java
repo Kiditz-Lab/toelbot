@@ -21,7 +21,7 @@ class OpenApiConfig {
 	@Bean
 	public OpenAPI customOpenAPI() {
 		Server server1 = new Server();
-		server1.setUrl("https://dev.toelbox.com");
+		server1.setUrl("https://api.toelbox.com");
 		server1.setDescription("Development Server");
 
 		Server server2 = new Server();
