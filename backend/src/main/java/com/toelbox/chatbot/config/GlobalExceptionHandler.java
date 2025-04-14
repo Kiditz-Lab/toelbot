@@ -9,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -48,6 +49,21 @@ class GlobalExceptionHandler {
 	@ExceptionHandler(NotFoundException.class)
 	public ResponseEntity<ErrorResponse> handleNotFoundException(
 			NotFoundException ex,
+			WebRequest request) {
+
+		ErrorResponse response = ErrorResponse.builder()
+				.status(HttpStatus.NOT_FOUND.value())
+				.error("Not Found")
+				.message(ex.getMessage())
+				.path(request.getDescription(false).replace("uri=", ""))
+				.timestamp(LocalDateTime.now())
+				.build();
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+	}
+
+	@ExceptionHandler(NoResourceFoundException.class)
+	public ResponseEntity<ErrorResponse> handleNotFoundException(
+			NoResourceFoundException ex,
 			WebRequest request) {
 
 		ErrorResponse response = ErrorResponse.builder()
