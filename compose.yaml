@@ -50,7 +50,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: toelbot-frontend
+    container_name: frontend
     ports:
       - "3000:3000"
     # volumes:
@@ -59,7 +59,8 @@ services:
       - NODE_ENV=production
       - VITE_API_URL=http://backend:8080/api/v1
       - VITE_WS_URL=http://backend:8080/api/ws
-    # command: npm run dev
+    networks:
+      - toelbot
 
 networks:
   toelbot: 
