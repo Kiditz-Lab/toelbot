@@ -9,7 +9,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/facebook")
 @RequiredArgsConstructor
-public class FacebookController {
+class FacebookController {
 
 	private final FacebookService facebookService;
 
