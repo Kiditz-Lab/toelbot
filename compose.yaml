@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   nginx:
     image: nginx:latest
@@ -11,8 +9,10 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    networks:
+      - toelbot
   backend:
-    image: toolbot:0.0.1-SNAPSHOT
+    image: toolbot:0.0.1
     container_name: toelbot-backend
     ports:
       - "8080:8080"
