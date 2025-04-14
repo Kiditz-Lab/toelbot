@@ -15,8 +15,7 @@ const dialog = ref(false);
 const { selectedTool, testToolResult, loading, agentTools, toolId } = toRefs(useToolStore());
 const { testConnection, getFields, deleteConnection, fetchMcp, findToolById } = useToolStore();
 
-
-onMounted(async() => {
+onMounted(async () => {
   import('md-editor-v3/lib/style.css');
   selectedTool.value = {};
   await findToolById(toolId.value);
@@ -54,15 +53,25 @@ onMounted(async() => {
                 <v-expansion-panel-text>
                   <div class="text-subtitle-1 text-grey my-3">{{ tool.description }}</div>
                   <v-form @submit.prevent="testConnection(tool)" v-model="tool.isValid">
-                    <v-text-field
-                      v-for="field in getFields(tool)"
-                      variant="outlined"
-                      :key="field.name"
-                      v-model="tool.formData[field.name]"
-                      :label="field.title"
-                      :type="field.type === 'integer' ? 'number' : 'text'"
-                      :rules="[field.required ? (v) => !!v || 'Required' : () => true]"
-                    ></v-text-field>
+                    <template v-for="field in getFields(tool)" :key="field.name">
+                      <v-text-field
+                        v-if="field.type === 'number'"
+                        variant="outlined"
+                        v-model.number="tool.formData[field.name]"
+                        :label="field.title"
+                        type="number"
+                        :rules="[field.required ? (v) => !!v || 'Required' : () => true]"
+                      />
+                      <v-text-field
+                        v-else
+                        variant="outlined"
+                        v-model="tool.formData[field.name]"
+                        :label="field.title"
+                        type="text"
+                        :rules="[field.required ? (v) => !!v || 'Required' : () => true]"
+                      />
+                    </template>
+
                     <v-divider class="my-2" />
                     <v-btn :loading="loading" :disabled="!tool.isValid" type="submit" color="primary" variant="tonal"
                       >Test Connection</v-btn
