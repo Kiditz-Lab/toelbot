@@ -22,7 +22,7 @@ const getComponent = (type: string) => {
     case 'text_area':
       return 'v-textarea';
     default:
-      return 'v-text-field';
+      return 'template';
   }
 };
 
