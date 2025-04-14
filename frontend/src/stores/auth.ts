@@ -14,7 +14,7 @@ export const useAuthStore = defineStore('auth', {
     // @ts-ignore
     user: JSON.parse(localStorage.getItem('user')),
     token: localStorage.getItem('token'),
-    returnUrl: '/',
+    returnUrl: null,
     loading: false,
     error: ''
   }),
