@@ -2,6 +2,7 @@ package com.toelbox.chatbot.agent;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.toelbox.chatbot.core.AIConfigProperties;
+import com.toelbox.chatbot.core.IpAddress;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,14 +52,16 @@ class AgentChatService {
 		if (principal == null && !agent.isPublic()) {
 			throw new AccessDeniedException("Your agent is not public");
 		}
-//		String ipAddress = IpAddress.getClientIp(request);
+		String ipAddress = IpAddress.getClientIp(request);
+		String chatId = chat.chatId();
+
 		agentIdToChatIdsMap.compute(agentId, (key, existingSet) -> {
 			Set<String> newSet = existingSet == null ? ConcurrentHashMap.newKeySet() : existingSet;
 			newSet.add(chat.chatId());
 			return newSet;
 		});
 
-		ChatClient client = chatClientCache.get(chat.chatId(), id -> buildChatClient(agent));
+		ChatClient client = chatClientCache.get(chat.chatId(), id -> buildChatClient(agent, new ChatLoggingAdvisor.AdvisorInfo(ipAddress, agent.getConfig().getAiModel().getVersion(), chatId, agentId)));
 		return client.prompt()
 				.user(chat.chat())
 				.advisors(a -> a
@@ -66,16 +69,17 @@ class AgentChatService {
 						.param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 500))
 				.stream().content();
 	}
+
 	List<Map<String, String>> aiModels() {
 		return Arrays.stream(AIModel.values()).map(aiModel -> Map.of("name", aiModel.getName(), "version", aiModel.getVersion(), "value", aiModel.name())).collect(Collectors.toList());
 	}
 
-	ChatClient buildChatClient(Agent agent) {
+	ChatClient buildChatClient(Agent agent, ChatLoggingAdvisor.AdvisorInfo info) {
 		var config = agent.getConfig();
 		var model = config.getAiModel();
 		var api = openAiApi(isGrooq(model));
 		var clients = mcpService.findAllByAgentClientSync(agent.getId());
-		var tools = SyncMcpToolCallbackProvider.syncToolCallbacks(  clients);
+		var tools = SyncMcpToolCallbackProvider.syncToolCallbacks(clients);
 		log.info("Clients: {}", clients.size());
 		var options = OpenAiChatOptions.builder()
 				.model(model.getVersion())
@@ -93,7 +97,8 @@ class AgentChatService {
 								.filterExpression("agentId == '%s'".formatted(agent.getId().toString()))
 								.build()
 						),
-						new MessageChatMemoryAdvisor(chatMemory)
+						new MessageChatMemoryAdvisor(chatMemory),
+						new ChatLoggingAdvisor(info, publisher)
 				);
 		var prompt = config.getPrompt();
 		if (StringUtils.isNoneBlank(prompt)) {
@@ -115,38 +120,6 @@ class AgentChatService {
 		}
 	}
 
-	private String getPrompt(AgentConfig config) {
-		String prompt = config.getPrompt();
-		prompt += """
-				---
-				Additional Instructions:
-				- If the user asks about listings (e.g., properties, products, services), return a structured Markdown response.
-				- Do NOT fabricate or infer external URLs.
-				- Do NOT show the `url` field if no real URL is available.
-				- Do NOT hallucinate for url.
-				- For non-listing queries, respond in friendly markdown or plain text.
-				""";
-
-		log.debug("Prompt : {}", prompt);
-		return prompt;
-	}
-
-//	@Bean(destroyMethod = "close")
-//	public McpSyncClient mcpClient() {
-//		var stdioParams = ServerParameters.builder("npx")
-//				.args("-y", "@modelcontextprotocol/server-filesystem")
-//				.env(Map.of("ODOO_URL", "abc"))
-//				.build();
-//		var mcpClient = McpClient.sync(new StdioClientTransport(stdioParams))
-//				.requestTimeout(Duration.ofSeconds(10)).build();
-//
-//		var init = mcpClient.initialize();
-//
-//		System.out.println("MCP Initialized: " + init);
-//
-//		return mcpClient;
-//
-//	}
 
 	boolean isGrooq(AIModel model) {
 		return switch (model) {
