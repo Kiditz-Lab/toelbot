@@ -16,7 +16,7 @@ export const useToolStore = defineStore(
     const { fetchAgent } = useAgentStore();
     const agentTools = computed(() => agent.value?.tools ?? []);
     const selectedTool = ref<Tools>({} as Tools);
-    const testToolResult = ref<TestToolResult | undefined>();
+    // const testToolResult = ref<TestToolResult | undefined>();
     const { showSnackbar } = useSnackbarStore();
     const api = useApi();
     const loading = computed(() => api.loading);
@@ -87,7 +87,7 @@ export const useToolStore = defineStore(
         tool.formData = {};
         tool.isValid = false;
       }
-      testToolResult.value = undefined;
+      tool.testResult = undefined;
       const properties = tool.inputSchema?.properties ?? {};
       for (const [key, prop] of Object.entries(properties)) {
         if (!(key in tool.formData)) {
@@ -114,7 +114,7 @@ export const useToolStore = defineStore(
         args: selectedTool.value.args,
         params: tool.formData
       } as TestTool;
-      testToolResult.value = undefined;
+      tool.testResult = undefined;
       try {
         const res = await api.post<TestToolResult>('/tools/test', testTool);
         if (res?.isError) {
@@ -122,13 +122,13 @@ export const useToolStore = defineStore(
           showSnackbar(errorMessage, 'error', 3000, 'Error');
           disableTestConnection.value = true;
         } else {
-          testToolResult.value = res;
+          tool.testResult = res;
           showSnackbar('Tool tested successfully.', 'success', 3000, 'Success');
           disableTestConnection.value = false;
         }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (error:Error| any) {
-        testToolResult.value = error;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: Error | any) {
+        tool.testResult = error;
         showSnackbar('Tool tested failed.', 'error', 3000, 'Error');
         disableTestConnection.value = false;
       }
@@ -175,7 +175,6 @@ export const useToolStore = defineStore(
       disableTestConnection,
       testConnection,
       getFields,
-      testToolResult,
       agentTools,
       updateConnection,
       deleteConnection,
@@ -188,7 +187,7 @@ export const useToolStore = defineStore(
   {
     persist: {
       storage: sessionStorage,
-      pick: ['disableTestConnection', 'tools']
+      pick: ['disableTestConnection', 'tools', 'selectedTool']
     }
   }
 );

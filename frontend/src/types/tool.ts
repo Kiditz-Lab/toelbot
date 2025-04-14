@@ -22,6 +22,7 @@ export interface Tool {
   name: string;
   isValid: boolean;
   id: string;
+  testResult: TestToolResult | undefined;
   description: string;
   inputSchema: {
     type: 'object';
@@ -30,11 +31,10 @@ export interface Tool {
     required?: string[];
   };
 
-  formData?: Record<string, unknown>; 
+  formData?: Record<string, unknown>;
 }
 
 export interface TestTool {
-  
   command: string;
   args: string[];
   name: string;
@@ -43,21 +43,21 @@ export interface TestTool {
 }
 
 export interface TestToolResult {
-  content: Content[]
-  isError: boolean
+  content: Content[];
+  isError: boolean;
 }
 
 export interface Content {
-  type: string
-  text: string
+  type: string;
+  text: string;
 }
 
 export interface McpConnectCommand {
-  toolsId: string
-  serverName: string
-  command: string
-  args: string[]
-  env: Record<string, string>
+  toolsId: string;
+  serverName: string;
+  command: string;
+  args: string[];
+  env: Record<string, string>;
 }
 
 export interface ParsedArgField {
