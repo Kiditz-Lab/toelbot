@@ -128,8 +128,8 @@ export const useToolStore = defineStore(
         }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error:Error| any) {
-        testToolResult.value = error.message;
-        showSnackbar('Tool tested failed.', 'success', 3000, 'Error');
+        testToolResult.value = error;
+        showSnackbar('Tool tested failed.', 'error', 3000, 'Error');
         disableTestConnection.value = false;
       }
     };
