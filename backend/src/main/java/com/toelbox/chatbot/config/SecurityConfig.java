@@ -26,6 +26,7 @@ class SecurityConfig {
 		return http
 				.authorizeHttpRequests(registry -> registry
 						.requestMatchers("/api/v1/agents/{id}/chats").permitAll()
+						.requestMatchers("/api/v1/agents/{id}").permitAll()
 						.requestMatchers("/api/v1/**").authenticated()
 						.anyRequest().permitAll())
 				.oauth2ResourceServer(oauth -> oauth.jwt(Customizer.withDefaults()))

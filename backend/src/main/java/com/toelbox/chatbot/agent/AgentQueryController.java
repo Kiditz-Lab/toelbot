@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.nio.file.AccessDeniedException;
 import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
@@ -24,7 +25,7 @@ public class AgentQueryController {
 	}
 
 	@GetMapping("/{id}")
-	Agent getAgent(@PathVariable UUID id) {
-		return service.findById(id);
+	Agent getAgent(@PathVariable UUID id, Principal principal) throws AccessDeniedException {
+		return service.findById(id, principal);
 	}
 }

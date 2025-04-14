@@ -48,7 +48,7 @@ class AgentChatService {
 	Flux<String> chat(UUID agentId, AgentChat chat, HttpServletRequest request, Principal principal) throws Exception {
 		log.info("Agent Id: {}", agentId);
 		log.info("Chat ID: {}", chat.chatId());
-		Agent agent = service.findById(agentId);
+		Agent agent = service.findById(agentId, principal);
 		if (principal == null && !agent.isPublic()) {
 			throw new AccessDeniedException("Your agent is not public");
 		}

@@ -4,6 +4,7 @@ import com.toelbox.chatbot.core.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
@@ -17,7 +18,11 @@ class AgentQueryService {
 		return repository.findByCreatedBy(principal.getName());
 	}
 
-	Agent findById(UUID id) {
-		return repository.findById(id).orElseThrow(() -> new NotFoundException("Agent not found with ID: " + id));
+	Agent findById(UUID id, Principal principal) throws AccessDeniedException {
+		var agent = repository.findById(id).orElseThrow(() -> new NotFoundException("Agent not found with ID: " + id));
+		if (principal == null && !agent.isPublic()) {
+			throw new AccessDeniedException("Your agent is not public");
+		}
+		return agent;
 	}
 }
