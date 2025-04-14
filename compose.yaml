@@ -12,7 +12,9 @@ services:
     networks:
       - toelbot
   backend:
-    image: toolbot:0.0.1
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     environment:
