@@ -26,11 +26,6 @@ class AgentChatController {
 		return service.chat(id, chat, request, principal);
 	}
 
-	/*@PostMapping("/{id}/chat-response")
-	ChatResponse chatWithResponse(@PathVariable UUID id, @Valid @RequestBody AgentChat chat, HttpServletRequest request, Principal principal) throws Exception {
-		return service.chatWithResponse(id, chat, request, principal);
-	}*/
-
 	@GetMapping("/models")
 	List<Map<String, String>> getModels() {
 		return service.aiModels();
