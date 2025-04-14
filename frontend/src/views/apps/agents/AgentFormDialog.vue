@@ -3,6 +3,7 @@
   <v-dialog v-model="dialog" max-width="400">
     <v-card rounded="xl">
       <v-card-title class="text-h5 text-center"> Create a new agent </v-card-title>
+      <v-divider/>
       <v-card-text class="px-8 py-0">
         <v-form ref="formRef" @submit.prevent="save">
           <v-label class="font-weight-regular">Give your agent a name to easily identify it</v-label>
