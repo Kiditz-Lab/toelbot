@@ -420,8 +420,7 @@ function sendMessage() {
         <div class="text-center mb-12">
           <h2 class="text-h2 font-weight-bold mb-4">Smarter Chats. Instant Actions.</h2>
           <p class="text-h3 text-grey">
-            Toelbot integrates with your tools and turns customer, sales, and support messages into real business actions — from Slack to
-            sales to support.
+            Toelbot integrates with your tools and turns customer, sales, and support messages into real business actions
           </p>
         </div>
         <v-row>
