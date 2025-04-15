@@ -90,7 +90,7 @@ const handleSaveOrUpdate = async () => {
       v-if="!agentTools.includes(tool.id)"
       type="submit"
       :loading="loading"
-      text="Create Connection"
+      text="Connect Now"
       color="primary"
       block
       :disabled="disableTestConnection"
