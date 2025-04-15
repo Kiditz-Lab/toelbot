@@ -1,12 +1,14 @@
 package com.toelbox.chatbot.facebook;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 class FacebookService {
 
 	private final FacebookClient facebookClient;
@@ -14,6 +16,7 @@ class FacebookService {
 	private final FacebookConfigProp prop;
 
 	Facebook.TokenResponse exchangeCodeForAccessToken(String code) {
+		log.info("Config : {}", prop);
 		return facebookClient.getAccessToken(prop.getAppId(), prop.getRedirectUri(), prop.getAppSecret(), code);
 	}
 
