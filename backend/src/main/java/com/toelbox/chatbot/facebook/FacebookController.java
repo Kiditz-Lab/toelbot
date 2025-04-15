@@ -1,7 +1,10 @@
 package com.toelbox.chatbot.facebook;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,15 +15,38 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "Facebook")
 class FacebookController {
-
+	private final ObjectMapper mapper;
 	private final FacebookService facebookService;
 
 	@GetMapping("/callback")
-	ResponseEntity<List<Facebook.Page>> handleCallback(@RequestParam String code) {
+	public ResponseEntity<String> handleCallback(@RequestParam String code) throws JsonProcessingException {
 		Facebook.TokenResponse token = facebookService.exchangeCodeForAccessToken(code);
 		List<Facebook.Page> pages = facebookService.getUserPages(token.getAccess_token());
-		return ResponseEntity.ok(pages);
+		String json = mapper.writeValueAsString(pages);
+		String html = """
+				<!DOCTYPE html>
+				<html>
+				<body>
+				<script>
+				    const pages = %s;
+				    window.opener.postMessage({
+				        type: "facebook-connected",
+				        payload: {
+				            status: "success",
+				            pages: pages
+				        }
+				    }, "https://toelbox.com");
+				    setTimeout(() => window.close(), 500);
+				</script>
+				</body>
+				</html>
+				""".formatted(json);
+
+		return ResponseEntity.ok()
+				.contentType(MediaType.TEXT_HTML)
+				.body(html);
 	}
+
 
 	@PostMapping("/api/v1/save-page")
 	ResponseEntity<Void> savePage(@RequestBody Facebook.SavePageRequest req) {
