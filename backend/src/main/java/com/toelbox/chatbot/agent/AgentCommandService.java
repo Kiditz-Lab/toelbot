@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,6 +47,7 @@ class AgentCommandService {
 				.isPublic(command.isPublic())
 				.name(command.name())
 				.agentKey(agentKey)
+				.facebooks(Collections.emptyList())
 				.config(AgentConfig.builder()
 						.aiModel(AIModel.GPT_4O_MINI)
 						.prompt("")
