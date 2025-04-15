@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/facebook")
@@ -23,11 +22,11 @@ class FacebookController {
 	private final FacebookService facebookService;
 	private final FacebookConfigProp prop;
 
-	@GetMapping("/callback/{agentId}")
-	public ResponseEntity<String> handleCallback(@PathVariable UUID agentId, @RequestParam String code) throws JsonProcessingException {
+	@GetMapping("/callback")
+	public ResponseEntity<String> handleCallback(@RequestParam String code) throws JsonProcessingException {
 		try {
 			Facebook.TokenResponse token = facebookService.exchangeCodeForAccessToken(code);
-			List<FacebookPage> pages = facebookService.getUserPages(agentId, token.getAccess_token());
+			List<FacebookPage> pages = facebookService.getUserPages(token.getAccess_token());
 			String json = mapper.writeValueAsString(pages);
 //			String escapedJson = json.replace("\\", "\\\\").replace("\"", "\\\"");
 

@@ -27,18 +27,15 @@ class FacebookService {
 	}
 
 	@Transactional
-	List<FacebookPage> getUserPages(UUID agentId, String userAccessToken) {
+	List<FacebookPage> getUserPages(String userAccessToken) {
 		var pages = facebookClient.getUserPages(userAccessToken, "id,name,category,access_token,picture{url}").getData();
-		var facebookPages = pages.stream().map(page -> FacebookPage.builder()
+		return pages.stream().map(page -> FacebookPage.builder()
 				.pageId(page.getId())
 				.category(page.getCategory())
 				.name(page.getName())
-				.agentId(agentId)
 				.accessToken(page.getAccess_token())
 				.imageUrl(page.getPicture().getData().getUrl())
 				.build()).toList();
-		repository.saveAll(facebookPages);
-		return facebookPages;
 	}
 
 	@Transactional
