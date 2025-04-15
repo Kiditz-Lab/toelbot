@@ -15,7 +15,7 @@ class FacebookWebhookController {
 	private final FacebookConfigProp prop;
 
 	@GetMapping
-	public ResponseEntity<String> verifyWebhook(
+	ResponseEntity<String> verifyWebhook(
 			@RequestParam("hub.mode") String mode,
 			@RequestParam("hub.verify_token") String token,
 			@RequestParam("hub.challenge") String challenge) {
@@ -28,7 +28,7 @@ class FacebookWebhookController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Void> receiveMessage(@RequestBody String payload) {
+	ResponseEntity<Void> receiveMessage(@RequestBody String payload) {
 		System.out.println("Incoming webhook: " + payload);
 		return ResponseEntity.ok().build();
 	}
