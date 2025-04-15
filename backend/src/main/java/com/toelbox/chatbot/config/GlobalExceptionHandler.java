@@ -2,6 +2,7 @@ package com.toelbox.chatbot.config;
 
 import com.toelbox.chatbot.core.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -77,7 +78,6 @@ class GlobalExceptionHandler {
 	}
 
 
-
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorResponse> handleGenericException(
 			Exception ex,
@@ -90,6 +90,36 @@ class GlobalExceptionHandler {
 				.status(HttpStatus.INTERNAL_SERVER_ERROR.value())
 				.error("Internal Server Error")
 				.message("Something went wrong. Please contact support.") // avoid exposing internal error details
+				.path(request.getDescription(false).replace("uri=", ""))
+				.timestamp(LocalDateTime.now())
+				.build();
+
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+	}
+
+
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(
+			DataIntegrityViolationException ex,
+			WebRequest request) {
+
+		// Check for a unique constraint violation and respond accordingly
+		if (ex.getMessage().contains("duplicate key value violates unique constraint")) {
+			ErrorResponse response = ErrorResponse.builder()
+					.status(HttpStatus.BAD_REQUEST.value())
+					.error("Bad Request")
+					.message("A unique constraint violation occurred. Please ensure the data is unique.")
+					.path(request.getDescription(false).replace("uri=", ""))
+					.timestamp(LocalDateTime.now())
+					.build();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+		}
+
+		// For other data integrity violations
+		ErrorResponse response = ErrorResponse.builder()
+				.status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+				.error("Internal Server Error")
+				.message("An error occurred while processing your request.")
 				.path(request.getDescription(false).replace("uri=", ""))
 				.timestamp(LocalDateTime.now())
 				.build();

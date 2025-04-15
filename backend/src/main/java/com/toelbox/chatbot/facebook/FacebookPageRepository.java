@@ -7,4 +7,5 @@ import java.util.UUID;
 
 interface FacebookPageRepository extends ListCrudRepository<FacebookPage, UUID> {
 	Optional<FacebookPage> findByPageId(String pageId);
+	Optional<FacebookPage> findByPageIdAndAgentId(String pageId, UUID agentId);
 }

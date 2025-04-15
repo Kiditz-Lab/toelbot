@@ -81,8 +81,15 @@ class FacebookController {
 				""", message, targetOrigin);
 	}
 
-	@PostMapping("/api/v1/save-page")
-	ResponseEntity<Void> savePage(@RequestBody Facebook.SavePageRequest req) {
+	@PostMapping("/api/v1/subscribe-page")
+	ResponseEntity<Void> subscribePage(@RequestBody Facebook.SavePageRequest req) {
+		// Save to DB (req.getPageId(), req.getAccessToken(), etc.)
+		facebookService.subscribePage(req);
+		return ResponseEntity.ok().build();
+	}
+
+	@PostMapping("/api/v1/unsubscribe-page")
+	ResponseEntity<Void> unsubscribePage(@RequestBody Facebook.SavePageRequest req) {
 		// Save to DB (req.getPageId(), req.getAccessToken(), etc.)
 		facebookService.subscribePage(req);
 		return ResponseEntity.ok().build();

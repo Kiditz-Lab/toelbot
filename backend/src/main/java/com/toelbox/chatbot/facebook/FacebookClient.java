@@ -26,5 +26,9 @@ interface FacebookClient {
 	                 @RequestParam("access_token") String accessToken,
 	                 @RequestBody Facebook.Message message);
 
+	@DeleteMapping("/me/subscribed_apps")
+	void unsubscribePageFromApp(@RequestParam("access_token") String pageAccessToken);
+
+
 }
 

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -57,6 +58,14 @@ class FacebookService {
 		publisher.publishEvent(new FacebookPageCreatedEvent(access.getPageId(), access.getAgentId()));
 	}
 
+	@Transactional
+	void unsubscribePage(String pageId) {
+		var page = repository.findByPageId(pageId).orElse(null);
+		if (page != null) {
+			facebookClient.unsubscribePageFromApp(page.getAccessToken());
+			repository.deleteById(page.getId());
+		}
+	}
 
 	void messageReceived(FacebookWebhookResponse response) {
 		log.info("Message received: {}", response);
