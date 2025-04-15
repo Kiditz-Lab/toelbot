@@ -41,7 +41,7 @@ export const useFacbookStore = defineStore(
         page.agentId = id;
         await api.post('/subscribe-page', page);
         await agentStore.fetchAgent(id);
-        showSnackbar('Your page are subscribed successfully', 'success', 3000, 'Success');
+        showSnackbar('Your page are subscribed', 'success', 3000, 'Success');
       } catch (error) {
         showSnackbar(error as string, 'error', 3000, 'Error');
       } finally {
@@ -53,9 +53,13 @@ export const useFacbookStore = defineStore(
         page.loading = true;
         const id = route.params.id as string;
         page.agentId = id;
-        await api.del('/unsubscribe-page', { pageId: page.id });
+        await api.del(`/unsubscribe-page/${page.pageId}`);
         await agentStore.fetchAgent(id);
-        showSnackbar('Your page are su now', 'success', 3000, 'Success');
+        // const index = pages.value.findIndex((p) => p.pageId === page.pageId);
+
+        // if (index !== -1) {
+        //   pages.value.splice(index, 1);
+        // }
       } catch (error) {
         showSnackbar(error as string, 'error', 3000, 'Error');
       } finally {

@@ -52,7 +52,7 @@ onMounted(() => {
                 :color="agent?.facebooks?.includes(page.pageId) ? 'success' : 'secondary'"
                 :icon="agent?.facebooks?.includes(page.pageId) ? mdiPowerPlugOff : mdiPowerPlug"
                 variant="tonal"
-                @click="!agent?.facebooks?.includes(page.pageId) ? store.unassignPage(page) : store.assignPage(page)"
+                @click="!agent?.facebooks?.includes(page.pageId) ? store.assignPage(page) : store.unassignPage(page)"
                 :loading="page.loading"
               />
             </template>
