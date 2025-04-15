@@ -25,8 +25,18 @@ class FacebookService {
 		return facebookClient.getAccessToken(prop.getAppId(), prop.getRedirectUri(), prop.getAppSecret(), code);
 	}
 
-	List<Facebook.Page> getUserPages(String userAccessToken) {
-		return facebookClient.getUserPages(userAccessToken, "id,name,category,access_token,picture{url}").getData();
+	@Transactional
+	List<FacebookPage> getUserPages(String userAccessToken) {
+		var pages = facebookClient.getUserPages(userAccessToken, "id,name,category,access_token,picture{url}").getData();
+		var facebookPages = pages.stream().map(page -> FacebookPage.builder()
+				.pageId(page.getId())
+				.category(page.getCategory())
+				.name(page.getName())
+				.accessToken(page.getAccess_token())
+				.imageUrl(page.getPicture().getData().getUrl())
+				.build()).toList();
+		repository.saveAll(facebookPages);
+		return facebookPages;
 	}
 
 	@Transactional

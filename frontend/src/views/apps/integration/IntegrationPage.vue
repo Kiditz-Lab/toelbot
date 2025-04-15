@@ -8,7 +8,7 @@ const breadcrumbs = ref([{ title: 'Integration', disabled: false, href: '#' }]);
 <template>
   <BaseBreadcrumb title="Integration" :breadcrumbs="breadcrumbs" />
   <v-row>
-    <v-col cols="12" sm="6" md="4" lg="3">
+    <v-col  cols="12" sm="6" md="4" lg="4">
       <FacebookCard />
     </v-col>
   </v-row>
