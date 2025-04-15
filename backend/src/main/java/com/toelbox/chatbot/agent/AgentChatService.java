@@ -61,6 +61,7 @@ class AgentChatService {
 
 	String syncChat(Agent agent, AgentChat chat, Country country) {
 		String chatId = chat.chatId();
+		log.info("CHATID >>>> {}", chatId);
 		agentIdToChatIdsMap.compute(agent.getId(), (key, existingSet) -> {
 			Set<String> newSet = existingSet == null ? ConcurrentHashMap.newKeySet() : existingSet;
 			newSet.add(chat.chatId());

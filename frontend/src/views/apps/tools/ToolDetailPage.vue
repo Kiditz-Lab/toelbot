@@ -86,7 +86,7 @@ onMounted(async () => {
                         density="compact"
                       >
                         <v-card-text>
-                          <json-viewer :key="tool.id" :value="JSON.parse(content.text)" theme="light" />
+                          <json-viewer :key="tool.id" :value="content" theme="light" />
                         </v-card-text>
                       </v-card>
                     </div>

@@ -154,16 +154,16 @@ export const useToolStore = defineStore(
       console.log(envValues.value);
       const agentId = route.params.id;
       await api.put(`/mcp/agent/${agentId}/tools/${selectedTool.value.id}/env`, envValues.value);
-      router.back();
       showSnackbar('Tool updated successfully.', 'success', 3000, 'Success');
+      router.back();
     };
 
     const deleteConnection = async () => {
       console.log(envValues.value);
       const agentId = route.params.id;
       await api.del(`/mcp/agent/${agentId}/tools/${selectedTool.value.id}`);
-      router.back();
       showSnackbar('Tool removed successfully.', 'success', 3000, 'Success');
+      router.back();
     };
 
     return {
