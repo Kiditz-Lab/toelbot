@@ -43,8 +43,7 @@ class FacebookService {
 	@Transactional
 	void subscribePage(Facebook.SavePageRequest request) {
 		Map<String, Object> body = Map.of("subscribed_fields", List.of("messages", "message_deliveries", "message_reads", "messaging_postbacks"));
-
-		facebookClient.subscribePageToApp(request.getAccessToken(), "messages,message_deliveries,message_reads,messaging_postbacks");
+		facebookClient.subscribePageToApp(request.getAccessToken(), body);
 		var access = FacebookPage.builder()
 				.pageId(request.getPageId())
 				.name(request.getName())

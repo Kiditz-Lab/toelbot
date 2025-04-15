@@ -2,7 +2,7 @@
 import { useAgentStore } from '@/stores/apps/agentStore';
 import { useFacbookStore } from '@/stores/apps/facebookStore';
 import { useSnackbarStore } from '@/stores/snackbarStore';
-import { mdiConnection, mdiOpenInNew } from '@mdi/js';
+import { mdiConnection, mdiLink, mdiLinkOff, mdiOpenInNew, mdiPowerOff, mdiPowerOn, mdiPowerPlug, mdiPowerPlugOff } from '@mdi/js';
 import { onMounted, toRefs } from 'vue';
 const store = useFacbookStore();
 const agentStore = useAgentStore();
@@ -27,7 +27,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <v-card title="Facebook" subtitle="Integrate Toelbot to Facebook" :append-icon="mdiOpenInNew">
+  <v-card title="Facebook" subtitle="Integrate Toelbot to Facebook">
     <template v-slot:prepend>
       <img src="@/assets/tools/facebook.svg" />
     </template>
@@ -50,7 +50,8 @@ onMounted(() => {
               <v-btn
                 v-bind="props"
                 :color="agent?.facebooks?.includes(page.pageId) ? 'success' : 'secondary'"
-                :icon="mdiConnection"
+                :icon="agent?.facebooks?.includes(page.pageId) ? mdiPowerPlug : mdiPowerPlugOff"
+
                 :disabled="!agent?.facebooks"
                 variant="tonal"
                 @click="!agent?.facebooks.includes(page.pageId) && store.assignPage(page)"
