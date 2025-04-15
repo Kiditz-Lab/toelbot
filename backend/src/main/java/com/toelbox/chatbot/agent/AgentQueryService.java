@@ -18,11 +18,7 @@ class AgentQueryService {
 		return repository.findByCreatedBy(principal.getName());
 	}
 
-	Agent findById(UUID id, Principal principal) throws AccessDeniedException {
-		var agent = repository.findById(id).orElseThrow(() -> new NotFoundException("Agent not found with ID: " + id));
-		if (principal == null && !agent.isPublic()) {
-			throw new AccessDeniedException("Your agent is not public");
-		}
-		return agent;
+	Agent findById(UUID id) throws AccessDeniedException {
+		return repository.findById(id).orElseThrow(() -> new NotFoundException("Agent not found with ID: " + id));
 	}
 }

@@ -26,6 +26,6 @@ public class AgentQueryController {
 
 	@GetMapping("/{id}")
 	Agent getAgent(@PathVariable UUID id, Principal principal) throws AccessDeniedException {
-		return service.findById(id, principal);
+		return service.findById(id);
 	}
 }

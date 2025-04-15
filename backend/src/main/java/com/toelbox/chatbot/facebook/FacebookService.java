@@ -54,4 +54,13 @@ class FacebookService {
 		access = repository.save(access);
 		publisher.publishEvent(new FacebookPageCreatedEvent(access.getPageId(), access.getAgentId()));
 	}
+
+	void messageReceived(FacebookWebhookResponse response) {
+		log.info("Message received: {}", response);
+		response.entry().forEach(entry -> {
+			entry.messaging().forEach(messaging -> {
+
+			});
+		});
+	}
 }

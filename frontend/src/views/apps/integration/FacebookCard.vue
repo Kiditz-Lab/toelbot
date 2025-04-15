@@ -2,7 +2,7 @@
 import { useAgentStore } from '@/stores/apps/agentStore';
 import { useFacbookStore } from '@/stores/apps/facebookStore';
 import { useSnackbarStore } from '@/stores/snackbarStore';
-import { mdiConnection, mdiLink, mdiLinkOff, mdiOpenInNew, mdiPowerOff, mdiPowerOn, mdiPowerPlug, mdiPowerPlugOff } from '@mdi/js';
+import { mdiPowerPlug, mdiPowerPlugOff } from '@mdi/js';
 import { onMounted, toRefs } from 'vue';
 const store = useFacbookStore();
 const agentStore = useAgentStore();
@@ -33,7 +33,7 @@ onMounted(() => {
     </template>
     <v-card-text> Connect your Toelbot to your Facebook Pages to chat with your customer 24/7.</v-card-text>
     <v-card-actions v-if="agent">
-      <v-btn :disabled="agent?.facebooks.length > 0" color="primary" variant="elevated" block @click="store.connectFacebook">Connect</v-btn>
+      <v-btn :disabled="agent?.facebooks?.length > 0" color="primary" variant="elevated" block @click="store.connectFacebook">Connect</v-btn>
     </v-card-actions>
     <v-card-text class="ma-0">
       <v-list-item
@@ -50,9 +50,7 @@ onMounted(() => {
               <v-btn
                 v-bind="props"
                 :color="agent?.facebooks?.includes(page.pageId) ? 'success' : 'secondary'"
-                :icon="agent?.facebooks?.includes(page.pageId) ? mdiPowerPlug : mdiPowerPlugOff"
-
-                :disabled="!agent?.facebooks"
+                :icon="agent?.facebooks?.includes(page.pageId) ? mdiPowerPlugOff : mdiPowerPlug"
                 variant="tonal"
                 @click="!agent?.facebooks.includes(page.pageId) && store.assignPage(page)"
                 :loading="page.loading"

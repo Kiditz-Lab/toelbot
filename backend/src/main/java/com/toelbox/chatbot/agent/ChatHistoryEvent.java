@@ -5,7 +5,7 @@ import java.util.UUID;
 public record ChatHistoryEvent(
 		String userMessage,
 		String botMessage,
-		String ipAddress,
+		String countryCode,
 		String model,
 		UUID agentId,
 		String chatId

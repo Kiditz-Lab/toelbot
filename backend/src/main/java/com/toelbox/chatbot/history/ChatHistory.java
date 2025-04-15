@@ -25,13 +25,13 @@ public class ChatHistory {
     private String chatId;
     private String botMessage;
     private String userMessage;
-    private String ipAddress;
+//    private String ipAddress;
     private String countryCode;
     private String country;
-    private String regionName;
-    private String regionCode;
-    private Double latitude;
-    private Double longitude;
+//    private String regionName;
+//    private String regionCode;
+//    private Double latitude;
+//    private Double longitude;
     private String model;
     private LocalDateTime createdAt;
 }

@@ -25,7 +25,7 @@ class ChatLoggingAdvisor implements StreamAroundAdvisor, CallAroundAdvisor {
 		return new MessageAggregator().aggregateAdvisedResponse(responses, response -> {
 			assert response.response() != null;
 			String botMessage = response.response().getResult().getOutput().getText();
-			publisher.publishEvent(new ChatHistoryEvent(userMessage, botMessage, info.ipAddress, info.model, info.agentId, info.chatId));
+			publisher.publishEvent(new ChatHistoryEvent(userMessage, botMessage, info.countryCode, info.model, info.agentId, info.chatId));
 			log.info("\nResponse: {}", response.response().getResult().getOutput().getText());
 		});
 	}
@@ -46,11 +46,11 @@ class ChatLoggingAdvisor implements StreamAroundAdvisor, CallAroundAdvisor {
 		String userMessage = advisedRequest.userText();
 		AdvisedResponse resp = chain.nextAroundCall(advisedRequest);
 		String botMessage = Objects.requireNonNull(resp.response()).getResult().getOutput().getText();
-		publisher.publishEvent(new ChatHistoryEvent(userMessage, botMessage, info.ipAddress, info.model, info.agentId, info.chatId));
+		publisher.publishEvent(new ChatHistoryEvent(userMessage, botMessage, info.countryCode, info.model, info.agentId, info.chatId));
 		return resp;
 	}
 
-	record AdvisorInfo(String ipAddress, String model, String chatId, UUID agentId) {
+	record AdvisorInfo(String countryCode, String model, String chatId, UUID agentId) {
 
 	}
 }

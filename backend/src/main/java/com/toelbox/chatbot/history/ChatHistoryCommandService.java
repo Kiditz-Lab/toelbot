@@ -22,20 +22,20 @@ class ChatHistoryCommandService {
 	@EventListener
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	void history(ChatHistoryEvent event) {
-		IpApiResponse address = service.getIpInfo(event.ipAddress());
+//		IpApiResponse address = service.getIpInfo(event.ipAddress());
 		ChatHistory history = ChatHistory.builder()
 				.agentId(event.agentId())
 				.chatId(event.chatId())
 				.model(event.model())
 				.botMessage(event.botMessage())
 				.userMessage(event.userMessage())
-				.country(address.getCountry())
-				.countryCode(address.getCountryCode())
-				.regionCode(address.getRegion())
-				.regionName(address.getRegionName())
-				.latitude(address.getLat())
-				.longitude(address.getLon())
-				.ipAddress(event.ipAddress())
+//				.country(address.getCountry())
+				.countryCode(event.countryCode())
+//				.regionCode(address.getRegion())
+//				.regionName(address.getRegionName())
+//				.latitude(address.getLat())
+//				.longitude(address.getLon())
+//				.ipAddress(event.ipAddress())
 				.createdAt(LocalDateTime.now())
 				.build();
 		repository.save(history);

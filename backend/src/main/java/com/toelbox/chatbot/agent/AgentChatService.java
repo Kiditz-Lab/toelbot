@@ -2,8 +2,7 @@ package com.toelbox.chatbot.agent;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.toelbox.chatbot.core.AIConfigProperties;
-import com.toelbox.chatbot.core.IpAddress;
-import jakarta.servlet.http.HttpServletRequest;
+import com.toelbox.chatbot.history.IpApiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -23,8 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 
-import java.nio.file.AccessDeniedException;
-import java.security.Principal;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -43,26 +40,19 @@ class AgentChatService {
 	private final McpQueryService mcpService;
 	private final InMemoryChatMemory chatMemory;
 	private final Cache<String, ChatClient> chatClientCache;
+	private final IpApiService ipApiService;
 	private final ConcurrentHashMap<UUID, Set<String>> agentIdToChatIdsMap = new ConcurrentHashMap<>();
 
 	@Transactional
-	Flux<String> chat(UUID agentId, AgentChat chat, HttpServletRequest request, Principal principal) throws Exception {
-		log.info("Agent Id: {}", agentId);
-		log.info("Chat ID: {}", chat.chatId());
-		Agent agent = service.findById(agentId, principal);
-		if (principal == null && !agent.isPublic()) {
-			throw new AccessDeniedException("Your agent is not public");
-		}
-		String ipAddress = IpAddress.getClientIp(request);
+	Flux<String> chat(Agent agent, AgentChat chat, String countryCode) {
 		String chatId = chat.chatId();
-
-		agentIdToChatIdsMap.compute(agentId, (key, existingSet) -> {
+		agentIdToChatIdsMap.compute(agent.getId(), (key, existingSet) -> {
 			Set<String> newSet = existingSet == null ? ConcurrentHashMap.newKeySet() : existingSet;
 			newSet.add(chat.chatId());
 			return newSet;
 		});
 
-		ChatClient client = chatClientCache.get(chat.chatId(), id -> buildChatClient(agent, new ChatLoggingAdvisor.AdvisorInfo(ipAddress, agent.getConfig().getAiModel().getVersion(), chatId, agentId)));
+		ChatClient client = chatClientCache.get(chat.chatId(), id -> buildChatClient(agent, chatId, countryCode));
 		return client.prompt()
 				.user(chat.chat())
 				.advisors(a -> a
@@ -75,10 +65,11 @@ class AgentChatService {
 		return Arrays.stream(AIModel.values()).map(aiModel -> Map.of("name", aiModel.getName(), "version", aiModel.getVersion(), "value", aiModel.name())).collect(Collectors.toList());
 	}
 
-	ChatClient buildChatClient(Agent agent, ChatLoggingAdvisor.AdvisorInfo info) {
+	ChatClient buildChatClient(Agent agent, String chatId, String country) {
 		var config = agent.getConfig();
 		var model = config.getAiModel();
 		var api = openAiApi(isGrooq(model));
+
 		var clients = mcpService.findAllByAgentClientSync(agent.getId());
 		var tools = SyncMcpToolCallbackProvider.syncToolCallbacks(clients);
 		var options = OpenAiChatOptions.builder()
@@ -98,7 +89,9 @@ class AgentChatService {
 				)
 		);
 		advisors.add(new MessageChatMemoryAdvisor(chatMemory));
-		
+		var info = new ChatLoggingAdvisor.AdvisorInfo(country, agent.getConfig().getAiModel().getVersion(), chatId, agent.getId());
+		advisors.add(new ChatLoggingAdvisor(info, publisher));
+
 		var builder = ChatClient.builder(chatModel)
 				.defaultTools(tools)
 				.defaultAdvisors(advisors);

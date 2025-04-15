@@ -1,5 +1,7 @@
 package com.toelbox.chatbot.facebook;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 class FacebookWebhookController {
 
 	private final FacebookConfigProp prop;
+	private final ObjectMapper mapper;
+	private final FacebookService service;
 
 	@GetMapping
 	ResponseEntity<String> verifyWebhook(
@@ -30,8 +34,10 @@ class FacebookWebhookController {
 	}
 
 	@PostMapping
-	ResponseEntity<Void> receiveMessage(@RequestBody String payload) {
+	ResponseEntity<Void> receiveMessage(@RequestBody String payload) throws JsonProcessingException {
 		System.out.println("Incoming webhook: " + payload);
+		FacebookWebhookResponse response = mapper.readValue(payload, FacebookWebhookResponse.class);
+		service.messageReceived(response);
 		return ResponseEntity.ok().build();
 	}
 
