@@ -11,7 +11,7 @@ const api = useApi();
 const agents = ref([]);
 const dialog = ref(false);
 const page = ref({ title: 'Your Agents' });
-const {showSnackbar} = useSnackbarStore()
+const { showSnackbar } = useSnackbarStore();
 
 const getJdenticonSvg = (title) => {
   const svg = toSvg(title, 100);
@@ -27,7 +27,7 @@ const fetchAgents = async () => {
   } catch (err) {
     console.log(err);
     showSnackbar(err, 'error', 3000, 'Error');
-  }finally{
+  } finally {
     loading.value = false;
   }
 };
@@ -41,14 +41,12 @@ onMounted(fetchAgents);
 </script>
 
 <template>
-  
   <v-container>
     <snack-bar />
     <v-row align="center" justify="space-between" class="mb-5">
       <h3 class="text-h3 ma-0">{{ page.title }}</h3>
       <v-btn v-if="agents.length > 0" color="primary" variant="elevated" @click="dialog = true" :loading="loading"> New Agent </v-btn>
     </v-row>
-
 
     <v-row justify="start" v-if="agents.length > 0">
       <v-col v-for="agent in agents" :key="agent.id" cols="12" sm="6" md="4" lg="3">
