@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import { useApi } from '@/composables/useApi';
 import { ref, computed } from 'vue';
-import { useRoute } from 'vue-router';
 import { router } from '@/router';
 import type { Agent } from '@/types/agent';
 
@@ -13,10 +12,8 @@ export const useAgentStore = defineStore(
     const agent = ref<Agent | null>(null);
     const loading = computed(() => api.loading);
     const error = computed(() => api.error);
-    
-    async function fetchAgent() {
-      const route = useRoute();
-      const id = route.params.id as string;
+
+    async function fetchAgent(id: string) {
       agent.value = await api.get(`/agents/${id}`);
     }
 
@@ -36,8 +33,8 @@ export const useAgentStore = defineStore(
       await api.del<Agent>(`/agents/${agent.value.id}`);
       router.replace('/agents');
     }
-    
-    return { agent, loading, error, fetchAgent , updateAgentName, updateAgentConfig, deleteAgent };
+
+    return { agent, loading, error, fetchAgent, updateAgentName, updateAgentConfig, deleteAgent };
   },
   {
     persist: {

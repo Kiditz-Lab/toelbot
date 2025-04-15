@@ -5,6 +5,7 @@ import { computed, ref } from 'vue';
 // import { useRoute } from 'vue-router';
 import { useSnackbarStore } from '../snackbarStore';
 import { useAgentStore } from './agentStore';
+import { useRoute } from 'vue-router';
 
 export const useFacbookStore = defineStore(
   'facebookStore',
@@ -12,7 +13,7 @@ export const useFacbookStore = defineStore(
     const pages = ref<FacebookPage[]>([]);
     const loading = computed(() => api.loading);
     const api = useApi();
-    const agentStore = useAgentStore()
+
     const { showSnackbar } = useSnackbarStore();
     const connectFacebook = () => {
       const clientId = import.meta.env.VITE_FACEBOOK_APP_ID;
@@ -26,16 +27,20 @@ export const useFacbookStore = defineStore(
     const setPages = (newPages: FacebookPage[]) => {
       pages.value = newPages;
     };
+    const agentStore = useAgentStore();
+    const route = useRoute();
     const assignPage = async (page: FacebookPage) => {
+      
       try {
         page.loading = true;
-        page.agentId = agentStore.agent!.id as string;
+        const id = route.params.id as string;
+        page.agentId = id;
         await api.post('/save-page', page);
-        await agentStore.fetchAgent();
+        await agentStore.fetchAgent(id);
         showSnackbar('Your page are assigned now', 'success', 3000, 'Success');
       } catch (error) {
         showSnackbar(error as string, 'error', 3000, 'Error');
-      }finally{
+      } finally {
         page.loading = false;
       }
     };
@@ -44,7 +49,7 @@ export const useFacbookStore = defineStore(
       pages,
       setPages,
       assignPage,
-      loading,
+      loading
     };
   },
   { persist: true }

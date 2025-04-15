@@ -73,7 +73,9 @@ export const useToolStore = defineStore(
     };
 
     onBeforeMount(async () => {
-      await fetchAgent();
+      const route = useRoute();
+      const id = route.params.id as string;
+      await fetchAgent(id);
     });
 
     const selectTool = async (info: Tools) => {

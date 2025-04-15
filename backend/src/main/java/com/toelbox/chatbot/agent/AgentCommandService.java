@@ -91,7 +91,7 @@ class AgentCommandService {
 		log.info("Event received");
 		repository.findById(event.agentId()).map(agent -> {
 			List<String> facebooks = agent.getFacebooks() == null ? new ArrayList<>() : new ArrayList<>(agent.getFacebooks());
-			facebooks.add(event.id().toString());
+			facebooks.add(event.pageId());
 			agent.setFacebooks(facebooks);
 			return repository.save(agent);
 		}).orElseThrow(() -> new NotFoundException("Agent not found with ID: " + event.agentId()));

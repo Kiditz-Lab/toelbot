@@ -50,6 +50,6 @@ class FacebookService {
 				.agentId(request.getAgentId())
 				.build();
 		access = repository.save(access);
-		publisher.publishEvent(new FacebookPageCreatedEvent(access.getId(), access.getAgentId()));
+		publisher.publishEvent(new FacebookPageCreatedEvent(access.getPageId(), access.getAgentId()));
 	}
 }

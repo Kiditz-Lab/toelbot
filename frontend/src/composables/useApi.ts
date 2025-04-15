@@ -48,7 +48,7 @@ export function useApi() {
         method,
         url,
         data,
-        params,
+        params: params ?? {},
         paramsSerializer: (params) => {
           const searchParams = new URLSearchParams();
           for (const [key, value] of Object.entries(params)) {
@@ -76,8 +76,8 @@ export function useApi() {
 
       return response.data;
     } catch (err: unknown) {
+      console.log(err);
       const axiosErr = err as AxiosError;
-
       if (axiosErr.code === 'ECONNABORTED') {
         error.value = 'Request timed out. Please try again.';
       } else if (!axiosErr.response) {
@@ -109,6 +109,6 @@ export function useApi() {
     patch: <T>(url: string, data?: unknown, headers?: Record<string, unknown>, responseType: 'json' | 'stream' = 'json') =>
       request<T>('PATCH', url, data, {}, headers, responseType),
     del: <T>(url: string, params?: Record<string, unknown>, headers?: Record<string, unknown>, responseType: 'json' | 'stream' = 'json') =>
-      request<T>('DELETE', url, null, params, headers, responseType),
+      request<T>('DELETE', url, null, params, headers, responseType)
   };
 }
