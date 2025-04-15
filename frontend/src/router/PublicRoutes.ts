@@ -11,6 +11,11 @@ const PublicRoutes = {
       component: () => import('@/views/apps/landing/LandingPage.vue')
     },
     {
+      name: 'Privacy And Policy',
+      path: '/privacy-policy',
+      component: () => import('@/views/apps/PrivacyAndPolicy.vue')
+    },
+    {
       name: 'Authentication',
       path: '/login',
       component: () => import('@/views/authentication/auth/LoginPage.vue')
@@ -20,11 +25,11 @@ const PublicRoutes = {
       path: '/embed/:id',
       component: () => import('@/views/apps/chats/EmbedPage.vue')
     },
-    {
-      name: 'Login',
-      path: '/login1',
-      component: () => import('@/views/authentication/auth/LoginPage.vue')
-    },
+    // {
+    //   name: 'Login',
+    //   path: '/login1',
+    //   component: () => import('@/views/authentication/auth/LoginPage.vue')
+    // },
     {
       name: 'Register',
       path: '/register',
