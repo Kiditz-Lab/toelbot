@@ -40,7 +40,7 @@ onMounted(() => {
         :key="page.id"
         :title="page.name"
         :subtitle="page.category"
-        :prepend-avatar="page.picture.data.url"
+        :prepend-avatar="page.imageUrl"
         
       >
         <template #append>
