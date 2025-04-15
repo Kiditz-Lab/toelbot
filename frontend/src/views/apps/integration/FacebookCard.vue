@@ -7,7 +7,7 @@ onMounted(() => {
   window.addEventListener('message', (event) => {
     
     
-    // if (event.origin !== 'https://toelbox.com') return;
+    if (event.origin !== 'https://toelbox.com' || event.origin !== 'http://localhost:5173') return;
 
     const { type, payload } = event.data;
     console.log(payload);

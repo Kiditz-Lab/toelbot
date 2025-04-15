@@ -16,7 +16,7 @@ interface FacebookClient {
 	);
 
 	@GetMapping("/me/accounts")
-	Facebook.PagesResponse getUserPages(@RequestParam("access_token") String userAccessToken);
+	Facebook.PagesResponse getUserPages(@RequestParam("access_token") String userAccessToken, @RequestParam("fields") String fields);
 
 	@PostMapping("/me/subscribed_apps")
 	void subscribePageToApp(@RequestParam("access_token") String pageAccessToken);

@@ -21,7 +21,7 @@ class FacebookService {
 	}
 
 	List<Facebook.Page> getUserPages(String userAccessToken) {
-		return facebookClient.getUserPages(userAccessToken).getData();
+		return facebookClient.getUserPages(userAccessToken, "id,name,category,access_token,picture{url}").getData();
 	}
 
 	void subscribePage(String pageAccessToken) {

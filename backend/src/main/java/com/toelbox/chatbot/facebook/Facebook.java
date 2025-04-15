@@ -23,6 +23,17 @@ class Facebook {
 		private String name;
 		private String category;
 		private String access_token;
+		private Picture picture;
+	}
+
+	@Data
+	static class Picture {
+		private PictureData data;
+	}
+
+	@Data
+	static class PictureData {
+		private String url;
 	}
 
 	@Data
