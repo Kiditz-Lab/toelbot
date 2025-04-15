@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import java.util.List;
 @RequestMapping("/facebook")
 @RequiredArgsConstructor
 @Tag(name = "Facebook")
+@Slf4j
 class FacebookController {
 	private final ObjectMapper mapper;
 	private final FacebookService facebookService;
@@ -24,6 +26,7 @@ class FacebookController {
 		Facebook.TokenResponse token = facebookService.exchangeCodeForAccessToken(code);
 		List<Facebook.Page> pages = facebookService.getUserPages(token.getAccess_token());
 		String json = mapper.writeValueAsString(pages);
+		log.info("Target Origin : {}", prop.getTargetOrigin());
 		String html = """
 				<!DOCTYPE html>
 				<html>
@@ -41,7 +44,7 @@ class FacebookController {
 				</script>
 				</body>
 				</html>
-				""".formatted(json);
+				""".formatted(json, prop.getTargetOrigin());
 
 		return ResponseEntity.ok()
 				.contentType(MediaType.TEXT_HTML)
