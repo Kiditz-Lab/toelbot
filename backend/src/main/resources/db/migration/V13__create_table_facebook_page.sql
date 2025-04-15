@@ -6,6 +6,5 @@ CREATE TABLE facebook_page_access (
     name VARCHAR(255),
     category VARCHAR(255),
     image_url VARCHAR(255),
-    access_token TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
