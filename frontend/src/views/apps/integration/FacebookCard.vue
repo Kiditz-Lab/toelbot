@@ -41,12 +41,11 @@ onMounted(() => {
         :title="page.name"
         :subtitle="page.category"
         :prepend-avatar="page.imageUrl"
-        
       >
         <template #append>
           <v-tooltip text="Assign" bottom>
             <template #activator="{ props }">
-              <v-btn v-bind="props" color="" :icon="mdiConnection"  variant="tonal"/>
+              <v-btn v-bind="props" color="" :icon="mdiConnection"  variant="tonal" @click="store.assignPage(page)" :loading="page.loading" />
             </template>
           </v-tooltip>
         </template>

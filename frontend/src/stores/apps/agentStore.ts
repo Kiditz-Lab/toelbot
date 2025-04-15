@@ -13,6 +13,7 @@ export const useAgentStore = defineStore(
     const agent = ref<Agent | null>(null);
     const loading = computed(() => api.loading);
     const error = computed(() => api.error);
+    
     async function fetchAgent() {
       const route = useRoute();
       const id = route.params.id as string;
@@ -36,7 +37,7 @@ export const useAgentStore = defineStore(
       router.replace('/agents');
     }
     
-    return { agent, loading, error, fetchAgent: fetchAgent, updateAgentName, updateAgentConfig, deleteAgent };
+    return { agent, loading, error, fetchAgent , updateAgentName, updateAgentConfig, deleteAgent };
   },
   {
     persist: {

@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Data
 @Builder
-@Table("facebook_page_access")
+@Table("facebook_page")
 class FacebookPage {
 	@Id
 	private UUID id;

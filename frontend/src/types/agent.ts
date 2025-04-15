@@ -15,4 +15,5 @@ export interface Agent {
     version: number;
     createdBy: string;
     tools: string[];
+    facebooks: string[];
   }
