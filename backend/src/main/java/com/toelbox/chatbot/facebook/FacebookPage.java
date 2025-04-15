@@ -9,12 +9,15 @@ import java.util.UUID;
 
 @Data
 @Builder
-@Table("facebook_page_access")
-class FacebookPageAccess {
+@Table("facebook_page")
+class FacebookPage {
 	@Id
 	private UUID id;
 	private UUID agentId;
 	private String pageId;
 	private String accessToken;
+	private String name;
+	private String category;
+	private String imageUrl;
 
 }

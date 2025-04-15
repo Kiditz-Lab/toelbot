@@ -34,23 +34,23 @@ onMounted(() => {
     <v-card-actions>
       <v-btn color="primary" variant="elevated" block @click="store.connectFacebook">Connect</v-btn>
     </v-card-actions>
-    <v-card-text class="pa-2">
-      <v-card
+    <v-card-text class="ma-0">
+      <v-list-item divider="bottom"
         v-for="page in pages"
         :key="page.id"
         :title="page.name"
         :subtitle="page.category"
         :prepend-avatar="page.picture.data.url"
-        variant="outlined"
+        
       >
         <template #append>
           <v-tooltip text="Assign" bottom>
             <template #activator="{ props }">
-              <v-btn v-bind="props" color="" :icon="mdiConnection"  variant="outlined"/>
+              <v-btn v-bind="props" color="" :icon="mdiConnection"  variant="tonal"/>
             </template>
           </v-tooltip>
         </template>
-      </v-card>
+      </v-list-item>
     </v-card-text>
   </v-card>
 </template>

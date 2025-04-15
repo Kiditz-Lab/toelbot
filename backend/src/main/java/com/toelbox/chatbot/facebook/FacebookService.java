@@ -32,8 +32,11 @@ class FacebookService {
 	@Transactional
 	void subscribePage(Facebook.SavePageRequest request) {
 		facebookClient.subscribePageToApp(request.getAccessToken());
-		var access = FacebookPageAccess.builder()
+		var access = FacebookPage.builder()
 				.pageId(request.getPageId())
+				.name(request.getName())
+				.category(request.getCategory())
+				.imageUrl(request.getImageUrl())
 				.accessToken(request.getAccessToken())
 				.agentId(request.getAgentId())
 				.build();

@@ -41,6 +41,8 @@ class Facebook {
 	static class SavePageRequest {
 		private String pageId;
 		private String name;
+		private String category;
+		private String imageUrl;
 		private String accessToken;
 		private UUID agentId;
 	}
