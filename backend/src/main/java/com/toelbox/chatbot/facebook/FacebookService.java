@@ -65,7 +65,7 @@ class FacebookService {
 			var page = repository.findByPageId(entry.id()).orElse(null);
 			if (page != null) {
 				for (FacebookWebhookResponse.Messaging messaging : entry.messaging()) {
-					if (StringUtils.isNoneBlank(messaging.message().text())) {
+					if (messaging.message() != null) {
 						publisher.publishEvent(new FacebookIncomingMessageEvent(page.getAgentId(), entry.id(), messaging.sender().id(), messaging.message().text()));
 					}
 				}
