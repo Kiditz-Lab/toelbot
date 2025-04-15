@@ -61,7 +61,7 @@ class FacebookController {
 		}
 	}
 
-	private String generateErrorHtml(String message, String targetOrigin) {
+	String generateErrorHtml(String message, String targetOrigin) {
 		return String.format("""
 				<!DOCTYPE html>
 				<html>
