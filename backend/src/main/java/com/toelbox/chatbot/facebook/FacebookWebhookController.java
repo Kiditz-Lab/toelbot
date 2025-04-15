@@ -2,10 +2,12 @@ package com.toelbox.chatbot.facebook;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/facebook/webhook")
 @Tag(name = "Facebook")
@@ -19,7 +21,7 @@ class FacebookWebhookController {
 			@RequestParam("hub.mode") String mode,
 			@RequestParam("hub.verify_token") String token,
 			@RequestParam("hub.challenge") String challenge) {
-
+		log.info("Data {}, {}, {}", mode, token, challenge);
 		if ("subscribe".equals(mode) && prop.getVerifyToken().equals(token)) {
 			return ResponseEntity.ok(challenge);
 		} else {
