@@ -5,10 +5,12 @@ import { useSnackbarStore } from '@/stores/snackbarStore';
 import { mdiConnection, mdiOpenInNew } from '@mdi/js';
 import { onMounted, toRefs } from 'vue';
 const store = useFacbookStore();
+const agentStore = useAgentStore();
 const { pages } = toRefs(store);
-const { agent } = toRefs(useAgentStore());
+const { agent } = toRefs(agentStore);
 onMounted(() => {
   const { showSnackbar } = useSnackbarStore();
+  
   window.addEventListener('message', (event) => {
     const { type, payload } = event.data;
     console.log(type);
@@ -29,9 +31,9 @@ onMounted(() => {
     <template v-slot:prepend>
       <img src="@/assets/tools/facebook.svg" />
     </template>
-    <v-card-text> Connect your Toelbot to your Facebook Pages to chat with your customer 24/7. {{ agent?.facebooks }}</v-card-text>
-    <v-card-actions>
-      <v-btn color="primary" variant="elevated" block @click="store.connectFacebook">Connect</v-btn>
+    <v-card-text> Connect your Toelbot to your Facebook Pages to chat with your customer 24/7.</v-card-text>
+    <v-card-actions v-if="agent">
+      <v-btn :disabled="agent?.facebooks.length > 0" color="primary" variant="elevated" block @click="store.connectFacebook">Connect</v-btn>
     </v-card-actions>
     <v-card-text class="ma-0">
       <v-list-item
@@ -43,14 +45,15 @@ onMounted(() => {
         :prepend-avatar="page.imageUrl"
       >
         <template #append>
-          <v-tooltip text="Assign" bottom>
+          <v-tooltip :text="agent?.facebooks?.includes(page.pageId) ? 'Assigned' : 'Assign'" bottom>
             <template #activator="{ props }">
               <v-btn
                 v-bind="props"
-                :color="agent?.facebooks.includes(page.id) ? 'success' : 'secondary'"
+                :color="agent?.facebooks?.includes(page.pageId) ? 'success' : 'secondary'"
                 :icon="mdiConnection"
+                :disabled="!agent?.facebooks"
                 variant="tonal"
-                @click="!agent?.facebooks.includes(page.id) && store.assignPage(page)"
+                @click="!agent?.facebooks.includes(page.pageId) && store.assignPage(page)"
                 :loading="page.loading"
               />
             </template>

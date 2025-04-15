@@ -3,7 +3,10 @@ package com.toelbox.chatbot.facebook;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Map;
 
 @FeignClient(name = "facebookClient", url = "https://graph.facebook.com/v18.0")
 interface FacebookClient {
@@ -19,7 +22,7 @@ interface FacebookClient {
 	Facebook.PagesResponse getUserPages(@RequestParam("access_token") String userAccessToken, @RequestParam("fields") String fields);
 
 	@PostMapping("/me/subscribed_apps")
-	void subscribePageToApp(@RequestParam("access_token") String pageAccessToken, @RequestParam("subscribed_fields") String subscribedFields);
+	void subscribePageToApp(@RequestParam("access_token") String pageAccessToken, @RequestBody Map<String, Object> body);
 
 
 }

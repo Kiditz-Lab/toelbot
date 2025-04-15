@@ -52,6 +52,7 @@ import UpdateAgent from '@/components/apps/agents/UpdateAgent.vue';
 import AgentConfig from '@/components/apps/agents/AgentConfig.vue';
 import { onMounted, ref } from 'vue';
 import { useAgentStore } from '@/stores/apps/agentStore';
+import { useRoute } from 'vue-router';
 
 const dialog = ref(false);
 const { deleteAgent, fetchAgent } = useAgentStore();
@@ -61,5 +62,10 @@ const confirmDelete = async () => {
   dialog.value = false;
   await deleteAgent();
 };
-onMounted(fetchAgent);
+
+onMounted(() => {
+  const route = useRoute();
+  const id = route.params.id as string;
+  fetchAgent(id);
+});
 </script>

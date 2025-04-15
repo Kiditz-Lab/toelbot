@@ -6,7 +6,9 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -40,6 +42,8 @@ class FacebookService {
 
 	@Transactional
 	void subscribePage(Facebook.SavePageRequest request) {
+		Map<String, Object> body = Map.of("subscribed_fields", List.of("messages", "message_deliveries", "message_reads", "messaging_postbacks"));
+
 		facebookClient.subscribePageToApp(request.getAccessToken(), "messages,message_deliveries,message_reads,messaging_postbacks");
 		var access = FacebookPage.builder()
 				.pageId(request.getPageId())
