@@ -14,4 +14,5 @@ class FacebookConfigProp {
 	private String appId;
 	private String appSecret;
 	private String redirectUri;
+	private String targetOrigin;
 }

@@ -77,3 +77,4 @@ facebook:
   app-id: 1745290839353355
   app-secret: ded1468d0be8809c2d684dac55fe0557
   redirect-uri: https://api.toelbox.com/facebook/callback
+  target-origin: http://localhost:5173

@@ -1,7 +1,26 @@
 <script setup lang="ts">
 import { useFacbookStore } from '@/stores/apps/facebookStore';
 import { mdiOpenInNew } from '@mdi/js';
+import { message } from 'ant-design-vue';
+import { onMounted } from 'vue';
 const store = useFacbookStore();
+onMounted(() => {
+  window.addEventListener('message', (event) => {
+    console.log(message);
+    console.log(event.origin);
+    if (event.origin !== 'https://toelbox.com') return;
+
+    const { type, payload } = event.data;
+    if (type === 'facebook-connected') {
+      if (payload.status === 'success') {
+        console.log('Facebook Pages:', payload.pages);
+        // render them in the UI or save them to a store
+      } else {
+        console.error('Failed to connect:', payload.message);
+      }
+    }
+  });
+});
 </script>
 
 <template>

@@ -17,6 +17,7 @@ import java.util.List;
 class FacebookController {
 	private final ObjectMapper mapper;
 	private final FacebookService facebookService;
+	private final FacebookConfigProp prop;
 
 	@GetMapping("/callback")
 	public ResponseEntity<String> handleCallback(@RequestParam String code) throws JsonProcessingException {
@@ -35,7 +36,7 @@ class FacebookController {
 				            status: "success",
 				            pages: pages
 				        }
-				    }, "https://toelbox.com");
+				    }, "%s");
 				    setTimeout(() => window.close(), 500);
 				</script>
 				</body>
