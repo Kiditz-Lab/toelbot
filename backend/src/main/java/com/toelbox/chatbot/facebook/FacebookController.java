@@ -1,5 +1,6 @@
 package com.toelbox.chatbot.facebook;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -7,8 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/facebook")
+@RequestMapping("/api/v1/facebook")
 @RequiredArgsConstructor
+@Tag(name = "Facebook")
 class FacebookController {
 
 	private final FacebookService facebookService;
