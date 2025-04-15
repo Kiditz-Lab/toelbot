@@ -42,6 +42,6 @@ public class Agent {
 
 	@CreatedBy
 	private String createdBy;
-
 	private List<String> tools;
+	private List<String> facebooks;
 }

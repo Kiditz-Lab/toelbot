@@ -3,6 +3,7 @@ package com.toelbox.chatbot.facebook;
 import lombok.Data;
 
 import java.util.List;
+import java.util.UUID;
 
 class Facebook {
 	@Data
@@ -41,7 +42,7 @@ class Facebook {
 		private String pageId;
 		private String name;
 		private String accessToken;
-		private String agentId;
+		private UUID agentId;
 	}
 
 }

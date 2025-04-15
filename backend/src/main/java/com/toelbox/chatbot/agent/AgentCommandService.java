@@ -1,17 +1,21 @@
 package com.toelbox.chatbot.agent;
 
-import com.github.benmanes.caffeine.cache.Cache;
 import com.toelbox.chatbot.core.NotFoundException;
 import com.toelbox.chatbot.core.Timing;
+import com.toelbox.chatbot.facebook.FacebookPageCreatedEvent;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.RandomStringGenerator;
-import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.modulith.events.ApplicationModuleListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -80,5 +84,16 @@ class AgentCommandService {
 	void deleteAgent(UUID id) {
 		chatService.invalidateCacheByAgentId(id);
 		repository.deleteById(id);
+	}
+
+	@ApplicationModuleListener
+	void facebookCreated(FacebookPageCreatedEvent event) {
+		log.info("Event received");
+		repository.findById(event.agentId()).map(agent -> {
+			List<String> facebooks = agent.getFacebooks() == null ? new ArrayList<>() : new ArrayList<>(agent.getFacebooks());
+			facebooks.add(event.id().toString());
+			agent.setFacebooks(facebooks);
+			return repository.save(agent);
+		}).orElseThrow(() -> new NotFoundException("Agent not found with ID: " + event.agentId()));
 	}
 }

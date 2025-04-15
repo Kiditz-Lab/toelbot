@@ -84,7 +84,7 @@ class FacebookController {
 	@PostMapping("/api/v1/save-page")
 	ResponseEntity<Void> savePage(@RequestBody Facebook.SavePageRequest req) {
 		// Save to DB (req.getPageId(), req.getAccessToken(), etc.)
-		facebookService.subscribePage(req.getAccessToken());
+		facebookService.subscribePage(req);
 		return ResponseEntity.ok().build();
 	}
 }
