@@ -29,7 +29,9 @@ onMounted(() => {
 <template>
   <v-card title="Facebook" subtitle="Integrate Toelbot to Facebook">
     <template v-slot:prepend>
-      <img src="@/assets/tools/facebook.svg" />
+      <v-avatar rounded>
+        <img src="@/assets/tools/facebook.svg" />
+      </v-avatar>        
     </template>
     <v-card-text> Connect your Toelbot to your Facebook Pages to chat with your customer 24/7.</v-card-text>
     <v-card-actions v-if="agent">

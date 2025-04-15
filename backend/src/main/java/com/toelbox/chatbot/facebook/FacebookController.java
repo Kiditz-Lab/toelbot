@@ -23,12 +23,11 @@ class FacebookController {
 	private final FacebookConfigProp prop;
 
 	@GetMapping("/facebook/callback")
-	public ResponseEntity<String> handleCallback(@RequestParam String code) throws JsonProcessingException {
+	public ResponseEntity<String> handleCallback(@RequestParam String code) {
 		try {
 			Facebook.TokenResponse token = facebookService.exchangeCodeForAccessToken(code);
 			List<FacebookPage> pages = facebookService.getUserPages(token.getAccess_token());
 			String json = mapper.writeValueAsString(pages);
-//			String escapedJson = json.replace("\\", "\\\\").replace("\"", "\\\"");
 
 			log.info("Target Origin : {}", prop.getTargetOrigin());
 			String html = """
