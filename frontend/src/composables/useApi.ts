@@ -1,5 +1,5 @@
 import { ref } from 'vue';
-import axios, { type AxiosInstance, type AxiosProgressEvent } from 'axios';
+import axios, { type AxiosInstance, type AxiosProgressEvent, type AxiosError } from 'axios';
 import { auth } from '@/utils/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 
@@ -75,12 +75,19 @@ export function useApi() {
       });
 
       return response.data;
-    } catch (err) {
-      if (err instanceof Error) {
-        error.value = err.message;
+    } catch (err: unknown) {
+      const axiosErr = err as AxiosError;
+
+      if (axiosErr.code === 'ECONNABORTED') {
+        error.value = 'Request timed out. Please try again.';
+      } else if (!axiosErr.response) {
+        error.value = 'Network error. Please check your internet connection.';
       } else {
-        error.value = 'An unknown error occurred';
+        const status = axiosErr.response?.status;
+        const message = axiosErr.response?.data || axiosErr.message;
+        error.value = `Error ${status}: ${typeof message === 'string' ? message : JSON.stringify(message)}`;
       }
+
       return Promise.reject(error.value);
     } finally {
       loading.value = false;

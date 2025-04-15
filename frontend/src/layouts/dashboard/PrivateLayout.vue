@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
 import LoaderWrapper from './LoaderWrapper.vue';
+
 // import VerticalSidebarVue from './vertical-sidebar/VerticalSidebar.vue';
 import VerticalHeaderVue from './vertical-header/VerticalHeader.vue';
 // import FooterPanel from './footer/FooterPanel.vue';
@@ -11,6 +12,7 @@ import VerticalHeaderVue from './vertical-header/VerticalHeader.vue';
     <v-app :class="[]">
       
       <v-main class="page-wrapper">
+        
         <!-- <VerticalSidebarVue /> -->
         <VerticalHeaderVue :is-logo="true" />
         

@@ -5,6 +5,7 @@ import VerticalSidebarVue from './vertical-sidebar/VerticalSidebar.vue';
 import VerticalHeaderVue from './vertical-header/VerticalHeader.vue';
 import FooterPanel from './footer/FooterPanel.vue';
 import SnackBar from '@/components/shared/SnackBar.vue';
+
 </script>
 
 <template>
