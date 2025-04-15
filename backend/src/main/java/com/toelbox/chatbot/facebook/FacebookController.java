@@ -28,7 +28,7 @@ class FacebookController {
 			Facebook.TokenResponse token = facebookService.exchangeCodeForAccessToken(code);
 			List<Facebook.Page> pages = facebookService.getUserPages(token.getAccess_token());
 			String json = mapper.writeValueAsString(pages);
-			String escapedJson = json.replace("\\", "\\\\").replace("\"", "\\\"");
+//			String escapedJson = json.replace("\\", "\\\\").replace("\"", "\\\"");
 
 			log.info("Target Origin : {}", prop.getTargetOrigin());
 			String html = """
@@ -48,7 +48,7 @@ class FacebookController {
 					</script>
 					</body>
 					</html>
-					""".formatted(escapedJson, prop.getTargetOrigin());
+					""".formatted(json, prop.getTargetOrigin());
 
 			return ResponseEntity.ok()
 					.contentType(MediaType.TEXT_HTML)
