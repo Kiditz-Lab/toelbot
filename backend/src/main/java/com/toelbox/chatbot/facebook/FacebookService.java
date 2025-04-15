@@ -6,10 +6,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +28,7 @@ class FacebookService {
 
 	@Transactional
 	List<FacebookPage> getUserPages(String userAccessToken) {
+		log.info("Access token: {}", userAccessToken);
 		var pages = facebookClient.getUserPages(userAccessToken, "id,name,category,access_token,picture{url}").getData();
 		return pages.stream().map(page -> FacebookPage.builder()
 				.pageId(page.getId())
