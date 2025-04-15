@@ -82,6 +82,7 @@ class AgentChatService {
 	}
 
 	ChatClient buildChatClient(Agent agent, String chatId, Country country) {
+		log.info("DATA : {}", chatId, country);
 		var config = agent.getConfig();
 		var model = config.getAiModel();
 		var api = openAiApi(isGrooq(model));
