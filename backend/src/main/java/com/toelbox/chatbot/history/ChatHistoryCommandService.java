@@ -30,7 +30,7 @@ class ChatHistoryCommandService {
 				.botMessage(event.botMessage())
 				.userMessage(event.userMessage())
 //				.country(address.getCountry())
-				.countryCode(event.countryCode())
+				.countryCode(event.country().getCode())
 //				.regionCode(address.getRegion())
 //				.regionName(address.getRegionName())
 //				.latitude(address.getLat())

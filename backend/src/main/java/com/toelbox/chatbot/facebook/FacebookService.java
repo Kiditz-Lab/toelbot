@@ -3,6 +3,8 @@ package com.toelbox.chatbot.facebook;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +17,7 @@ import java.util.Map;
 class FacebookService {
 
 	private final FacebookClient facebookClient;
-	private final FacebookPageAccessRepository repository;
+	private final FacebookPageRepository repository;
 	private final ApplicationEventPublisher publisher;
 
 
@@ -55,12 +57,23 @@ class FacebookService {
 		publisher.publishEvent(new FacebookPageCreatedEvent(access.getPageId(), access.getAgentId()));
 	}
 
+
 	void messageReceived(FacebookWebhookResponse response) {
 		log.info("Message received: {}", response);
-		response.entry().forEach(entry -> {
-			entry.messaging().forEach(messaging -> {
+		for (FacebookWebhookResponse.Entry entry : response.entry()) {
+			var page = repository.findByPageId(entry.id()).orElse(null);
+			if (page != null) {
+				for (FacebookWebhookResponse.Messaging messaging : entry.messaging()) {
+					publisher.publishEvent(new FacebookIncomingMessageEvent(page.getAgentId(), entry.id(), messaging.sender().id(), messaging.message().text()));
+				}
+			}
+		}
+	}
 
-			});
-		});
+	@Async
+	@EventListener
+	void replyMessage(FacebookReplyMessageEvent event) {
+		var message = new Facebook.Message(new Facebook.Recipient(event.senderId()), new Facebook.MessageContent(event.text()));
+		repository.findByPageId(event.pageId()).ifPresent(page -> facebookClient.sendMessage(page.getPageId(), page.getAccessToken(), message));
 	}
 }

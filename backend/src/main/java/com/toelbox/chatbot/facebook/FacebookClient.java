@@ -1,10 +1,7 @@
 package com.toelbox.chatbot.facebook;
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -24,5 +21,10 @@ interface FacebookClient {
 	@PostMapping("/me/subscribed_apps")
 	void subscribePageToApp(@RequestParam("access_token") String pageAccessToken, @RequestBody Map<String, Object> body);
 
+	@PostMapping("/{pageId}/messages")
+	void sendMessage(@PathVariable("pageId") String pageId,
+	                 @RequestParam("access_token") String accessToken,
+	                 @RequestBody Facebook.Message message);
 
 }
+

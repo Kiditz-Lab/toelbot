@@ -1,6 +1,6 @@
 package com.toelbox.chatbot.agent;
 
-import com.toelbox.chatbot.core.IpAddress;
+import com.toelbox.chatbot.core.Country;
 import com.toelbox.chatbot.history.IpApiService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,13 +33,13 @@ class AgentChatController {
 		if (principal == null && !agent.isPublic()) {
 			throw new AccessDeniedException("Your agent is not public");
 		}
-		String ipAddress = IpAddress.getClientIp(request);
-		String countryCode = "";
-		try {
-			countryCode = ipApiService.getIpInfo(ipAddress).getCountryCode();
-		} catch (Exception ignored) {
-		}
-		return service.chat(agent, chat, countryCode);
+//		String ipAddress = IpAddress.getClientIp(request);
+//		String countryCode = "";
+//		try {
+//			countryCode = .getCountryCode();
+//		} catch (Exception ignored) {
+//		}
+		return service.asyncChat(agent, chat, new Country());
 	}
 
 	@GetMapping("/models")

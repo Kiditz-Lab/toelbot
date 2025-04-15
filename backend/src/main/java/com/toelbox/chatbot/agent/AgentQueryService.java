@@ -18,7 +18,7 @@ class AgentQueryService {
 		return repository.findByCreatedBy(principal.getName());
 	}
 
-	Agent findById(UUID id) throws AccessDeniedException {
+	Agent findById(UUID id) {
 		return repository.findById(id).orElseThrow(() -> new NotFoundException("Agent not found with ID: " + id));
 	}
 }

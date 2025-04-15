@@ -4,11 +4,15 @@ import java.util.List;
 
 record FacebookWebhookResponse(List<Entry> entry) {
 
-    record Entry(List<Messaging> messaging) { }
+	record Entry(String id, long time, List<Messaging> messaging) {
+	}
 
-    record Messaging(Sender sender, Message message) { }
+	record Messaging(Sender sender, Message message) {
+	}
 
-    record Sender(String id) { }
+	record Sender(String id) {
+	}
 
-    record Message(String text) { }
+	record Message(String text) {
+	}
 }

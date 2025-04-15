@@ -47,4 +47,14 @@ class Facebook {
 		private UUID agentId;
 	}
 
+	record Message(Recipient recipient, MessageContent message) {
+	}
+
+	record Recipient(String id) {
+	}
+
+	record MessageContent(String text) {
+	}
+
+
 }
