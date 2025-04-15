@@ -1,5 +1,5 @@
 CREATE TABLE facebook_page (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),,
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     agent_id UUID,
     page_id VARCHAR(20),
     access_token TEXT,
