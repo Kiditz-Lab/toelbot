@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/facebook")
+@RequestMapping
 @RequiredArgsConstructor
 @Tag(name = "Facebook")
 @Slf4j
@@ -22,7 +22,7 @@ class FacebookController {
 	private final FacebookService facebookService;
 	private final FacebookConfigProp prop;
 
-	@GetMapping("/callback")
+	@GetMapping("/facebook/callback")
 	public ResponseEntity<String> handleCallback(@RequestParam String code) throws JsonProcessingException {
 		try {
 			Facebook.TokenResponse token = facebookService.exchangeCodeForAccessToken(code);
