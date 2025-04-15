@@ -1,6 +1,6 @@
 import { useApi } from '@/composables/useApi';
 import { router } from '@/router';
-import type { McpConnectCommand, TestTool, TestToolResult, Tool, ToolList, Tools } from '@/types/tool';
+import type { McpConnectCommand, TestTool, TestToolResult, Tool, Tools } from '@/types/tool';
 import { defineStore } from 'pinia';
 import { computed, onBeforeMount, ref, toRefs, watch, watchEffect } from 'vue';
 import { useSnackbarStore } from '../snackbarStore';
@@ -11,7 +11,7 @@ import type { McpServer } from '@/types/mcp_server';
 export const useToolStore = defineStore(
   'toolStore',
   () => {
-    const tools = ref<ToolList[]>([]);
+    const tools = ref<Tools[]>([]);
     const { agent } = toRefs(useAgentStore());
     const { fetchAgent } = useAgentStore();
     const agentTools = computed(() => agent.value?.tools ?? []);
@@ -76,8 +76,8 @@ export const useToolStore = defineStore(
       await fetchAgent();
     });
 
-    const selectTool = async (info: ToolList) => {
-      // const tool = await findToolById(info.id);
+    const selectTool = async (info: Tools) => {
+      selectedTool.value = info;
       toolId.value = info.id;
       router.push({ name: 'ToolDetail', params: route.params });
     };

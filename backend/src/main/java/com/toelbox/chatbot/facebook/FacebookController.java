@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/facebook")
+@RequestMapping("/facebook")
 @RequiredArgsConstructor
 @Tag(name = "Facebook")
 class FacebookController {
@@ -22,7 +22,7 @@ class FacebookController {
 		return ResponseEntity.ok(pages);
 	}
 
-	@PostMapping("/save-page")
+	@PostMapping("/api/v1/save-page")
 	ResponseEntity<Void> savePage(@RequestBody Facebook.SavePageRequest req) {
 		// Save to DB (req.getPageId(), req.getAccessToken(), etc.)
 		facebookService.subscribePage(req.getAccessToken());

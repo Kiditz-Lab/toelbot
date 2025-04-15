@@ -17,7 +17,6 @@ const { testConnection, getFields, deleteConnection, fetchMcp, findToolById } = 
 
 onMounted(async () => {
   import('md-editor-v3/lib/style.css');
-  selectedTool.value = {};
   await findToolById(toolId.value);
   await fetchMcp(toolId.value);
 });

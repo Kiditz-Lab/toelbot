@@ -1,10 +1,10 @@
 <!-- AgentForm.vue -->
 <template>
   <v-dialog v-model="dialog" max-width="400">
-    <v-card rounded="xl">
+    <v-card rounded="lg">
       <v-card-title class="text-h5 text-center"> Create a new agent </v-card-title>
-      <v-divider/>
-      <v-card-text class="px-8 py-0">
+      <v-divider class="mb-2"/>
+      <v-card-text class="px-8 pt-4">
         <v-form ref="formRef" @submit.prevent="save">
           <v-label class="font-weight-regular">Give your agent a name to easily identify it</v-label>
           <v-text-field
@@ -20,8 +20,8 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer />
-        <v-btn class="pa-2" color="grey" variant="text" @click="dialog = false">Close</v-btn>
-        <v-btn color="primary" variant="tonal" @click="save">Let's Go</v-btn>
+        <v-btn class="pa-2" color="error" variant="text" @click="dialog = false">Close</v-btn>
+        <v-btn color="primary" variant="elevated" @click="save">Let's Go</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
