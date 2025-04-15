@@ -8,7 +8,7 @@ onMounted(() => {
   window.addEventListener('message', (event) => {
     console.log(message);
     console.log(event.origin);
-    if (event.origin !== 'https://toelbox.com') return;
+    // if (event.origin !== 'https://toelbox.com') return;
 
     const { type, payload } = event.data;
     if (type === 'facebook-connected') {
