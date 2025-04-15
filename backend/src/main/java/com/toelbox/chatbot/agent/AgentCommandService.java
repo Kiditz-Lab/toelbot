@@ -3,6 +3,7 @@ package com.toelbox.chatbot.agent;
 import com.toelbox.chatbot.core.NotFoundException;
 import com.toelbox.chatbot.core.Timing;
 import com.toelbox.chatbot.facebook.FacebookPageCreatedEvent;
+import com.toelbox.chatbot.facebook.FacebookPageRemovedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.RandomStringGenerator;
@@ -90,10 +91,21 @@ class AgentCommandService {
 
 	@ApplicationModuleListener
 	void facebookCreated(FacebookPageCreatedEvent event) {
-		log.info("Event received");
+		log.info("Event created");
 		repository.findById(event.agentId()).map(agent -> {
 			List<String> facebooks = agent.getFacebooks() == null ? new ArrayList<>() : new ArrayList<>(agent.getFacebooks());
 			facebooks.add(event.pageId());
+			agent.setFacebooks(facebooks);
+			return repository.save(agent);
+		}).orElseThrow(() -> new NotFoundException("Agent not found with ID: " + event.agentId()));
+	}
+
+	@ApplicationModuleListener
+	void facebookRemoved(FacebookPageRemovedEvent event) {
+		log.info("Event removed");
+		repository.findById(event.agentId()).map(agent -> {
+			List<String> facebooks = agent.getFacebooks() == null ? new ArrayList<>() : new ArrayList<>(agent.getFacebooks());
+			facebooks.remove(event.pageId());
 			agent.setFacebooks(facebooks);
 			return repository.save(agent);
 		}).orElseThrow(() -> new NotFoundException("Agent not found with ID: " + event.agentId()));

@@ -46,7 +46,7 @@ class FacebookService {
 	void subscribePage(Facebook.SavePageRequest request) {
 		Map<String, Object> body = Map.of("subscribed_fields", List.of("messages", "message_deliveries", "message_reads", "messaging_postbacks"));
 		facebookClient.subscribePageToApp(request.getAccessToken(), body);
-		var access = FacebookPage.builder()
+		var page = FacebookPage.builder()
 				.pageId(request.getPageId())
 				.name(request.getName())
 				.category(request.getCategory())
@@ -54,8 +54,8 @@ class FacebookService {
 				.accessToken(request.getAccessToken())
 				.agentId(request.getAgentId())
 				.build();
-		access = repository.save(access);
-		publisher.publishEvent(new FacebookPageCreatedEvent(access.getPageId(), access.getAgentId()));
+		page = repository.save(page);
+		publisher.publishEvent(new FacebookPageCreatedEvent(page.getPageId(), page.getAgentId()));
 	}
 
 	@Transactional
@@ -63,6 +63,7 @@ class FacebookService {
 		var page = repository.findByPageId(pageId).orElse(null);
 		if (page != null) {
 			facebookClient.unsubscribePageFromApp(page.getAccessToken());
+			publisher.publishEvent(new FacebookPageRemovedEvent(page.getPageId(), page.getAgentId()));
 			repository.deleteById(page.getId());
 		}
 	}

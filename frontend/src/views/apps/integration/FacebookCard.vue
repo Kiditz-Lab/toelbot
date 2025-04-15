@@ -45,7 +45,7 @@ onMounted(() => {
         :prepend-avatar="page.imageUrl"
       >
         <template #append>
-          <v-tooltip :text="agent?.facebooks?.includes(page.pageId) ? 'Assigned' : 'Assign'" bottom>
+          <v-tooltip :text="agent?.facebooks?.includes(page.pageId) ? 'Unsubscribe' : 'Subscribe'" bottom>
             <template #activator="{ props }">
               <v-btn
                 v-bind="props"
