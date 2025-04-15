@@ -2,6 +2,7 @@ package com.toelbox.chatbot.facebook;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -64,7 +65,9 @@ class FacebookService {
 			var page = repository.findByPageId(entry.id()).orElse(null);
 			if (page != null) {
 				for (FacebookWebhookResponse.Messaging messaging : entry.messaging()) {
-					publisher.publishEvent(new FacebookIncomingMessageEvent(page.getAgentId(), entry.id(), messaging.sender().id(), messaging.message().text()));
+					if (StringUtils.isNoneBlank(messaging.message().text())) {
+						publisher.publishEvent(new FacebookIncomingMessageEvent(page.getAgentId(), entry.id(), messaging.sender().id(), messaging.message().text()));
+					}
 				}
 			}
 		}
