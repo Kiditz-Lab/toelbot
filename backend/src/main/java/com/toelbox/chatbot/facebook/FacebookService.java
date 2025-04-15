@@ -40,7 +40,7 @@ class FacebookService {
 
 	@Transactional
 	void subscribePage(Facebook.SavePageRequest request) {
-		facebookClient.subscribePageToApp(request.getAccessToken());
+		facebookClient.subscribePageToApp(request.getAccessToken(), "messages,message_deliveries,message_reads,messaging_postbacks");
 		var access = FacebookPage.builder()
 				.pageId(request.getPageId())
 				.name(request.getName())
