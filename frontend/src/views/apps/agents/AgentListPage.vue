@@ -3,12 +3,15 @@ import { onMounted, ref } from 'vue';
 import { toSvg } from 'jdenticon';
 import { useApi } from '@/composables/useApi';
 import AgentFormDialog from './AgentFormDialog.vue';
+import SnackBar from '@/components/shared/SnackBar.vue';
 import { format, parseISO } from 'date-fns';
 import { mdiLockOpenCheckOutline, mdiLockOutline, mdiOpenInNew } from '@mdi/js';
+import { useSnackbarStore } from '@/stores/snackbarStore';
 const api = useApi();
 const agents = ref([]);
 const dialog = ref(false);
 const page = ref({ title: 'Your Agents' });
+const {showSnackbar} = useSnackbarStore()
 
 const getJdenticonSvg = (title) => {
   const svg = toSvg(title, 100);
@@ -22,7 +25,8 @@ const fetchAgents = async () => {
     const response = await api.get('/agents');
     agents.value = response;
   } catch (err) {
-    console.error('Failed to fetch items:', err);
+    console.log(err);
+    showSnackbar(err, 'error', 3000, 'Error');
   }finally{
     loading.value = false;
   }
@@ -39,7 +43,7 @@ onMounted(fetchAgents);
 <template>
   
   <v-container>
-    
+    <snack-bar />
     <v-row align="center" justify="space-between" class="mb-5">
       <h3 class="text-h3 ma-0">{{ page.title }}</h3>
       <v-btn v-if="agents.length > 0" color="primary" variant="elevated" @click="dialog = true" :loading="loading"> New Agent </v-btn>

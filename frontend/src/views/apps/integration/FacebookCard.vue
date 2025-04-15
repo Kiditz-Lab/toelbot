@@ -1,22 +1,24 @@
 <script setup lang="ts">
 import { useFacbookStore } from '@/stores/apps/facebookStore';
-import { mdiOpenInNew } from '@mdi/js';
-import { onMounted } from 'vue';
+import { useSnackbarStore } from '@/stores/snackbarStore';
+import { mdiConnection, mdiOpenInNew } from '@mdi/js';
+import { onMounted, toRefs } from 'vue';
 const store = useFacbookStore();
+const { pages } = toRefs(store);
 onMounted(() => {
-  window.addEventListener('message', (event) => {
-    
-    
-    if (event.origin !== 'https://toelbox.com' || event.origin !== 'http://localhost:5173') return;
+  const { showSnackbar } = useSnackbarStore();
 
+  window.addEventListener('message', (event) => {
+    // if (event.origin !== 'https://toelbox.com') return;
     const { type, payload } = event.data;
-    console.log(payload);
+    console.log(type);
     if (type === 'facebook-connected') {
       if (payload.status === 'success') {
+        store.setPages(payload.pages);
         console.log('Facebook Pages:', payload.pages);
         // render them in the UI or save them to a store
       } else {
-        console.error('Failed to connect:', payload.message);
+        showSnackbar('Failed to connect', 'error', 3000, 'Error');
       }
     }
   });
@@ -32,5 +34,23 @@ onMounted(() => {
     <v-card-actions>
       <v-btn color="primary" variant="elevated" block @click="store.connectFacebook">Connect</v-btn>
     </v-card-actions>
+    <v-card-text class="pa-2">
+      <v-card
+        v-for="page in pages"
+        :key="page.id"
+        :title="page.name"
+        :subtitle="page.category"
+        :prepend-avatar="page.picture.data.url"
+        variant="outlined"
+      >
+        <template #append>
+          <v-tooltip text="Assign" bottom>
+            <template #activator="{ props }">
+              <v-btn v-bind="props" color="" :icon="mdiConnection"  variant="outlined"/>
+            </template>
+          </v-tooltip>
+        </template>
+      </v-card>
+    </v-card-text>
   </v-card>
 </template>
