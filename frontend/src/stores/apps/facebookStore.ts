@@ -20,7 +20,7 @@ export const useFacbookStore = defineStore(
     onMounted(async () => {
       const id = route.params.id as string;
       await agentStore.fetchAgent(id);
-    })
+    });
     const connectFacebook = () => {
       const clientId = import.meta.env.VITE_FACEBOOK_APP_ID;
       const baseUrl = import.meta.env.VITE_BASE_URL;
@@ -33,15 +33,29 @@ export const useFacbookStore = defineStore(
     const setPages = (newPages: FacebookPage[]) => {
       pages.value = newPages;
     };
-    
+
     const assignPage = async (page: FacebookPage) => {
       try {
         page.loading = true;
         const id = route.params.id as string;
         page.agentId = id;
-        await api.post('/save-page', page);
+        await api.post('/subscribe-page', page);
         await agentStore.fetchAgent(id);
-        showSnackbar('Your page are assigned now', 'success', 3000, 'Success');
+        showSnackbar('Your page are subscribed successfully', 'success', 3000, 'Success');
+      } catch (error) {
+        showSnackbar(error as string, 'error', 3000, 'Error');
+      } finally {
+        page.loading = false;
+      }
+    };
+    const unassignPage = async (page: FacebookPage) => {
+      try {
+        page.loading = true;
+        const id = route.params.id as string;
+        page.agentId = id;
+        await api.del('/unsubscribe-page', { pageId: page.id });
+        await agentStore.fetchAgent(id);
+        showSnackbar('Your page are su now', 'success', 3000, 'Success');
       } catch (error) {
         showSnackbar(error as string, 'error', 3000, 'Error');
       } finally {
@@ -53,6 +67,7 @@ export const useFacbookStore = defineStore(
       pages,
       setPages,
       assignPage,
+      unassignPage,
       loading
     };
   },
