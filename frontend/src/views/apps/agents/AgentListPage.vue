@@ -11,16 +11,20 @@ const dialog = ref(false);
 const page = ref({ title: 'Your Agents' });
 
 const getJdenticonSvg = (title) => {
-  const svg = toSvg(title, 100); // Generate SVG string with size 100px
-  return `data:image/svg+xml;base64,${btoa(svg)}`; // Convert to base64 data URL
+  const svg = toSvg(title, 100);
+  return `data:image/svg+xml;base64,${btoa(svg)}`;
 };
+const loading = ref(false);
 
 const fetchAgents = async () => {
   try {
+    loading.value = true;
     const response = await api.get('/agents');
     agents.value = response;
   } catch (err) {
     console.error('Failed to fetch items:', err);
+  }finally{
+    loading.value = false;
   }
 };
 const saveAgent = async (agent) => {
@@ -33,11 +37,14 @@ onMounted(fetchAgents);
 </script>
 
 <template>
+  
   <v-container>
+    
     <v-row align="center" justify="space-between" class="mb-5">
       <h3 class="text-h3 ma-0">{{ page.title }}</h3>
-      <v-btn v-if="agents.length > 0" color="primary" variant="elevated" @click="dialog = true"> New Agent </v-btn>
+      <v-btn v-if="agents.length > 0" color="primary" variant="elevated" @click="dialog = true" :loading="loading"> New Agent </v-btn>
     </v-row>
+
 
     <v-row justify="start" v-if="agents.length > 0">
       <v-col v-for="agent in agents" :key="agent.id" cols="12" sm="6" md="4" lg="3">
@@ -68,7 +75,7 @@ onMounted(fetchAgents);
         <v-card-title>No agents available</v-card-title>
         <v-card-subtitle>Please create an agent to get started.</v-card-subtitle>
 
-        <v-btn color="primary" @click="dialog = true" class="mt-4"> New Agent </v-btn>
+        <v-btn color="primary" @click="dialog = true" class="mt-4" :loading="loading"> New Agent </v-btn>
       </v-card>
     </v-col>
 

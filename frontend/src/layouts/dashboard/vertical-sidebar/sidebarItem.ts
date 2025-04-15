@@ -12,7 +12,7 @@
 // } from '@ant-design/icons-vue';
 
 // import { SettingOutlined, MessageOutlined, FileTextOutlined, CloudUploadOutlined, GlobalOutlined } from '@ant-design/icons-vue';
-import { CloudIcon, MessageCircle2Icon, MessageCircleSearchIcon, FileTextIcon, WorldIcon, SettingsIcon, ToolsIcon } from 'vue-tabler-icons';
+import { CloudIcon, MessageCircle2Icon, MessageCircleSearchIcon, FileTextIcon, WorldIcon, SettingsIcon, ToolsIcon, PlugIcon } from 'vue-tabler-icons';
 // import { ChartBarIcon } from 'vue-tabler-icons';
 
 export interface menu {
@@ -60,7 +60,13 @@ const sidebarItem: menu[] = [
     icon: WorldIcon,
     to: 'TrainingWebsite'
   },
+  
   { header: 'Advance' },
+  {
+    title: 'Integration',
+    icon: PlugIcon,
+    to: 'Integration'
+  },
   {
     title: 'Tools',
     icon: ToolsIcon,

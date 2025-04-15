@@ -7,11 +7,11 @@ const MainRoutes = {
   component: () => import('@/layouts/dashboard/DashboardLayout.vue'),
   children: [
     
-    // {
-    //   name: 'Dashboard',
-    //   path: '/:id/dashboard',
-    //   component: () => import('@/views/dashboard/DefaultDashboard.vue')
-    // },
+    {
+      name: 'Integration',
+      path: '/:id/integration',
+      component: () => import('@/views/apps/integration/IntegrationPage.vue')
+    },
     {
       name: 'Settings',
       path: '/:id/settings',
