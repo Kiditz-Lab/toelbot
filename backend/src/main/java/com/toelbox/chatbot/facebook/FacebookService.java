@@ -42,6 +42,7 @@ class FacebookService {
 	void subscribePage(Facebook.SavePageRequest request) {
 		facebookClient.subscribePageToApp(request.getAccessToken(), "messages,message_deliveries,message_reads,messaging_postbacks");
 		var access = FacebookPage.builder()
+				.id(UUID.randomUUID())
 				.pageId(request.getPageId())
 				.name(request.getName())
 				.category(request.getCategory())
