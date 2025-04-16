@@ -23,7 +23,9 @@ class FacebookController {
 	private final FacebookConfigProp prop;
 
 	@GetMapping("/facebook/callback")
-	public ResponseEntity<String> handleCallback(@RequestParam String code) {
+	public ResponseEntity<String> handleCallback(@RequestParam String code, @RequestParam(value = "state", required = false) String state
+	) {
+		log.info("STATE: {}", state);
 		try {
 			Facebook.TokenResponse token = facebookService.exchangeCodeForAccessToken(code);
 			List<FacebookPage> pages = facebookService.getUserPages(token.getAccess_token());
