@@ -42,6 +42,7 @@ class InstagramService {
 				.builder()
 				.userId(me.getUserId())
 				.name(me.getName())
+				.active(false)
 				.agentId(UUID.fromString(agentId))
 				.username(me.getUsername())
 				.profilePictureUrl(me.getProfilePictureUrl())
