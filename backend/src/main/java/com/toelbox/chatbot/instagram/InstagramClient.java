@@ -14,6 +14,20 @@ interface InstagramClient {
 			@RequestParam("access_token") String accessToken
 	);
 
+	@GetMapping("/access_token")
+	Instagram.TokenResponse exchangeToken(
+			@RequestParam("grant_type") String grantType,
+			@RequestParam("client_secret") String clientSecret,
+			@RequestParam("access_token") String accessToken
+	);
+
+	@GetMapping("/refresh_access_token")
+	Instagram.TokenResponse refreshAccessToken(
+			@RequestParam("grant_type") String grantType,
+			@RequestParam("access_token") String accessToken
+	);
+
+
 	@DeleteMapping("/me/subscribed_apps")
 	void unsubscribeFromSubscribedApps(
 			@RequestHeader("Authorization") String authorization,

@@ -1,8 +1,8 @@
 package com.toelbox.chatbot.instagram;
 
-import com.github.benmanes.caffeine.cache.Cache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.quartz.Scheduler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +18,7 @@ class InstagramService {
 	private final InstagramClient instagramClient;
 	private final InstagramConfigProp config;
 	private final InstagramAccountRepository repository;
+	private final Scheduler scheduler;
 //	private final Cache<String, String> accessTokenCache;
 
 	Instagram.TokenResponse exchangeCodeForAccessToken(String code) {
@@ -32,17 +33,18 @@ class InstagramService {
 	}
 
 
-
 	InstagramAccount getAndSaveAccount(
 			String accessToken,
 			String agentId
 	) {
-		var me = instagramClient.getMe("user_id,username,profile_picture_url,name", accessToken);
+		var token = instagramClient.exchangeToken("ig_exchange_token", config.getAppSecret(), accessToken);
+		var me = instagramClient.getMe("user_id,username,profile_picture_url,name", token.getAccessToken());
 		var account = InstagramAccount
 				.builder()
 				.userId(me.getUserId())
 				.name(me.getName())
 				.active(false)
+				.token(token.getAccessToken())
 				.agentId(UUID.fromString(agentId))
 				.username(me.getUsername())
 				.profilePictureUrl(me.getProfilePictureUrl())

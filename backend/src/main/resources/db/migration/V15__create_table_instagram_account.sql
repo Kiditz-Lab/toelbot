@@ -6,5 +6,6 @@ CREATE TABLE instagram_account (
     username TEXT,
     active BOOLEAN,
     token TEXT,
+    expires_at TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

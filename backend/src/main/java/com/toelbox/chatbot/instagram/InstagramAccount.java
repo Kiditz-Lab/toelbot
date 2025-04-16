@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -19,5 +20,6 @@ class InstagramAccount {
 	private String name;
 	private String token;
 	private boolean active;
+	private LocalDateTime expiresAt;
 	private String username;
 }
