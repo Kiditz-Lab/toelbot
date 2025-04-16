@@ -1,5 +1,5 @@
 CREATE TABLE instagram_account (
-    id TEXT PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id TEXT NOT NULL,
     profile_picture_url TEXT,
     name TEXT,
