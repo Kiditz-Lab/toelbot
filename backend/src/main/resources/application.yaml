@@ -92,7 +92,7 @@ facebook:
 
 instagram:
   verify-token: FsyUCPJggAWvWeGmaKqYRqzzVRxZikLsGF2O3OMRE9gRDRVMUkgMZRZEay1bk7ab
-  app-id: 1023127972521359
-  app-secret: 98fb04b7ac79def870b53496c3dfcf7a
+  app-id: 1745290839353355
+  app-secret: ded1468d0be8809c2d684dac55fe0557
   redirect-uri: https://api.toelbox.com/instagram/callback
   target-origin: http://localhost:5173

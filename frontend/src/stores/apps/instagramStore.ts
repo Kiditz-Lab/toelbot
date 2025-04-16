@@ -5,7 +5,7 @@ export const useInstagramStore = defineStore('instagramStore', () => {
     const clientId = import.meta.env.VITE_FACEBOOK_APP_ID; // Same as Facebook
     const baseUrl = import.meta.env.VITE_BASE_URL;
 
-    const scope = 'pages_show_list,instagram_basic,instagram_manage_messages';
+    const scope = 'instagram_basic,instagram_manage_messages';
     const redirectUri = `${baseUrl}/instagram/callback`;
 
     const igAuthUrl = `https://www.facebook.com/v18.0/dialog/oauth?client_id=${clientId}&redirect_uri=${encodeURIComponent(
