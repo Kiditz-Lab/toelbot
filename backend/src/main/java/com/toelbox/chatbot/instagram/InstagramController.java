@@ -13,14 +13,14 @@ import java.util.List;
 @RequestMapping
 @RequiredArgsConstructor
 @Slf4j
-public class InstagramController {
+class InstagramController {
 
 	private final InstagramService instagramService;
 	private final InstagramConfigProp prop;
 	private final ObjectMapper mapper;
 
 	@GetMapping("/instagram/callback")
-	public ResponseEntity<String> handleInstagramCallback(@RequestParam String code) {
+	ResponseEntity<String> handleInstagramCallback(@RequestParam String code) {
 		try {
 			Instagram.TokenResponse token = instagramService.exchangeCodeForAccessToken(code);
 			List<Instagram.FacebookPage> pages = instagramService.getFacebookPages(token.getAccess_token());
@@ -30,23 +30,23 @@ public class InstagramController {
 			log.info("Returning pages with IG business accounts to {}", prop.getTargetOrigin());
 
 			String html = """
-                    <!DOCTYPE html>
-                    <html>
-                    <body>
-                    <script>
-                        const pages = %s;
-                        window.opener.postMessage({
-                            type: "instagram-connected",
-                            payload: {
-                                status: "success",
-                                pages: pages
-                            }
-                        }, "%s");
-                        setTimeout(() => window.close(), 500);
-                    </script>
-                    </body>
-                    </html>
-                    """.formatted(json, prop.getTargetOrigin());
+					<!DOCTYPE html>
+					<html>
+					<body>
+					<script>
+					    const pages = %s;
+					    window.opener.postMessage({
+					        type: "instagram-connected",
+					        payload: {
+					            status: "success",
+					            pages: pages
+					        }
+					    }, "%s");
+					    setTimeout(() => window.close(), 500);
+					</script>
+					</body>
+					</html>
+					""".formatted(json, prop.getTargetOrigin());
 
 			return ResponseEntity.ok()
 					.contentType(MediaType.TEXT_HTML)
@@ -64,21 +64,21 @@ public class InstagramController {
 
 	private String generateErrorHtml(String message, String targetOrigin) {
 		return String.format("""
-                <!DOCTYPE html>
-                <html>
-                <body>
-                <script>
-                    window.opener.postMessage({
-                        type: "instagram-connected",
-                        payload: {
-                            status: "error",
-                            message: "%s"
-                        }
-                    }, "%s");
-                    setTimeout(() => window.close(), 500);
-                </script>
-                </body>
-                </html>
-                """, message, targetOrigin);
+				<!DOCTYPE html>
+				<html>
+				<body>
+				<script>
+				    window.opener.postMessage({
+				        type: "instagram-connected",
+				        payload: {
+				            status: "error",
+				            message: "%s"
+				        }
+				    }, "%s");
+				    setTimeout(() => window.close(), 500);
+				</script>
+				</body>
+				</html>
+				""", message, targetOrigin);
 	}
 }
