@@ -12,7 +12,7 @@ import java.util.UUID;
 @Table("instagram_account")
 class InstagramAccount {
 	@Id
-	private String id;
+	private UUID id;
 	private UUID agentId;
 	private String userId;
 	private String profilePictureUrl;

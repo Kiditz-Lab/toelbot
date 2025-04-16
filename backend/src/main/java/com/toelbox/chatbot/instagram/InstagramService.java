@@ -40,7 +40,6 @@ class InstagramService {
 		var me = instagramClient.getMe("user_id,username,profile_picture_url,name", accessToken);
 		var account = InstagramAccount
 				.builder()
-				.id(me.getId())
 				.userId(me.getUserId())
 				.name(me.getName())
 				.agentId(UUID.fromString(agentId))
