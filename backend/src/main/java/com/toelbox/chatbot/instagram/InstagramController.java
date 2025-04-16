@@ -36,12 +36,12 @@ class InstagramController {
 					<html>
 					<body>
 					<script>
-					    const pages = %s;
+					    const token = %s;
 					    window.opener.postMessage({
 					        type: "instagram-connected",
 					        payload: {
 					            status: "success",
-					            pages: pages
+					            token: token
 					        }
 					    }, "%s");
 					    setTimeout(() => window.close(), 500);
