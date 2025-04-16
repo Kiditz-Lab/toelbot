@@ -21,7 +21,7 @@ const { account } = toRefs(store);
         :key="account?.id"
         :title="account?.name"
         :subtitle="account?.username"
-        :prepend-avatar="account?.profile_picture_url"
+        :prepend-avatar="account?.profilePictureUrl"
       ></v-list-item>
     </v-card-text>
   </v-card>

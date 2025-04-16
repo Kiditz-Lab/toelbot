@@ -1,7 +1,7 @@
 export interface InstagramAccount {
     id: string;
-    user_id: string;
-    profile_picture_url: string;
+    userId: string;
+    profilePictureUrl: string;
     name: string;
     username: string;
   }
