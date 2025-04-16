@@ -31,50 +31,58 @@ class FacebookService {
 	}
 
 	@Transactional
-	List<FacebookPage> getUserPages(String userAccessToken, String agentId) {
+	public List<FacebookPage> getUserPages(String userAccessToken, String agentId) {
 		log.info("Access token: {}", userAccessToken);
 		var pages = facebookClient.getUserPages(userAccessToken, "id,name,category,access_token,picture{url}").getData();
-		var facebookPages = pages.stream().map(page -> FacebookPage.builder()
-				.pageId(page.getId())
-				.category(page.getCategory())
-				.name(page.getName())
-				.agentId(UUID.fromString(agentId))
-				.accessToken(page.getAccess_token())
-				.imageUrl(page.getPicture().getData().getUrl())
-				.build()).toList();
+		UUID agentUUID = UUID.fromString(agentId);
+
+		List<FacebookPage> facebookPages = pages.stream().map(page -> {
+			FacebookPage existing = repository.findByPageId(page.getId()).orElse(null);
+
+			if (existing != null) {
+				// Update existing record
+				existing.setCategory(page.getCategory());
+				existing.setName(page.getName());
+				existing.setAgentId(agentUUID);
+				existing.setAccessToken(page.getAccess_token());
+				existing.setImageUrl(page.getPicture().getData().getUrl());
+				return existing;
+			} else {
+				// Create new record
+				return FacebookPage.builder()
+						.pageId(page.getId())
+						.category(page.getCategory())
+						.name(page.getName())
+						.agentId(agentUUID)
+						.accessToken(page.getAccess_token())
+						.imageUrl(page.getPicture().getData().getUrl())
+						.build();
+			}
+		}).toList();
+
 		return repository.saveAll(facebookPages);
 	}
 
-	List<FacebookPage> findByAgentId(UUID agentId){
+
+	List<FacebookPage> findByAgentId(UUID agentId) {
 		return repository.findByAgentId(agentId);
 	}
 
 	@Transactional
-	void subscribePage(Facebook.SavePageRequest request) {
+	FacebookPage subscribePage(Facebook.SavePageRequest request) {
 		Map<String, Object> body = Map.of("subscribed_fields", List.of("messages", "message_deliveries", "message_reads", "messaging_postbacks"));
 		facebookClient.subscribePageToApp(request.getAccessToken(), body);
-		var page = repository.findByPageId(request.getPageId()).orElseThrow(() -> new NotFoundException("Page not found"));
-
-//		var page = FacebookPage.builder()
-//				.pageId(request.getPageId())
-//				.name(request.getName())
-//				.category(request.getCategory())
-//				.imageUrl(request.getImageUrl())
-//				.accessToken(request.getAccessToken())
-//				.agentId(request.getAgentId())
-//				.build();
-//		page = repository.save(page);
+		var page = repository.findByPageIdForUpdate(request.getPageId()).orElseThrow(() -> new NotFoundException("Page not found"));
+		page.setActive(true);
 		publisher.publishEvent(new FacebookPageCreatedEvent(page.getPageId(), page.getAgentId()));
+		return repository.save(page);
 	}
 
 	@Transactional
-	void unsubscribePage(String pageId) {
-		var page = repository.findByPageId(pageId).orElse(null);
-		if (page != null) {
-			facebookClient.unsubscribePageFromApp(page.getAccessToken());
-			publisher.publishEvent(new FacebookPageRemovedEvent(page.getPageId(), page.getAgentId()));
-			repository.deleteById(page.getId());
-		}
+	FacebookPage unsubscribePage(String pageId) {
+		var page = repository.findByPageIdForUpdate(pageId).orElseThrow(() -> new NotFoundException("Page not found"));
+		page.setActive(false);
+		return repository.save(page);
 	}
 
 	void messageReceived(FacebookWebhookResponse response) {
