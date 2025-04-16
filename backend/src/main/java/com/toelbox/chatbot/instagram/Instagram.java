@@ -1,21 +1,32 @@
 package com.toelbox.chatbot.instagram;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+
 class Instagram {
 
 	@lombok.Data
 	static class TokenResponse {
-		private String access_token;
-		private String token_type;
-		private Long expires_in;
+		@JsonProperty("access_token")
+		private String accessToken;
+		@JsonProperty("token_type")
+		private String tokenType;
+		@JsonProperty("expires_in")
+		private Long expiresIn;
 	}
 
 
-	@lombok.Data
-	static class IgBusinessProfile {
+	@Data
+	static class Account {
+		@JsonProperty("id")
 		private String id;
-		private String username;
+		@JsonProperty("user_id")
+		private String userId;
+		@JsonProperty("profile_picture_url")
+		private String profilePictureUrl;
+		@JsonProperty("name")
 		private String name;
-		private String profile_picture_url;
-		private String biography;
+		@JsonProperty("username")
+		private String username;
 	}
 }

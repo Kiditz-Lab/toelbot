@@ -3,6 +3,7 @@ package com.toelbox.chatbot.instagram;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +12,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 class InstagramService {
+	private final ApiInstagramClient apiInstagramClient;
 	private final InstagramClient instagramClient;
 	private final InstagramConfigProp config;
 
@@ -22,8 +24,13 @@ class InstagramService {
 		form.put("grant_type", "authorization_code");
 		form.put("redirect_uri", config.getRedirectUri());
 		form.put("code", code);
+		return apiInstagramClient.getAccessToken(form);
+	}
 
-		return instagramClient.getAccessToken(form);
+	Instagram.Account getAccount(
+			String accessToken
+	) {
+		return instagramClient.getMe("user_id,username,profile_picture_url,name", accessToken);
 	}
 
 

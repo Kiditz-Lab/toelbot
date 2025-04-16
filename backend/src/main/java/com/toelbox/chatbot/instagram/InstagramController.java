@@ -26,22 +26,21 @@ class InstagramController {
 	ResponseEntity<String> handleInstagramCallback(@RequestParam String code) {
 		try {
 			Instagram.TokenResponse token = instagramService.exchangeCodeForAccessToken(code);
-
-			String json = mapper.writeValueAsString(token);
-
-			log.info("Returning pages with IG business accounts to {}", prop.getTargetOrigin());
+			Instagram.Account account = instagramService.getAccount(token.getAccessToken());
+			String json = mapper.writeValueAsString(account);
+			log.info("Returning pages with IG business account to {}", prop.getTargetOrigin());
 
 			String html = """
 					<!DOCTYPE html>
 					<html>
 					<body>
 					<script>
-					    const token = %s;
+					    const account = %s;
 					    window.opener.postMessage({
 					        type: "instagram-connected",
 					        payload: {
 					            status: "success",
-					            token: token
+					            account: account
 					        }
 					    }, "%s");
 					    setTimeout(() => window.close(), 500);
