@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -23,14 +24,15 @@ import java.util.Optional;
         String clientSecret = config.getAppSecret();
         String redirectUri = "https://api.toelbox.com/instagram/callback"; // Do NOT encode manually
 
-        String url = String.format(
-                "https://graph.facebook.com/v18.0/oauth/access_token" +
-                        "?client_id=%s&redirect_uri=%s&client_secret=%s&code=%s",
-                URLEncoder.encode(clientId, StandardCharsets.UTF_8),
-                URLEncoder.encode(redirectUri, StandardCharsets.UTF_8),
-                URLEncoder.encode(clientSecret, StandardCharsets.UTF_8),
-                URLEncoder.encode(code, StandardCharsets.UTF_8)
-        );
+        String url = UriComponentsBuilder
+                .fromUriString("https://graph.facebook.com/v22.0/oauth/access_token")
+                .queryParam("client_id", clientId)
+                .queryParam("redirect_uri", redirectUri)
+                .queryParam("client_secret", clientSecret)
+                .queryParam("code", code)
+                .build(false)  // false = do NOT encode
+                .toUriString();
+
 
         ResponseEntity<Instagram.TokenResponse> response = new RestTemplate().getForEntity(url, Instagram.TokenResponse.class);
         return response.getBody();
