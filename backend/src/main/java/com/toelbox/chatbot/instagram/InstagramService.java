@@ -1,6 +1,7 @@
 package com.toelbox.chatbot.instagram;
 
 import com.toelbox.chatbot.core.NotFoundException;
+import com.toelbox.chatbot.facebook.FacebookPage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.Scheduler;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -71,5 +73,8 @@ class InstagramService {
 		return repository.save(account);
 	}
 
+	List<InstagramAccount> findByAgentId(UUID agentId) {
+		return repository.findByAgentId(agentId);
+	}
 
 }

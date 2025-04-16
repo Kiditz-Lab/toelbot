@@ -9,6 +9,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.UUID;
+
 @RestController
 @RequestMapping
 @RequiredArgsConstructor
@@ -92,5 +95,10 @@ class InstagramController {
 	ResponseEntity<InstagramAccount> unsubscribe(@PathVariable String userId) {
 		var account = instagramService.unsubscribe(userId);
 		return ResponseEntity.ok(account);
+	}
+
+	@GetMapping("/api/v1/instagram/accounts/{agentId}")
+	ResponseEntity<List<InstagramAccount>> getAccounts(@PathVariable UUID agentId) {
+		return ResponseEntity.ok(instagramService.findByAgentId(agentId));
 	}
 }
