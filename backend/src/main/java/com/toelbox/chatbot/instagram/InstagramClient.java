@@ -3,7 +3,7 @@ package com.toelbox.chatbot.instagram;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "instagramClient", url = "https://api.instagram.com")
+@FeignClient(name = "instagramClient", url = "https://api.instagram.com", configuration = FeignConfig.class)
 interface InstagramClient {
 
 	@PostMapping("/oauth/access_token")
