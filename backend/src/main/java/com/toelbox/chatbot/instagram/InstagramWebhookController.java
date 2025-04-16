@@ -16,28 +16,28 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 class InstagramWebhookController {
 
-//	private final FacebookConfigProp prop;
-//	private final ObjectMapper mapper;
+	private final InstagramConfigProp prop;
+	private final ObjectMapper mapper;
 //	private final FacebookService service;
-//
-//	@GetMapping
-//	ResponseEntity<String> verifyWebhook(
-//			@RequestParam("hub.mode") String mode,
-//			@RequestParam("hub.verify_token") String token,
-//			@RequestParam("hub.challenge") String challenge) {
-//		if ("subscribe".equals(mode) && prop.getVerifyToken().equals(token)) {
-//			return ResponseEntity.ok(challenge);
-//		} else {
-//			return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Verification failed");
-//		}
-//	}
-//
-//	@PostMapping
-//	ResponseEntity<Void> receiveMessage(@RequestBody String payload) throws JsonProcessingException {
-//		System.out.println("Incoming webhook: " + payload);
+
+	@GetMapping
+	ResponseEntity<String> verifyWebhook(
+			@RequestParam("hub.mode") String mode,
+			@RequestParam("hub.verify_token") String token,
+			@RequestParam("hub.challenge") String challenge) {
+		if ("subscribe".equals(mode) && prop.getVerifyToken().equals(token)) {
+			return ResponseEntity.ok(challenge);
+		} else {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Verification failed");
+		}
+	}
+
+	@PostMapping
+	ResponseEntity<Void> receiveMessage(@RequestBody String payload) throws JsonProcessingException {
+		System.out.println("Incoming webhook: " + payload);
 //		FacebookWebhookResponse response = mapper.readValue(payload, FacebookWebhookResponse.class);
 //		service.messageReceived(response);
-//		return ResponseEntity.ok().build();
-//	}
+		return ResponseEntity.ok().build();
+	}
 
 }
