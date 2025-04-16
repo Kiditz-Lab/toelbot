@@ -1,5 +1,6 @@
 package com.toelbox.chatbot.instagram;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -18,6 +19,7 @@ class InstagramAccount {
 	private String userId;
 	private String profilePictureUrl;
 	private String name;
+	@JsonIgnore
 	private String token;
 	private boolean active;
 	private LocalDateTime expiresAt;
