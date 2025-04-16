@@ -9,8 +9,8 @@ import java.util.Map;
 @FeignClient(name = "instagramClient", url = "https://api.instagram.com", configuration = FeignConfig.class)
 interface InstagramClient {
 
-	@PostMapping("/oauth/access_token")
-	@Headers("Content-Type: application/x-www-form-urlencoded")
+
+	@PostMapping(value = "/oauth/access_token", consumes = "application/x-www-form-urlencoded")
 	Instagram.TokenResponse getAccessToken(
 			@RequestBody Map<String, ?> body
 	);
