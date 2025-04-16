@@ -25,8 +25,8 @@ class InstagramController {
 	ResponseEntity<String> handleInstagramCallback(@RequestParam String code) {
 		try {
 			Instagram.TokenResponse token = instagramService.exchangeCodeForAccessToken(code);
-//			List<Instagram.FacebookPage> pages = instagramService.getFacebookPages(token.getAccess_token());
-			String json = mapper.writeValueAsString(token);
+			List<Instagram.FacebookPage> pages = instagramService.getFacebookPages(token.getAccess_token());
+			String json = mapper.writeValueAsString(pages);
 //			log.info("Pages: {}", json);
 
 			log.info("Returning pages with IG business accounts to {}", prop.getTargetOrigin());
