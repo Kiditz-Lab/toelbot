@@ -74,7 +74,7 @@ class FacebookService {
 		facebookClient.subscribePageToApp(request.getAccessToken(), body);
 		var page = repository.findByPageIdForUpdate(request.getPageId()).orElseThrow(() -> new NotFoundException("Page not found"));
 		page.setActive(true);
-		publisher.publishEvent(new FacebookPageCreatedEvent(page.getPageId(), page.getAgentId()));
+//		publisher.publishEvent(new FacebookPageCreatedEvent(page.getPageId(), page.getAgentId()));
 		return repository.save(page);
 	}
 

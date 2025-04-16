@@ -1,5 +1,6 @@
 package com.toelbox.chatbot.instagram;
 
+import com.github.benmanes.caffeine.cache.Cache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ class InstagramService {
 	private final InstagramClient instagramClient;
 	private final InstagramConfigProp config;
 	private final InstagramAccountRepository repository;
+	private final Cache<String, String> accessTokenCache;
 
 	Instagram.TokenResponse exchangeCodeForAccessToken(String code) {
 		log.info("CONFIG >> {}", config);
@@ -26,8 +28,11 @@ class InstagramService {
 		form.put("grant_type", "authorization_code");
 		form.put("redirect_uri", config.getRedirectUri());
 		form.put("code", code);
-		return apiInstagramClient.getAccessToken(form);
+		var token = apiInstagramClient.getAccessToken(form);
+		return token;
 	}
+
+
 
 	InstagramAccount getAndSaveAccount(
 			String accessToken,
@@ -48,7 +53,7 @@ class InstagramService {
 
 	@Transactional
 	void subscribePage() {
-
+		instagramClient.subscribeFromSubscribedApps("Bearer %s".formatted());
 //		publisher.publishEvent(new FacebookPageCreatedEvent(page.getPageId(), page.getAgentId()));
 	}
 

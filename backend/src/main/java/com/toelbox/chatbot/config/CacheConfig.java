@@ -19,10 +19,19 @@ public class CacheConfig {
     @Bean
     public Cache<String, ChatClient> chatClientCache() {
         return Caffeine.newBuilder()
-                .expireAfterAccess(Duration.ofHours(2))
-                .maximumSize(500)
+                .expireAfterAccess(Duration.ofHours(1))
+                .maximumSize(100)
                 .build();
     }
+
+    @Bean
+    public Cache<String, String> accessTokenCache() {
+        return Caffeine.newBuilder()
+                .expireAfterAccess(Duration.ofHours(1))
+                .maximumSize(100)
+                .build();
+    }
+
 
     @Bean
     public Caffeine<Object, Object> caffeineConfig() {

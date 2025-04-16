@@ -1,6 +1,7 @@
 package com.toelbox.chatbot.instagram;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.benmanes.caffeine.cache.Cache;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ class InstagramController {
 	private final InstagramService instagramService;
 	private final InstagramConfigProp prop;
 	private final ObjectMapper mapper;
+	private final Cache<String, String> accessTokenCache;
 
 	@GetMapping("/instagram/callback")
 	ResponseEntity<String> handleInstagramCallback(@RequestParam String code, @RequestParam(value = "state", required = false) String state) {
@@ -25,6 +27,7 @@ class InstagramController {
 			Instagram.TokenResponse token = instagramService.exchangeCodeForAccessToken(code);
 			InstagramAccount account = instagramService.getAndSaveAccount(token.getAccessToken(), state);
 			String json = mapper.writeValueAsString(account);
+			accessTokenCache.put(account.getUserId(), token.getAccessToken());
 			log.info("Returning pages with IG business account to {}", prop.getTargetOrigin());
 
 			String html = """
