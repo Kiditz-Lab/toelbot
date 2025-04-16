@@ -34,7 +34,6 @@ const { agent } = toRefs(agentStore);
         <template #append>
           <v-tooltip :text="page.active ? 'Unsubscribe' : 'Subscribe'" bottom>
             <template #activator="{ props }">
-              {{ page.active }}
               <v-btn
               v-bind="props"
               :color="page.active ? 'success' : 'secondary'"

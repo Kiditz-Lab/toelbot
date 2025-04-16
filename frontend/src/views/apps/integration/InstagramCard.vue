@@ -15,7 +15,7 @@ const { account } = toRefs(store);
     <v-card-actions>
       <v-btn color="pink" block variant="elevated" @click="store.connectInstagram">Connect</v-btn>
     </v-card-actions>
-    <v-card-text>
+    <v-card-text v-if="account">
       <v-list-item
         divider="bottom"
         :key="account?.id"

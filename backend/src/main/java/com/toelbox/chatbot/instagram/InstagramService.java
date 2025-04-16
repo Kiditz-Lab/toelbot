@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +16,7 @@ class InstagramService {
 	private final ApiInstagramClient apiInstagramClient;
 	private final InstagramClient instagramClient;
 	private final InstagramConfigProp config;
+	private final InstagramAccountRepository repository;
 
 	Instagram.TokenResponse exchangeCodeForAccessToken(String code) {
 		log.info("CONFIG >> {}", config);
@@ -28,15 +29,26 @@ class InstagramService {
 		return apiInstagramClient.getAccessToken(form);
 	}
 
-	Instagram.Account getAccount(
-			String accessToken
+	InstagramAccount getAndSaveAccount(
+			String accessToken,
+			String agentId
 	) {
-		return instagramClient.getMe("user_id,username,profile_picture_url,name", accessToken);
+		var me = instagramClient.getMe("user_id,username,profile_picture_url,name", accessToken);
+		var account = InstagramAccount
+				.builder()
+				.id(me.getId())
+				.userId(me.getUserId())
+				.name(me.getName())
+				.agentId(UUID.fromString(agentId))
+				.username(me.getUsername())
+				.profilePictureUrl(me.getProfilePictureUrl())
+				.build();
+		return repository.save(account);
 	}
 
 	@Transactional
 	void subscribePage() {
-		Map<String, Object> body = Map.of("subscribed_fields", List.of("messages", "message_deliveries", "message_reads", "messaging_postbacks"));
+
 //		publisher.publishEvent(new FacebookPageCreatedEvent(page.getPageId(), page.getAgentId()));
 	}
 

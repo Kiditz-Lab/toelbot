@@ -78,9 +78,10 @@ export const useFacbookStore = defineStore(
           pages.value[index] = { ...res, loading: false };
         }
 
-        showSnackbar('Your page are unsubscribed', 'success', 3000, 'Success');
+        showSnackbar(`Your ${page.name} are unsubscribed`, 'success', 3000, 'Success');
       } catch (error) {
-        showSnackbar(error as string, 'error', 3000, 'Error');
+        console.log(error);
+        showSnackbar('Something went wrong, please try again.', 'error', 3000, 'Error');
       } finally {
         page.loading = false;
       }

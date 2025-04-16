@@ -20,10 +20,10 @@ class InstagramController {
 	private final ObjectMapper mapper;
 
 	@GetMapping("/instagram/callback")
-	ResponseEntity<String> handleInstagramCallback(@RequestParam String code) {
+	ResponseEntity<String> handleInstagramCallback(@RequestParam String code, @RequestParam(value = "state", required = false) String state) {
 		try {
 			Instagram.TokenResponse token = instagramService.exchangeCodeForAccessToken(code);
-			Instagram.Account account = instagramService.getAccount(token.getAccessToken());
+			Instagram.Account account = instagramService.getAndSaveAccount(token.getAccessToken());
 			String json = mapper.writeValueAsString(account);
 			log.info("Returning pages with IG business account to {}", prop.getTargetOrigin());
 
