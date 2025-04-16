@@ -10,12 +10,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class FeignConfig {
 
-
-    @Bean
-    public Encoder feignFormEncoder() {
-        return new SpringFormEncoder();
-    }
-
     @Bean
     public Logger logger() {
         return new NormalizedFeignLogger();

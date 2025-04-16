@@ -5,11 +5,14 @@ import InstagramCard from './InstagramCard.vue';
 import BaseBreadcrumb from '@/components/shared/BaseBreadcrumb.vue';
 import { useSnackbarStore } from '@/stores/snackbarStore';
 import { useFacbookStore } from '@/stores/apps/facebookStore';
+import { useInstagramStore } from '@/stores/apps/instagramStore';
 const facebookStore = useFacbookStore();
+const instagramStore = useInstagramStore();
+
 const breadcrumbs = ref([{ title: 'Integration', disabled: false, href: '#' }]);
 onMounted(() => {
   const { showSnackbar } = useSnackbarStore();
-  
+
   window.addEventListener('message', (event) => {
     const { type, payload } = event.data;
     console.log(type);
@@ -24,7 +27,8 @@ onMounted(() => {
     if (type === 'instagram-connected') {
       if (payload.status === 'success') {
         // instagramStore.  (payload.pages);
-        console.log('Instagram Pages:', payload.token);
+        instagramStore.setAccount(payload.account);
+        console.log('Instagram Account:', payload.account);
       } else {
         showSnackbar('Failed to connect to Instagram', 'error', 3000, 'Error');
       }
