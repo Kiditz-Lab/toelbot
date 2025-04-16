@@ -82,6 +82,7 @@ class FacebookService {
 	FacebookPage unsubscribePage(String pageId) {
 		var page = repository.findByPageIdForUpdate(pageId).orElseThrow(() -> new NotFoundException("Page not found"));
 		page.setActive(false);
+		facebookClient.unsubscribePageFromApp(page.getAccessToken());
 		return repository.save(page);
 	}
 
