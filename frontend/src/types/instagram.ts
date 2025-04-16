@@ -4,5 +4,8 @@ export interface InstagramAccount {
     profilePictureUrl: string;
     name: string;
     username: string;
+    active: boolean;
+    loading: boolean;
+    agentId: string;
   }
   

@@ -21,7 +21,6 @@ class InstagramService {
 	private final InstagramClient instagramClient;
 	private final InstagramConfigProp config;
 	private final InstagramAccountRepository repository;
-	private final Scheduler scheduler;
 //	private final Cache<String, String> accessTokenCache;
 
 	Instagram.TokenResponse exchangeCodeForAccessToken(String code) {

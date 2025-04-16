@@ -3,6 +3,8 @@ import type { InstagramAccount } from '@/types/instagram';
 import { defineStore } from 'pinia';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import { useSnackbarStore } from '@/stores/snackbarStore';
+const { showSnackbar } = useSnackbarStore();
 
 export const useInstagramStore = defineStore('instagramStore', () => {
   const account = ref<InstagramAccount | undefined>();
@@ -14,7 +16,24 @@ export const useInstagramStore = defineStore('instagramStore', () => {
     account.value = res[0];
   };
   onMounted(fetchByAgent);
+  const subscribe = async (account: InstagramAccount) => {
+    try {
+      page.loading = true;
+      const id = route.params.id as string;
+      page.agentId = id;
+      const res = await api.post<InstagramAccount>('/facebook/subscribe-page', page);
+      const index = pages.value.findIndex((p) => p.pageId === res.pageId);
+      if (index !== -1) {
+        pages.value[index] = { ...res, loading: false };
+      }
 
+      showSnackbar('Your page are subscribed', 'success', 3000, 'Success');
+    } catch (error) {
+      showSnackbar(error as string, 'error', 3000, 'Error');
+    } finally {
+      page.loading = false;
+    }
+  };
   const connectInstagram = () => {
     const clientId = import.meta.env.VITE_INSTAGRAM_APP_ID; // Same as Facebook
     const baseUrl = import.meta.env.VITE_BASE_URL;
