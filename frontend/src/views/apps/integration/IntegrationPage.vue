@@ -23,8 +23,8 @@ onMounted(() => {
     }
     if (type === 'instagram-connected') {
       if (payload.status === 'success') {
-        // instagramStore.setPages(payload.pages);
-        console.log('Instagram Pages:', payload.pages);
+        // instagramStore.  (payload.pages);
+        console.log('Instagram Pages:', payload.token);
       } else {
         showSnackbar('Failed to connect to Instagram', 'error', 3000, 'Error');
       }
