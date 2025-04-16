@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -30,13 +31,14 @@ class FacebookService {
 	}
 
 	@Transactional
-	List<FacebookPage> getUserPages(String userAccessToken) {
+	List<FacebookPage> getUserPages(String userAccessToken, String agentId) {
 		log.info("Access token: {}", userAccessToken);
 		var pages = facebookClient.getUserPages(userAccessToken, "id,name,category,access_token,picture{url}").getData();
 		var facebookPages = pages.stream().map(page -> FacebookPage.builder()
 				.pageId(page.getId())
 				.category(page.getCategory())
 				.name(page.getName())
+				.agentId(UUID.fromString(agentId))
 				.accessToken(page.getAccess_token())
 				.imageUrl(page.getPicture().getData().getUrl())
 				.build()).toList();

@@ -28,7 +28,7 @@ class FacebookController {
 		log.info("STATE: {}", state);
 		try {
 			Facebook.TokenResponse token = facebookService.exchangeCodeForAccessToken(code);
-			List<FacebookPage> pages = facebookService.getUserPages(token.getAccess_token());
+			List<FacebookPage> pages = facebookService.getUserPages(token.getAccess_token(), state);
 			String json = mapper.writeValueAsString(pages);
 
 			log.info("Target Origin : {}", prop.getTargetOrigin());
