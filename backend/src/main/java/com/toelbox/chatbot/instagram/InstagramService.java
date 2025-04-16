@@ -40,18 +40,30 @@ class InstagramService {
 	) {
 		var token = instagramClient.exchangeToken("ig_exchange_token", config.getAppSecret(), accessToken);
 		var me = instagramClient.getMe("user_id,username,profile_picture_url,name", token.getAccessToken());
-		var account = InstagramAccount
-				.builder()
-				.userId(me.getUserId())
-				.name(me.getName())
-				.active(false)
-				.expiresAt(LocalDateTime.now().plusSeconds(token.getExpiresIn()))
-				.token(token.getAccessToken())
-				.agentId(UUID.fromString(agentId))
-				.username(me.getUsername())
-				.profilePictureUrl(me.getProfilePictureUrl())
-				.build();
-		return repository.save(account);
+		List<InstagramAccount> accounts = repository.findByAgentId(UUID.fromString(agentId));
+		if (accounts.isEmpty()) {
+			var account = InstagramAccount
+					.builder()
+					.userId(me.getUserId())
+					.name(me.getName())
+					.active(false)
+					.expiresAt(LocalDateTime.now().plusSeconds(token.getExpiresIn()))
+					.token(token.getAccessToken())
+					.agentId(UUID.fromString(agentId))
+					.username(me.getUsername())
+					.profilePictureUrl(me.getProfilePictureUrl())
+					.build();
+			return repository.save(account);
+		}
+		InstagramAccount existing = accounts.getFirst();
+		existing.setUserId(me.getUserId());
+		existing.setName(me.getName());
+		existing.setUsername(me.getUsername());
+		existing.setProfilePictureUrl(me.getProfilePictureUrl());
+		existing.setToken(token.getAccessToken());
+		existing.setExpiresAt(LocalDateTime.now().plusSeconds(token.getExpiresIn()));
+		existing.setActive(false);
+		return repository.save(accounts.getFirst());
 	}
 
 	@Transactional

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useInstagramStore } from '@/stores/apps/instagramStore';
 import { toRefs } from 'vue';
+import { mdiPowerPlug, mdiPowerPlugOff } from '@mdi/js';
 const store = useInstagramStore();
 const { account } = toRefs(store);
 </script>
@@ -22,7 +23,22 @@ const { account } = toRefs(store);
         :title="account?.name"
         :subtitle="account?.username"
         :prepend-avatar="account?.profilePictureUrl"
-      ></v-list-item>
+      >
+        <template #append>
+          <v-tooltip :text="account.active ? 'Unsubscribe' : 'Subscribe'" bottom>
+            <template #activator="{ props }">
+              <v-btn
+                v-bind="props"
+                :color="account.active ? 'success' : 'secondary'"
+                :icon="account.active ? mdiPowerPlugOff : mdiPowerPlug"
+                variant="tonal"
+                @click="account.active ? store.unsubscribe(account) : store.subscribe(account)"
+                :loading="account.loading"
+              />
+            </template>
+          </v-tooltip>
+        </template>
+      </v-list-item>
     </v-card-text>
   </v-card>
 </template>

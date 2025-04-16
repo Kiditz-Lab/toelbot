@@ -7,7 +7,7 @@ import { useSnackbarStore } from '@/stores/snackbarStore';
 const { showSnackbar } = useSnackbarStore();
 
 export const useInstagramStore = defineStore('instagramStore', () => {
-  const account = ref<InstagramAccount | undefined>();
+  const account = ref<InstagramAccount>({} as InstagramAccount);
   const route = useRoute();
   const api = useApi();
   const fetchByAgent = async () => {
@@ -16,22 +16,31 @@ export const useInstagramStore = defineStore('instagramStore', () => {
     account.value = res[0];
   };
   onMounted(fetchByAgent);
-  const subscribe = async (account: InstagramAccount) => {
+  const subscribe = async (acc: InstagramAccount) => {
     try {
-      page.loading = true;
-      const id = route.params.id as string;
-      page.agentId = id;
-      const res = await api.post<InstagramAccount>('/facebook/subscribe-page', page);
-      const index = pages.value.findIndex((p) => p.pageId === res.pageId);
-      if (index !== -1) {
-        pages.value[index] = { ...res, loading: false };
-      }
-
-      showSnackbar('Your page are subscribed', 'success', 3000, 'Success');
+      account.value.loading = true;
+      const res = await api.post<InstagramAccount>(`/instagram/subscribe/${acc.userId}`, acc.userId);
+      console.log(res);
+      account.value = res;
+      showSnackbar('Subscripation success', 'success', 3000, 'Success');
     } catch (error) {
       showSnackbar(error as string, 'error', 3000, 'Error');
     } finally {
-      page.loading = false;
+      account.value.loading = false;
+    }
+  };
+  const unsubscribe = async (acc: InstagramAccount) => {
+    try {
+      account.value.loading = true;
+      const res = await api.post<InstagramAccount>(`/instagram/unsubscribe/${acc.userId}`, {});
+      console.log(res);
+      account.value = res;
+
+      showSnackbar('Unsubscribe success', 'success', 3000, 'Success');
+    } catch (error) {
+      showSnackbar(error as string, 'error', 3000, 'Error');
+    } finally {
+      account.value.loading = false;
     }
   };
   const connectInstagram = () => {
@@ -51,5 +60,5 @@ export const useInstagramStore = defineStore('instagramStore', () => {
     account.value = acc;
   };
 
-  return { connectInstagram, account, setAccount };
+  return { connectInstagram, account, setAccount, subscribe, unsubscribe };
 });
