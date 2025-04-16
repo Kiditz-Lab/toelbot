@@ -83,15 +83,13 @@ class FacebookController {
 	}
 
 	@PostMapping("/api/v1/facebook/subscribe-page")
-	ResponseEntity<Void> subscribePage(@RequestBody Facebook.SavePageRequest req) {
-		facebookService.subscribePage(req);
-		return ResponseEntity.ok().build();
+	ResponseEntity<FacebookPage> subscribePage(@RequestBody Facebook.SavePageRequest req) {
+		return ResponseEntity.ok(facebookService.subscribePage(req));
 	}
 
 	@DeleteMapping("/api/v1/facebook/unsubscribe-page/{pageId}")
-	ResponseEntity<Void> unsubscribePage(@PathVariable String pageId) {
-		facebookService.unsubscribePage(pageId);
-		return ResponseEntity.ok().build();
+	ResponseEntity<FacebookPage> unsubscribePage(@PathVariable String pageId) {
+		return ResponseEntity.ok(facebookService.unsubscribePage(pageId));
 	}
 
 	@PostMapping("/api/v1/facebook-pages/{agentId}")
