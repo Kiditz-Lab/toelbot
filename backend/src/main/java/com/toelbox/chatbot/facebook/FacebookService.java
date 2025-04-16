@@ -45,6 +45,10 @@ class FacebookService {
 		return repository.saveAll(facebookPages);
 	}
 
+	List<FacebookPage> findByAgentId(UUID agentId){
+		return repository.findByAgentId(agentId);
+	}
+
 	@Transactional
 	void subscribePage(Facebook.SavePageRequest request) {
 		Map<String, Object> body = Map.of("subscribed_fields", List.of("messages", "message_deliveries", "message_reads", "messaging_postbacks"));

@@ -1,6 +1,5 @@
 package com.toelbox.chatbot.facebook;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping
@@ -82,15 +82,21 @@ class FacebookController {
 				""", message, targetOrigin);
 	}
 
-	@PostMapping("/api/v1/subscribe-page")
+	@PostMapping("/api/v1/facebook/subscribe-page")
 	ResponseEntity<Void> subscribePage(@RequestBody Facebook.SavePageRequest req) {
 		facebookService.subscribePage(req);
 		return ResponseEntity.ok().build();
 	}
 
-	@DeleteMapping("/api/v1/unsubscribe-page/{pageId}")
+	@DeleteMapping("/api/v1/facebook/unsubscribe-page/{pageId}")
 	ResponseEntity<Void> unsubscribePage(@PathVariable String pageId) {
 		facebookService.unsubscribePage(pageId);
 		return ResponseEntity.ok().build();
 	}
+
+	@PostMapping("/api/v1/facebook-pages/{agentId}")
+	ResponseEntity<List<FacebookPage>> getPages(@PathVariable UUID agentId) {
+		return ResponseEntity.ok(facebookService.findByAgentId(agentId));
+	}
+
 }
