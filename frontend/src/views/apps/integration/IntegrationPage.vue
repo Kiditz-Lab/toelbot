@@ -1,9 +1,37 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import FacebookCard from './FacebookCard.vue';
 import InstagramCard from './InstagramCard.vue';
 import BaseBreadcrumb from '@/components/shared/BaseBreadcrumb.vue';
+import { useSnackbarStore } from '@/stores/snackbarStore';
+import { useFacbookStore } from '@/stores/apps/facebookStore';
+const facebookStore = useFacbookStore();
 const breadcrumbs = ref([{ title: 'Integration', disabled: false, href: '#' }]);
+onMounted(() => {
+  const { showSnackbar } = useSnackbarStore();
+  
+  window.addEventListener('message', (event) => {
+    const { type, payload } = event.data;
+    console.log(type);
+    if (type === 'facebook-connected') {
+      if (payload.status === 'success') {
+        facebookStore.setPages(payload.pages);
+        console.log('Facebook Pages:', payload.pages);
+      } else {
+        showSnackbar('Failed to connect', 'error', 3000, 'Error');
+      }
+    }
+    if (type === 'instagram-connected') {
+      if (payload.status === 'success') {
+        // instagramStore.setPages(payload.pages);
+        console.log('Instagram Pages:', payload.pages);
+      } else {
+        showSnackbar('Failed to connect to Instagram', 'error', 3000, 'Error');
+      }
+    }
+
+  });
+});
 </script>
 
 <template>

@@ -8,22 +8,7 @@ const store = useFacbookStore();
 const agentStore = useAgentStore();
 const { pages } = toRefs(store);
 const { agent } = toRefs(agentStore);
-onMounted(() => {
-  const { showSnackbar } = useSnackbarStore();
-  
-  window.addEventListener('message', (event) => {
-    const { type, payload } = event.data;
-    console.log(type);
-    if (type === 'facebook-connected') {
-      if (payload.status === 'success') {
-        store.setPages(payload.pages);
-        console.log('Facebook Pages:', payload.pages);
-      } else {
-        showSnackbar('Failed to connect', 'error', 3000, 'Error');
-      }
-    }
-  });
-});
+
 </script>
 
 <template>
