@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,9 +17,11 @@ import java.util.Optional;
     private final InstagramConfigProp config;
 
     Instagram.TokenResponse exchangeCodeForAccessToken(String code) {
+        String redirectUri = URLEncoder.encode("https://api.toelbox.com/instagram/callback", StandardCharsets.UTF_8);
+
         return instagramClient.getAccessToken(
                 config.getAppId(),
-                "https://api.toelbox.com/instagram/callback",
+                redirectUri,
                 config.getAppSecret(),
                 code
         );
