@@ -2,19 +2,13 @@ package com.toelbox.chatbot.agent;
 
 import com.toelbox.chatbot.core.NotFoundException;
 import com.toelbox.chatbot.core.Timing;
-import com.toelbox.chatbot.facebook.FacebookPageCreatedEvent;
-import com.toelbox.chatbot.facebook.FacebookPageRemovedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.RandomStringGenerator;
-import org.springframework.modulith.events.ApplicationModuleListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -48,7 +42,6 @@ class AgentCommandService {
 				.isPublic(command.isPublic())
 				.name(command.name())
 				.agentKey(agentKey)
-				.facebooks(Collections.emptyList())
 				.config(AgentConfig.builder()
 						.aiModel(AIModel.GPT_4O_MINI)
 						.prompt("")
@@ -89,25 +82,25 @@ class AgentCommandService {
 		repository.deleteById(id);
 	}
 
-	@ApplicationModuleListener
-	void facebookCreated(FacebookPageCreatedEvent event) {
-		log.info("Event created");
-		repository.findById(event.agentId()).map(agent -> {
-			List<String> facebooks = agent.getFacebooks() == null ? new ArrayList<>() : new ArrayList<>(agent.getFacebooks());
-			facebooks.add(event.pageId());
-			agent.setFacebooks(facebooks);
-			return repository.save(agent);
-		}).orElseThrow(() -> new NotFoundException("Agent not found with ID: " + event.agentId()));
-	}
-
-	@ApplicationModuleListener
-	void facebookRemoved(FacebookPageRemovedEvent event) {
-		log.info("Event removed");
-		repository.findById(event.agentId()).map(agent -> {
-			List<String> facebooks = agent.getFacebooks() == null ? new ArrayList<>() : new ArrayList<>(agent.getFacebooks());
-			facebooks.remove(event.pageId());
-			agent.setFacebooks(facebooks);
-			return repository.save(agent);
-		}).orElseThrow(() -> new NotFoundException("Agent not found with ID: " + event.agentId()));
-	}
+//	@ApplicationModuleListener
+//	void facebookCreated(FacebookPageCreatedEvent event) {
+//		log.info("Event created");
+//		repository.findById(event.agentId()).map(agent -> {
+//			List<String> facebooks = agent.getFacebooks() == null ? new ArrayList<>() : new ArrayList<>(agent.getFacebooks());
+//			facebooks.add(event.pageId());
+//			agent.setFacebooks(facebooks);
+//			return repository.save(agent);
+//		}).orElseThrow(() -> new NotFoundException("Agent not found with ID: " + event.agentId()));
+//	}
+//
+//	@ApplicationModuleListener
+//	void facebookRemoved(FacebookPageRemovedEvent event) {
+//		log.info("Event removed");
+//		repository.findById(event.agentId()).map(agent -> {
+//			List<String> facebooks = agent.getFacebooks() == null ? new ArrayList<>() : new ArrayList<>(agent.getFacebooks());
+//			facebooks.remove(event.pageId());
+//			agent.setFacebooks(facebooks);
+//			return repository.save(agent);
+//		}).orElseThrow(() -> new NotFoundException("Agent not found with ID: " + event.agentId()));
+//	}
 }
