@@ -6,6 +6,7 @@ import org.quartz.Scheduler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -44,6 +45,7 @@ class InstagramService {
 				.userId(me.getUserId())
 				.name(me.getName())
 				.active(false)
+				.expiresAt(LocalDateTime.now().plusSeconds(token.getExpiresIn()))
 				.token(token.getAccessToken())
 				.agentId(UUID.fromString(agentId))
 				.username(me.getUsername())
