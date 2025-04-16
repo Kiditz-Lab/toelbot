@@ -17,5 +17,6 @@ class InstagramAccount {
 	private String userId;
 	private String profilePictureUrl;
 	private String name;
+	private String token;
 	private String username;
 }

@@ -18,7 +18,7 @@ class InstagramService {
 	private final InstagramClient instagramClient;
 	private final InstagramConfigProp config;
 	private final InstagramAccountRepository repository;
-	private final Cache<String, String> accessTokenCache;
+//	private final Cache<String, String> accessTokenCache;
 
 	Instagram.TokenResponse exchangeCodeForAccessToken(String code) {
 		log.info("CONFIG >> {}", config);
@@ -28,8 +28,7 @@ class InstagramService {
 		form.put("grant_type", "authorization_code");
 		form.put("redirect_uri", config.getRedirectUri());
 		form.put("code", code);
-		var token = apiInstagramClient.getAccessToken(form);
-		return token;
+		return apiInstagramClient.getAccessToken(form);
 	}
 
 
@@ -53,7 +52,7 @@ class InstagramService {
 
 	@Transactional
 	void subscribePage() {
-		instagramClient.subscribeFromSubscribedApps("Bearer %s".formatted());
+//		instagramClient.subscribeFromSubscribedApps("Bearer %s".formatted(""));
 //		publisher.publishEvent(new FacebookPageCreatedEvent(page.getPageId(), page.getAgentId()));
 	}
 
