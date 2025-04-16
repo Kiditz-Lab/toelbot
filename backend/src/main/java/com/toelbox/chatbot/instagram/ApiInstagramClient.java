@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Map;
 
-@FeignClient(name = "instagramClient", url = "https://api.instagram.com", configuration = FeignConfig.class)
+@FeignClient(name = "instagramApiClient", url = "https://api.instagram.com", configuration = FeignConfig.class)
 interface ApiInstagramClient {
 
 
