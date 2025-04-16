@@ -7,7 +7,6 @@ const store = useFacbookStore();
 const agentStore = useAgentStore();
 const { pages } = toRefs(store);
 const { agent } = toRefs(agentStore);
-
 </script>
 
 <template>
@@ -15,11 +14,13 @@ const { agent } = toRefs(agentStore);
     <template v-slot:prepend>
       <v-avatar rounded>
         <img src="@/assets/tools/facebook.svg" />
-      </v-avatar>        
+      </v-avatar>
     </template>
     <v-card-text> Connect your Toelbot to your Facebook Pages to chat with your customer 24/7.</v-card-text>
     <v-card-actions v-if="agent">
-      <v-btn :disabled="agent?.facebooks?.length > 0" color="primary" variant="elevated" block @click="store.connectFacebook">Connect</v-btn>
+      <v-btn :disabled="agent?.facebooks?.length > 0" color="primary" variant="elevated" block @click="store.connectFacebook"
+        >Connect</v-btn
+      >
     </v-card-actions>
     <v-card-text class="ma-0">
       <v-list-item
@@ -27,18 +28,18 @@ const { agent } = toRefs(agentStore);
         v-for="page in pages"
         :key="page.id"
         :title="page.name"
-        :subtitle="page.category" 
+        :subtitle="page.category"
         :prepend-avatar="page.imageUrl"
       >
         <template #append>
-          <v-tooltip :text="agent?.facebooks?.includes(page.pageId) ? 'Unsubscribe' : 'Subscribe'" bottom>
+          <v-tooltip :text="page.active ? 'Unsubscribe' : 'Subscribe'" bottom>
             <template #activator="{ props }">
               <v-btn
                 v-bind="props"
-                :color="agent?.facebooks?.includes(page.pageId) ? 'success' : 'secondary'"
-                :icon="agent?.facebooks?.includes(page.pageId) ? mdiPowerPlugOff : mdiPowerPlug"
+                :color="page.active ? 'success' : 'secondary'"
+                :icon="page.active ? mdiPowerPlugOff : mdiPowerPlug"
                 variant="tonal"
-                @click="!agent?.facebooks?.includes(page.pageId) ? store.assignPage(page) : store.unassignPage(page)"
+                @click="!page.active ? store.assignPage(page) : store.unassignPage(page)"
                 :loading="page.loading"
               />
             </template>

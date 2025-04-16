@@ -7,4 +7,5 @@ export interface FacebookPage {
   accessToken: string;
   imageUrl: string;
   loading: boolean;
+  active: boolean;
 }

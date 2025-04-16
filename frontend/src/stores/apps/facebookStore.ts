@@ -51,8 +51,8 @@ console.log(fbAuthUrl);
         page.loading = true;
         const id = route.params.id as string;
         page.agentId = id;
-        await api.post('/subscribe-page', page);
-        await agentStore.fetchAgent(id);
+        const res = await api.post<FacebookPage>('/facebook/subscribe-page', page);
+        page = res;
         showSnackbar('Your page are subscribed', 'success', 3000, 'Success');
       } catch (error) {
         showSnackbar(error as string, 'error', 3000, 'Error');
@@ -65,8 +65,10 @@ console.log(fbAuthUrl);
         page.loading = true;
         const id = route.params.id as string;
         page.agentId = id;
-        await api.del(`/unsubscribe-page/${page.pageId}`);
-        await agentStore.fetchAgent(id);
+        const res =  await api.del<FacebookPage>(`/facebook/unsubscribe-page/${page.pageId}`);
+        page = res;
+        showSnackbar('Your page are unsubscribed', 'success', 3000, 'Success');
+        // await agentStore.fetchAgent(id);
         // const index = pages.value.findIndex((p) => p.pageId === page.pageId);
 
         // if (index !== -1) {
