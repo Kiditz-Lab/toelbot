@@ -1,7 +1,6 @@
 package com.toelbox.chatbot.instagram;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.toelbox.chatbot.facebook.Facebook;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -82,8 +81,8 @@ class InstagramController {
 	}
 
 	@PostMapping("/api/v1/subscribe-page")
-	ResponseEntity<Void> subscribePage(@RequestBody Facebook.SavePageRequest req) {
-		instagramService.subscribePage(req);
+	ResponseEntity<Void> subscribePage() {
+//		instagramService.subscribePage(req);
 		return ResponseEntity.ok().build();
 	}
 }
