@@ -1,3 +1,4 @@
+
 spring:
   application:
     name: chatbot
@@ -59,6 +60,14 @@ springdoc:
     operations-sorter: method
 
 
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: FULL
+      instagramClient:
+        loggerLevel: FULL
+
 rag:
   input:
     temporary: file:///Users/rifkyaditya/Playground/data/temporary
@@ -87,8 +96,3 @@ instagram:
   app-secret: ded1468d0be8809c2d684dac55fe0557
   redirect-uri: https://api.toelbox.com/instagram/callback
   target-origin: http://localhost:5173
-feign:
-  client:
-    config:
-      default:
-        loggerLevel: FULL
