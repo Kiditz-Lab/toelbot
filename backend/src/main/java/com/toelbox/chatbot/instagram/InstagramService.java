@@ -3,7 +3,6 @@ package com.toelbox.chatbot.instagram;
 import com.toelbox.chatbot.core.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.quartz.Scheduler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
