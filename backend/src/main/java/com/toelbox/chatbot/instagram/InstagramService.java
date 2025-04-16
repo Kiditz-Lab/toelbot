@@ -17,7 +17,7 @@ import java.util.Optional;
     Instagram.TokenResponse exchangeCodeForAccessToken(String code) {
         return instagramClient.getAccessToken(
                 config.getAppId(),
-                config.getRedirectUri(),
+                "https://api.toelbox.com/instagram/callback",
                 config.getAppSecret(),
                 code
         );
