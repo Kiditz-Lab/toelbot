@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { useAgentStore } from '@/stores/apps/agentStore';
 import { useFacbookStore } from '@/stores/apps/facebookStore';
-import { useSnackbarStore } from '@/stores/snackbarStore';
 import { mdiPowerPlug, mdiPowerPlugOff } from '@mdi/js';
-import { onMounted, toRefs } from 'vue';
+import { toRefs } from 'vue';
 const store = useFacbookStore();
 const agentStore = useAgentStore();
 const { pages } = toRefs(store);
@@ -28,7 +27,7 @@ const { agent } = toRefs(agentStore);
         v-for="page in pages"
         :key="page.id"
         :title="page.name"
-        :subtitle="page.category"
+        :subtitle="page.category" 
         :prepend-avatar="page.imageUrl"
       >
         <template #append>

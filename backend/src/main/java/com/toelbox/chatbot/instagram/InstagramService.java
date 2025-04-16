@@ -25,6 +25,7 @@ import java.util.Optional;
 
 
     public List<Instagram.FacebookPage> getFacebookPages(String accessToken) {
+        log.info("Access Token : {}", accessToken);
         return instagramClient.getFacebookPages(accessToken).getData();
     }
 
