@@ -80,7 +80,7 @@ class InstagramController {
 				""", message, targetOrigin);
 	}
 
-	@PostMapping("/api/v1/subscribe-page")
+	@PostMapping("/api/v1/instagram/subscribe-page")
 	ResponseEntity<Void> subscribePage() {
 //		instagramService.subscribePage(req);
 		return ResponseEntity.ok().build();
