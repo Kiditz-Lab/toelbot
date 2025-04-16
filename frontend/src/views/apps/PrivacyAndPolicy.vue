@@ -5,7 +5,7 @@ import('md-editor-v3/lib/style.css');
 const policy = ref(`
 # Privacy Policy for Toelbox
 
-**Effective Date:** [Insert Date]
+**Effective Date:** 16-Apr-2025
 
 Thank you for using **Toelbox** ("Service"). We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and protect your information when you use our chatbot, which is integrated with platforms such as Facebook, Instagram, Slack, and Discord.
 
@@ -72,7 +72,7 @@ As a user in Indonesia, you have the right to:
 - Withdraw consent at any time  
 - Contact us regarding your privacy
 
-To make a request, please email us at **[your support email]**.
+To make a request, please email us at **support@toelbox.com**.
 
 ---
 
