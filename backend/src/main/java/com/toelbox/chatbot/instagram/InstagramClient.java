@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 @FeignClient(name = "instagramClient", url = "https://api.instagram.com")
 interface InstagramClient {
 
-	@GetMapping("/oauth/access_token")
+	@PostMapping("/oauth/access_token")
 	Instagram.TokenResponse getAccessToken(
 			@RequestParam("client_id") String clientId,
 			@RequestParam("redirect_uri") String redirectUri,
