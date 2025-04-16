@@ -23,7 +23,7 @@ class InstagramController {
 	ResponseEntity<String> handleInstagramCallback(@RequestParam String code, @RequestParam(value = "state", required = false) String state) {
 		try {
 			Instagram.TokenResponse token = instagramService.exchangeCodeForAccessToken(code);
-			Instagram.Account account = instagramService.getAndSaveAccount(token.getAccessToken());
+			InstagramAccount account = instagramService.getAndSaveAccount(token.getAccessToken(), state);
 			String json = mapper.writeValueAsString(account);
 			log.info("Returning pages with IG business account to {}", prop.getTargetOrigin());
 
