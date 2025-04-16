@@ -6,9 +6,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping
@@ -25,9 +26,8 @@ class InstagramController {
 	ResponseEntity<String> handleInstagramCallback(@RequestParam String code) {
 		try {
 			Instagram.TokenResponse token = instagramService.exchangeCodeForAccessToken(code);
-			List<Instagram.FacebookPage> pages = instagramService.getFacebookPages(token.getAccess_token());
-			String json = mapper.writeValueAsString(pages);
-//			log.info("Pages: {}", json);
+
+			String json = mapper.writeValueAsString(token);
 
 			log.info("Returning pages with IG business accounts to {}", prop.getTargetOrigin());
 

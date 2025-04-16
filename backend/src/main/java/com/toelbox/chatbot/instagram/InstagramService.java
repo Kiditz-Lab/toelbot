@@ -4,60 +4,27 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
- class InstagramService {
-    private final InstagramClient instagramClient;
-    private final InstagramConfigProp config;
+class InstagramService {
+	private final InstagramClient instagramClient;
+	private final InstagramConfigProp config;
 
-    Instagram.TokenResponse exchangeCodeForAccessToken(String code) {
-        log.info("CONFIG >> {}", config);
-        return instagramClient.getAccessToken(
-                config.getAppId(),
-                config.getRedirectUri(),
-                config.getAppSecret(),
-                code
-        );
-    }
+	Instagram.TokenResponse exchangeCodeForAccessToken(String code) {
+		log.info("CONFIG >> {}", config);
+		Map<String, String> form = new HashMap<>();
+		form.put("client_id", config.getAppId());
+		form.put("client_secret", config.getAppSecret());
+		form.put("grant_type", "authorization_code");
+		form.put("redirect_uri", config.getRedirectUri());
+		form.put("code", code);
 
-
-    public List<Instagram.FacebookPage> getFacebookPages(String accessToken) {
-        log.info("Access Token : {}", accessToken);
-        return instagramClient.getFacebookPages(accessToken).getData();
-    }
-
-
-    Optional<Instagram.PageDetails> getPageDetailsWithInstagram(String pageId, String accessToken) {
-        try {
-            Instagram.PageDetails page = instagramClient.getPageDetails(
-                    pageId,
-                    "id,name,instagram_business_account",
-                    accessToken
-            );
-            return Optional.of(page);
-        } catch (Exception e) {
-            log.warn("Could not fetch details for page: {}", pageId, e);
-            return Optional.empty();
-        }
-    }
-
-    Optional<Instagram.IgBusinessProfile> getInstagramProfile(String igBusinessId, String accessToken) {
-        try {
-            Instagram.IgBusinessProfile profile = instagramClient.getInstagramAccountDetails(
-                    igBusinessId,
-                    "id,username,profile_picture_url",
-                    accessToken
-            );
-            return Optional.of(profile);
-        } catch (Exception e) {
-            log.warn("Could not fetch IG business profile: {}", igBusinessId, e);
-            return Optional.empty();
-        }
-    }
+		return instagramClient.getAccessToken(form);
+	}
 
 
 }

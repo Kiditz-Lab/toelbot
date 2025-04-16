@@ -1,35 +1,19 @@
 package com.toelbox.chatbot.instagram;
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "instagramClient", url = "https://graph.facebook.com/v18.0")
+import java.util.Map;
+
+@FeignClient(name = "instagramClient", url = "https://api.instagram.com", configuration = FeignConfig.class)
 interface InstagramClient {
 
-	@GetMapping("/oauth/access_token")
+
+	@PostMapping(value = "/oauth/access_token", consumes = "application/x-www-form-urlencoded")
 	Instagram.TokenResponse getAccessToken(
-			@RequestParam("client_id") String clientId,
-			@RequestParam("redirect_uri") String redirectUri,
-			@RequestParam("client_secret") String clientSecret,
-			@RequestParam("code") String code
+			@RequestBody Map<String, ?> body
 	);
 
-	@GetMapping("/me/accounts")
-	Instagram.FacebookAccountsResponse getFacebookPages(
-			@RequestParam("access_token") String accessToken
-	);
 
-	@GetMapping("/{page-id}")
-	Instagram.PageDetails getPageDetails(
-			@PathVariable("page-id") String pageId,
-			@RequestParam("fields") String fields,
-			@RequestParam("access_token") String accessToken
-	);
-
-	@GetMapping("/{ig-id}")
-	Instagram.IgBusinessProfile getInstagramAccountDetails(
-			@PathVariable("ig-id") String instagramBusinessId,
-			@RequestParam("fields") String fields,
-			@RequestParam("access_token") String accessToken
-	);
 }
