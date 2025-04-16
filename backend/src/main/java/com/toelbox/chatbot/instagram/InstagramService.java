@@ -2,7 +2,9 @@ package com.toelbox.chatbot.instagram;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -16,16 +18,24 @@ import java.util.Optional;
     private final InstagramClient instagramClient;
     private final InstagramConfigProp config;
 
-    Instagram.TokenResponse exchangeCodeForAccessToken(String code) {
-        String redirectUri = URLEncoder.encode("https://api.toelbox.com/instagram/callback", StandardCharsets.UTF_8);
+    public Instagram.TokenResponse exchangeCodeForAccessToken(String code) {
+        String clientId = config.getAppId();
+        String clientSecret = config.getAppSecret();
+        String redirectUri = "https://api.toelbox.com/instagram/callback"; // Do NOT encode manually
 
-        return instagramClient.getAccessToken(
-                config.getAppId(),
-                redirectUri,
-                config.getAppSecret(),
-                code
+        String url = String.format(
+                "https://graph.facebook.com/v18.0/oauth/access_token" +
+                        "?client_id=%s&redirect_uri=%s&client_secret=%s&code=%s",
+                URLEncoder.encode(clientId, StandardCharsets.UTF_8),
+                URLEncoder.encode(redirectUri, StandardCharsets.UTF_8),
+                URLEncoder.encode(clientSecret, StandardCharsets.UTF_8),
+                URLEncoder.encode(code, StandardCharsets.UTF_8)
         );
+
+        ResponseEntity<Instagram.TokenResponse> response = new RestTemplate().getForEntity(url, Instagram.TokenResponse.class);
+        return response.getBody();
     }
+
 
 
     public List<Instagram.FacebookPage> getFacebookPages(String accessToken) {
