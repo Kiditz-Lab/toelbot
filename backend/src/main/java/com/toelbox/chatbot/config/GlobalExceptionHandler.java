@@ -64,22 +64,6 @@ class GlobalExceptionHandler {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
 	}
 
-	@ExceptionHandler(NoResourceFoundException.class)
-	public ResponseEntity<ErrorResponse> handleNotFoundException(
-			NoResourceFoundException ex,
-			WebRequest request) {
-
-		ErrorResponse response = ErrorResponse.builder()
-				.status(HttpStatus.NOT_FOUND.value())
-				.error("Not Found")
-				.message(ex.getMessage())
-				.path(request.getDescription(false).replace("uri=", ""))
-				.timestamp(LocalDateTime.now())
-				.build();
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-	}
-
-
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorResponse> handleGenericException(
 			Exception ex,
