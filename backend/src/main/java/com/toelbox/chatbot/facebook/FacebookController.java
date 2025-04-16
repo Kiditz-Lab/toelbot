@@ -92,7 +92,7 @@ class FacebookController {
 		return ResponseEntity.ok(facebookService.unsubscribePage(pageId));
 	}
 
-	@PostMapping("/api/v1/facebook-pages/{agentId}")
+	@GetMapping("/api/v1/facebook-pages/{agentId}")
 	ResponseEntity<List<FacebookPage>> getPages(@PathVariable UUID agentId) {
 		return ResponseEntity.ok(facebookService.findByAgentId(agentId));
 	}

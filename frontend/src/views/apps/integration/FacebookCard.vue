@@ -30,16 +30,17 @@ const { agent } = toRefs(agentStore);
         :title="page.name"
         :subtitle="page.category"
         :prepend-avatar="page.imageUrl"
-      >
+        >
         <template #append>
           <v-tooltip :text="page.active ? 'Unsubscribe' : 'Subscribe'" bottom>
             <template #activator="{ props }">
+              {{ page.active }}
               <v-btn
-                v-bind="props"
-                :color="page.active ? 'success' : 'secondary'"
-                :icon="page.active ? mdiPowerPlugOff : mdiPowerPlug"
-                variant="tonal"
-                @click="!page.active ? store.assignPage(page) : store.unassignPage(page)"
+              v-bind="props"
+              :color="page.active ? 'success' : 'secondary'"
+              :icon="page.active ? mdiPowerPlugOff : mdiPowerPlug"
+              variant="tonal"
+              @click="!page.active ? store.assignPage(page) : store.unassignPage(page)"
                 :loading="page.loading"
               />
             </template>

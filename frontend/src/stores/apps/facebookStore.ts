@@ -4,7 +4,7 @@ import { defineStore } from 'pinia';
 import { computed, onMounted, ref } from 'vue';
 // import { useRoute } from 'vue-router';
 import { useSnackbarStore } from '../snackbarStore';
-import { useAgentStore } from './agentStore';
+// import { useAgentStore } from './agentStore';
 import { useRoute } from 'vue-router';
 
 export const useFacbookStore = defineStore(
@@ -15,19 +15,23 @@ export const useFacbookStore = defineStore(
     const api = useApi();
 
     const { showSnackbar } = useSnackbarStore();
-    const agentStore = useAgentStore();
+    // const agentStore = useAgentStore();
     const route = useRoute();
     onMounted(async () => {
-      const id = route.params.id as string;
-      await agentStore.fetchAgent(id);
+      // await agentStore.fetchAgent(id);
+      fetchByAgent();
     });
+    const fetchByAgent = async () => {
+      const id = route.params.id as string;
+      const res = await api.get<FacebookPage[]>(`/facebook-pages/${id}`);
+      pages.value = res;
+    };
     const connectFacebook = () => {
       const businessId = route.params.id as string;
       const state = businessId;
 
       const clientId = import.meta.env.VITE_FACEBOOK_APP_ID;
       const baseUrl = import.meta.env.VITE_BASE_URL;
-      
 
       const scope = 'pages_show_list,pages_read_engagement,pages_messaging,public_profile,pages_manage_metadata';
       const redirectUri = `${baseUrl}/facebook/callback`;
@@ -39,7 +43,7 @@ export const useFacbookStore = defineStore(
         `&response_type=code` +
         `&display=page` +
         `&state=${state}`;
-console.log(fbAuthUrl);
+      console.log(fbAuthUrl);
       window.open(fbAuthUrl, '_blank', 'width=500,height=600');
     };
     const setPages = (newPages: FacebookPage[]) => {
@@ -52,7 +56,11 @@ console.log(fbAuthUrl);
         const id = route.params.id as string;
         page.agentId = id;
         const res = await api.post<FacebookPage>('/facebook/subscribe-page', page);
-        page = res;
+        const index = pages.value.findIndex((p) => p.pageId === res.pageId);
+        if (index !== -1) {
+          pages.value[index] = { ...res, loading: false };
+        }
+
         showSnackbar('Your page are subscribed', 'success', 3000, 'Success');
       } catch (error) {
         showSnackbar(error as string, 'error', 3000, 'Error');
@@ -65,15 +73,13 @@ console.log(fbAuthUrl);
         page.loading = true;
         const id = route.params.id as string;
         page.agentId = id;
-        const res =  await api.del<FacebookPage>(`/facebook/unsubscribe-page/${page.pageId}`);
-        page = res;
-        showSnackbar('Your page are unsubscribed', 'success', 3000, 'Success');
-        // await agentStore.fetchAgent(id);
-        // const index = pages.value.findIndex((p) => p.pageId === page.pageId);
+        const res = await api.del<FacebookPage>(`/facebook/unsubscribe-page/${page.pageId}`);
+        const index = pages.value.findIndex((p) => p.pageId === res.pageId);
+        if (index !== -1) {
+          pages.value[index] = { ...res, loading: false };
+        }
 
-        // if (index !== -1) {
-        //   pages.value.splice(index, 1);
-        // }
+        showSnackbar('Your page are unsubscribed', 'success', 3000, 'Success');
       } catch (error) {
         showSnackbar(error as string, 'error', 3000, 'Error');
       } finally {
