@@ -16,3 +16,4 @@ class InstagramConfigProp {
 	private String redirectUri;
 	private String targetOrigin;
 }
+

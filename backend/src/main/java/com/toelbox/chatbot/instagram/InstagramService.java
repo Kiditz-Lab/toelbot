@@ -15,6 +15,7 @@ import java.util.Optional;
     private final InstagramConfigProp config;
 
     Instagram.TokenResponse exchangeCodeForAccessToken(String code) {
+        log.info("CONFIG >> {}", config);
         return instagramClient.getAccessToken(
                 config.getAppId(),
                 config.getRedirectUri(),
