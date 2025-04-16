@@ -4,6 +4,6 @@ CREATE TABLE instagram_account (
     profile_picture_url TEXT,
     name TEXT,
     username TEXT,
-    active BOOL,
+    active BOOLEAN,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
