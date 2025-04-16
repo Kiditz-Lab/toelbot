@@ -1,5 +1,6 @@
 package com.toelbox.chatbot.instagram;
 
+import com.toelbox.chatbot.core.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.Scheduler;
@@ -55,9 +56,19 @@ class InstagramService {
 	}
 
 	@Transactional
-	void subscribePage() {
-//		instagramClient.subscribeFromSubscribedApps("Bearer %s".formatted(""));
-//		publisher.publishEvent(new FacebookPageCreatedEvent(page.getPageId(), page.getAgentId()));
+	InstagramAccount subscribe(String userId) {
+		var account = repository.findByUserId(userId).orElseThrow(() -> new NotFoundException("User not found"));
+		instagramClient.subscribeFromSubscribedApps(userId, "Bearer %s".formatted(account.getToken()), "messages");
+		account.setActive(true);
+		return repository.save(account);
+	}
+
+	@Transactional
+	InstagramAccount unsubscribe(String userId) {
+		var account = repository.findByUserId(userId).orElseThrow(() -> new NotFoundException("User not found"));
+		instagramClient.unsubscribeFromSubscribedApps(userId, "Bearer %s".formatted(account.getToken()), "messages");
+		account.setActive(false);
+		return repository.save(account);
 	}
 
 

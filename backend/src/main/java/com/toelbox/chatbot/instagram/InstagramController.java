@@ -82,9 +82,15 @@ class InstagramController {
 				""", message, targetOrigin);
 	}
 
-	@PostMapping("/api/v1/instagram/subscribe-page/{userId}")
-	ResponseEntity<Void> subscribePage(@PathVariable String userId) {
+	@PostMapping("/api/v1/instagram/subscribe/{userId}")
+	ResponseEntity<InstagramAccount> subscribe(@PathVariable String userId) {
+		var account = instagramService.subscribe(userId);
+		return ResponseEntity.ok(account);
+	}
 
-		return ResponseEntity.ok().build();
+	@PostMapping("/api/v1/instagram/unsubscribe/{userId}")
+	ResponseEntity<InstagramAccount> unsubscribe(@PathVariable String userId) {
+		var account = instagramService.unsubscribe(userId);
+		return ResponseEntity.ok(account);
 	}
 }

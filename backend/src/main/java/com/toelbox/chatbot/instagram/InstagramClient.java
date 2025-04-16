@@ -28,14 +28,16 @@ interface InstagramClient {
 	);
 
 
-	@DeleteMapping("/me/subscribed_apps")
+	@DeleteMapping("/{userId}/subscribed_apps")
 	void unsubscribeFromSubscribedApps(
+			@PathVariable String userId,
 			@RequestHeader("Authorization") String authorization,
 			@RequestParam("subscribed_fields") String subscribedFields
 	);
 
-	@PostMapping("/me/subscribed_apps")
+	@PostMapping("/{userId}/subscribed_apps")
 	void subscribeFromSubscribedApps(
+			@PathVariable String userId,
 			@RequestHeader("Authorization") String authorization,
 			@RequestParam("subscribed_fields") String subscribedFields
 	);
