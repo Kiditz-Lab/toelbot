@@ -85,3 +85,12 @@ instagram:
   app-secret: ded1468d0be8809c2d684dac55fe0557
   redirect-uri: https://api.toelbox.com/instagram/callback
   target-origin: http://localhost:5173
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: FULL
+logging:
+  level:
+    feign: DEBUG  # Enable logging at DEBUG level for Feign
+    com.toelbox.chatbot.instagram.InstagramClient: DEBUG  # Specific to your InstagramClient
