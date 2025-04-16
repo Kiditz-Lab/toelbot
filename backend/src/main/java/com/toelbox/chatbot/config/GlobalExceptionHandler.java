@@ -148,7 +148,7 @@ class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(NoResourceFoundException.class)
-	public ResponseEntity<ErrorResponse> handleNotFoundException(NoResourceFoundException ex, HttpServletRequest request) {
+	public ResponseEntity<ErrorResponse> handleNoResourceFoundException(NoResourceFoundException ex, HttpServletRequest request) {
 		log.warn("Not Found: {} {}", request.getMethod(), request.getRequestURI());
 
 		ErrorResponse error = ErrorResponse.builder()
