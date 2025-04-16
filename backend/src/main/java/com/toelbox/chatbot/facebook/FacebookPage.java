@@ -19,5 +19,6 @@ class FacebookPage {
 	private String name;
 	private String category;
 	private String imageUrl;
+	private boolean active;
 
 }

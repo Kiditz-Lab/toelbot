@@ -1,5 +1,6 @@
 package com.toelbox.chatbot.facebook;
 
+import com.toelbox.chatbot.core.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -10,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -33,28 +33,31 @@ class FacebookService {
 	List<FacebookPage> getUserPages(String userAccessToken) {
 		log.info("Access token: {}", userAccessToken);
 		var pages = facebookClient.getUserPages(userAccessToken, "id,name,category,access_token,picture{url}").getData();
-		return pages.stream().map(page -> FacebookPage.builder()
+		var facebookPages = pages.stream().map(page -> FacebookPage.builder()
 				.pageId(page.getId())
 				.category(page.getCategory())
 				.name(page.getName())
 				.accessToken(page.getAccess_token())
 				.imageUrl(page.getPicture().getData().getUrl())
 				.build()).toList();
+		return repository.saveAll(facebookPages);
 	}
 
 	@Transactional
 	void subscribePage(Facebook.SavePageRequest request) {
 		Map<String, Object> body = Map.of("subscribed_fields", List.of("messages", "message_deliveries", "message_reads", "messaging_postbacks"));
 		facebookClient.subscribePageToApp(request.getAccessToken(), body);
-		var page = FacebookPage.builder()
-				.pageId(request.getPageId())
-				.name(request.getName())
-				.category(request.getCategory())
-				.imageUrl(request.getImageUrl())
-				.accessToken(request.getAccessToken())
-				.agentId(request.getAgentId())
-				.build();
-		page = repository.save(page);
+		var page = repository.findByPageId(request.getPageId()).orElseThrow(() -> new NotFoundException("Page not found"));
+
+//		var page = FacebookPage.builder()
+//				.pageId(request.getPageId())
+//				.name(request.getName())
+//				.category(request.getCategory())
+//				.imageUrl(request.getImageUrl())
+//				.accessToken(request.getAccessToken())
+//				.agentId(request.getAgentId())
+//				.build();
+//		page = repository.save(page);
 		publisher.publishEvent(new FacebookPageCreatedEvent(page.getPageId(), page.getAgentId()));
 	}
 

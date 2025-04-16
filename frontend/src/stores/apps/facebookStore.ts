@@ -23,7 +23,7 @@ export const useFacbookStore = defineStore(
     });
     const connectFacebook = () => {
       const businessId = route.params.id as string;
-      const state = encodeURIComponent(JSON.stringify({ businessId: businessId }));
+      const state = businessId;
 
       const clientId = import.meta.env.VITE_FACEBOOK_APP_ID;
       const baseUrl = import.meta.env.VITE_BASE_URL;
@@ -39,7 +39,7 @@ export const useFacbookStore = defineStore(
         `&response_type=code` +
         `&display=page` +
         `&state=${state}`;
-
+console.log(fbAuthUrl);
       window.open(fbAuthUrl, '_blank', 'width=500,height=600');
     };
     const setPages = (newPages: FacebookPage[]) => {
