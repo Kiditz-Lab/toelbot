@@ -15,10 +15,9 @@ export const useFacbookStore = defineStore(
     const api = useApi();
 
     const { showSnackbar } = useSnackbarStore();
-    // const agentStore = useAgentStore();
     const route = useRoute();
     onMounted(async () => {
-      // await agentStore.fetchAgent(id);
+      
       fetchByAgent();
     });
     const fetchByAgent = async () => {

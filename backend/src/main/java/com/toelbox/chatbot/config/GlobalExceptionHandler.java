@@ -1,11 +1,13 @@
 package com.toelbox.chatbot.config;
 
 import com.toelbox.chatbot.core.NotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -97,12 +99,30 @@ class GlobalExceptionHandler {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
 	}
 
+	@ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
+	public ResponseEntity<ErrorResponse> handleMediaTypeNotAcceptable(
+			HttpMediaTypeNotAcceptableException ex,
+			HttpServletRequest request) {
+
+		log.warn("HttpMediaTypeNotAcceptableException at path {}: {}", request.getRequestURI(), ex.getMessage());
+
+		ErrorResponse errorResponse = ErrorResponse.builder()
+				.status(HttpStatus.NOT_ACCEPTABLE.value())
+				.error("Not Acceptable")
+				.message("Requested media type is not supported")
+				.path(request.getRequestURI())
+				.timestamp(LocalDateTime.now())
+				.build();
+
+		return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(errorResponse);
+	}
+
 
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(
 			DataIntegrityViolationException ex,
-			WebRequest request) {
-
+			WebRequest request, HttpServletRequest servletRequest) {
+		log.warn("Data Integrity: {} {}", servletRequest.getMethod(), servletRequest.getRequestURI());
 		// Check for a unique constraint violation and respond accordingly
 		if (ex.getMessage().contains("duplicate key value violates unique constraint")) {
 			ErrorResponse response = ErrorResponse.builder()
@@ -125,6 +145,21 @@ class GlobalExceptionHandler {
 				.build();
 
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+	}
+
+	@ExceptionHandler(NoResourceFoundException.class)
+	public ResponseEntity<ErrorResponse> handleNotFoundException(NoResourceFoundException ex, HttpServletRequest request) {
+		log.warn("Not Found: {} {}", request.getMethod(), request.getRequestURI());
+
+		ErrorResponse error = ErrorResponse.builder()
+				.status(HttpStatus.NOT_FOUND.value())
+				.error(HttpStatus.NOT_FOUND.getReasonPhrase())
+				.message(ex.getMessage())
+				.path(request.getRequestURI())
+				.timestamp(LocalDateTime.now())
+				.build();
+
+		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 	}
 
 }
