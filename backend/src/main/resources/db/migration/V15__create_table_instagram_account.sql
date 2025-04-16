@@ -3,6 +3,7 @@ CREATE TABLE instagram_account (
     user_id TEXT NOT NULL,
     profile_picture_url TEXT,
     name TEXT,
-    username TEXT
+    username TEXT,
+    active BOOL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
