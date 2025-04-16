@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/instagram/webhook")
-@Tag(name = "Facebook")
+@Tag(name = "Instagram")
 @RequiredArgsConstructor
 class InstagramWebhookController {
 
