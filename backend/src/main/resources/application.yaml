@@ -78,3 +78,10 @@ facebook:
   app-secret: ded1468d0be8809c2d684dac55fe0557
   redirect-uri: https://api.toelbox.com/facebook/callback
   target-origin: http://localhost:5173
+
+instagram:
+  verify-token: FsyUCPJggAWvWeGmaKqYRqzzVRxZikLsGF2O3OMRE9gRDRVMUkgMZRZEay1bk7ab
+  app-id: 1023127972521359
+  app-secret: 98fb04b7ac79def870b53496c3dfcf7a
+  redirect-uri: https://api.toelbox.com/facebook/callback
+  target-origin: http://localhost:5173
