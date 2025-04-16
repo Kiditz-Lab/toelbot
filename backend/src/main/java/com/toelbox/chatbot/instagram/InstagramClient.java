@@ -1,17 +1,18 @@
 package com.toelbox.chatbot.instagram;
 
+import feign.Headers;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "instagramClient", url = "https://api.instagram.com", configuration = FeignConfig.class)
+import java.util.Map;
+
+@FeignClient(name = "instagramClient", url = "https://api.instagram.com")
 interface InstagramClient {
 
 	@PostMapping("/oauth/access_token")
+	@Headers("Content-Type: application/x-www-form-urlencoded")
 	Instagram.TokenResponse getAccessToken(
-			@RequestParam("client_id") String clientId,
-			@RequestParam("redirect_uri") String redirectUri,
-			@RequestParam("client_secret") String clientSecret,
-			@RequestParam("code") String code
+			@RequestBody Map<String, ?> body
 	);
 
 	@GetMapping("/me/accounts")
