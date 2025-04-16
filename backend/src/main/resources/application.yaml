@@ -71,6 +71,8 @@ logging:
     io.modelcontextprotocol.client: TRACE
     org.springframework.cache: DEBUG
     com.github.benmanes.caffeine.cache: TRACE
+    feign: DEBUG
+    com.toelbox.chatbot.instagram.InstagramClient: DEBUG
 
 facebook:
   verify-token: 41khv7YTZhT7A71SVcUqtx071KSP8IFZeUWACjkhmL5tvyWPvHrKbyC4LDQCYSkA
@@ -90,7 +92,3 @@ feign:
     config:
       default:
         loggerLevel: FULL
-logging:
-  level:
-    feign: DEBUG  # Enable logging at DEBUG level for Feign
-    com.toelbox.chatbot.instagram.InstagramClient: DEBUG  # Specific to your InstagramClient
