@@ -10,9 +10,10 @@ const facebookStore = useFacbookStore();
 const instagramStore = useInstagramStore();
 
 const breadcrumbs = ref([{ title: 'Integration', disabled: false, href: '#' }]);
-onMounted(() => {
-  const { showSnackbar } = useSnackbarStore();
-
+const { showSnackbar } = useSnackbarStore();
+onMounted(async() => {
+  await instagramStore.fetchByAgent();
+  await facebookStore.fetchByAgent();
   window.addEventListener('message', (event) => {
     const { type, payload } = event.data;
     console.log(type);
@@ -33,7 +34,6 @@ onMounted(() => {
         showSnackbar('Failed to connect to Instagram', 'error', 3000, 'Error');
       }
     }
-
   });
 });
 </script>
@@ -47,6 +47,5 @@ onMounted(() => {
     <v-col cols="12" sm="6" md="4" lg="4">
       <InstagramCard />
     </v-col>
-
   </v-row>
 </template>

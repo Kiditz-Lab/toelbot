@@ -1,7 +1,7 @@
 import { useApi } from '@/composables/useApi';
 import type { FacebookPage } from '@/types/facebook';
 import { defineStore } from 'pinia';
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref } from 'vue';
 // import { useRoute } from 'vue-router';
 import { useSnackbarStore } from '../snackbarStore';
 // import { useAgentStore } from './agentStore';
@@ -16,10 +16,7 @@ export const useFacbookStore = defineStore(
 
     const { showSnackbar } = useSnackbarStore();
     const route = useRoute();
-    onMounted(async () => {
-      
-      fetchByAgent();
-    });
+    
     const fetchByAgent = async () => {
       const id = route.params.id as string;
       const res = await api.get<FacebookPage[]>(`/facebook-pages/${id}`);
@@ -92,7 +89,8 @@ export const useFacbookStore = defineStore(
       setPages,
       assignPage,
       unassignPage,
-      loading
+      loading,
+      fetchByAgent
     };
   },
   { persist: true }

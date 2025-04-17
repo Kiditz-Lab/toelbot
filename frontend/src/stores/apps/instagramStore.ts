@@ -1,7 +1,7 @@
 import { useApi } from '@/composables/useApi';
 import type { InstagramAccount } from '@/types/instagram';
 import { defineStore } from 'pinia';
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useSnackbarStore } from '@/stores/snackbarStore';
 const { showSnackbar } = useSnackbarStore();
@@ -15,7 +15,7 @@ export const useInstagramStore = defineStore('instagramStore', () => {
     const res = await api.get<InstagramAccount[]>(`/instagram/accounts/${id}`);
     account.value = res[0];
   };
-  onMounted(fetchByAgent);
+  
   const subscribe = async (acc: InstagramAccount) => {
     try {
       account.value.loading = true;
@@ -60,5 +60,5 @@ export const useInstagramStore = defineStore('instagramStore', () => {
     account.value = acc;
   };
 
-  return { connectInstagram, account, setAccount, subscribe, unsubscribe };
+  return { connectInstagram, account, setAccount, subscribe, unsubscribe, fetchByAgent };
 });
