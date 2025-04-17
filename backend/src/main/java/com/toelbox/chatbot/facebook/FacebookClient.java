@@ -29,6 +29,12 @@ interface FacebookClient {
 	@DeleteMapping("/me/subscribed_apps")
 	void unsubscribePageFromApp(@RequestParam("access_token") String pageAccessToken);
 
+	@PostMapping(value = "/me/messages", consumes = "application/json")
+	void sendTypingIndicator(
+			@RequestParam("access_token") String accessToken,
+			@RequestBody Map<String, Object> body
+	);
+
 
 }
 

@@ -2,9 +2,8 @@
   <div class="logo">
     <RouterLink to="/agents" aria-label="logo" class="text-decoration-none text-black">
       <div class="d-flex align-center">
-        <v-avatar color="white" class="mr-3 ml-0">
-          
-          <img src="@/assets/logo.svg" width="42px" height="42px" class="mx-3" />
+        <v-avatar color="white" class="mr-3 ml-0 rounded-0">
+          <img src="@/assets/logo.svg" width="38px" height="38px" class="mx-3" />
         </v-avatar>
         <v-toolbar-title class="font-weight-bold">Toelbot</v-toolbar-title>
       </div>
@@ -18,5 +17,4 @@
 </template>
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
-import { mdiRobot } from '@mdi/js';
 </script>

@@ -93,6 +93,11 @@ class FacebookService {
 			if (page != null) {
 				for (FacebookWebhookResponse.Messaging messaging : entry.messaging()) {
 					if (messaging.message() != null) {
+						Map<String, Object> body = Map.of(
+								"recipient", Map.of("id", messaging.sender().id()),
+								"sender_action", "typing_on"
+						);
+						facebookClient.sendTypingIndicator(page.getAccessToken(), body);
 						publisher.publishEvent(new FacebookIncomingMessageEvent(page.getAgentId(), entry.id(), messaging.sender().id(), messaging.message().text()));
 					}
 				}

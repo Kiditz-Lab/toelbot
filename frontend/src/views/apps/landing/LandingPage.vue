@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import ToolScroll from './ToolScroll.vue';
+import { useAuthStore } from '@/stores/auth';
 import {
   mdiRobot,
   mdiSend,
@@ -233,18 +234,17 @@ const getTextColor = (icon) => {
   }
 };
 
-const imageModules = import.meta.glob('@/assets/tools/*.{png,jpg,jpeg,svg}', {
-  eager: true,
-  import: 'default'
-});
+// const imageModules = import.meta.glob('@/assets/tools/*.{png,jpg,jpeg,svg}', {
+//   eager: true,
+//   import: 'default'
+// });
 // const tools = ref(Object.values(imageModules));
 
 // const midpoint = Math.ceil(tools.value.length / 2);
 // const leftTools = computed(() => tools.value.slice(0, midpoint));
 // const rightTools = computed(() => tools.value.slice(midpoint));
 
-console.log(imageModules);
-
+const auth = useAuthStore();
 // Send message method
 function sendMessage() {
   if (!userInput.value.trim()) return;
@@ -283,7 +283,8 @@ function sendMessage() {
       <v-btn variant="text" href="#usecase" class="text-none">Use Case</v-btn>
       <v-btn variant="text" href="#pricing" class="text-none">Pricing</v-btn>
       <!-- <v-btn variant="text" href="#faq" class="text-none">FAQ</v-btn> -->
-      <v-btn to="/login" class="bg-indigo text-white ml-4" elevation="1">Login</v-btn>
+      <v-btn v-if="!auth.user" to="/login" class="bg-indigo text-white ml-4" elevation="1">Login</v-btn>
+      <v-btn v-else to="/agents" variant="outlined" class="bg-indigo text-white ml-4" elevation="1">Go To Agents</v-btn>
     </div>
 
     <!-- Mobile Menu Button -->

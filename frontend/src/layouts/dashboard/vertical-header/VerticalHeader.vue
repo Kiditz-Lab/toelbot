@@ -33,7 +33,7 @@ defineProps({
       <MenuFoldOutlined :style="{ fontSize: '16px' }" />
     </v-btn>
     <div v-else class="d-flex align-center">
-      <img src="@/assets/logo.svg" width="42px" height="42px" class="mx-3" />
+      <img src="@/assets/logo.svg" width="38px" height="38px" class="mx-3" />
       <v-toolbar-title class="font-weight-bold text-h3">Toelbot</v-toolbar-title>
     </div>
     <v-btn v-if="!isLogo"
