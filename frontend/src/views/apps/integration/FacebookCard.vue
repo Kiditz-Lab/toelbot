@@ -1,12 +1,9 @@
 <script setup lang="ts">
-import { useAgentStore } from '@/stores/apps/agentStore';
 import { useFacbookStore } from '@/stores/apps/facebookStore';
 import { mdiPowerPlug, mdiPowerPlugOff } from '@mdi/js';
 import { toRefs } from 'vue';
 const store = useFacbookStore();
-const agentStore = useAgentStore();
 const { pages } = toRefs(store);
-const { agent } = toRefs(agentStore);
 </script>
 
 <template>
@@ -17,9 +14,9 @@ const { agent } = toRefs(agentStore);
       </v-avatar>
     </template>
     <v-card-text> Connect your Toelbot to your Facebook Pages to chat with your customer 24/7.</v-card-text>
-    <v-card-actions v-if="agent">
-      <v-btn :disabled="agent?.facebooks?.length > 0" color="primary" variant="elevated" block @click="store.connectFacebook"
-        >Connect</v-btn
+    <v-card-actions>
+      <v-btn  color="primary" variant="flat" block @click="store.connectFacebook"
+        >{{ pages.length >= 0 ? 'Reconnect' : 'Connect' }}</v-btn
       >
     </v-card-actions>
     <v-card-text class="ma-0">

@@ -57,7 +57,7 @@ export const useFacbookStore = defineStore(
           pages.value[index] = { ...res, loading: false };
         }
 
-        showSnackbar('Your page are subscribed', 'success', 3000, 'Success');
+        showSnackbar('Subscripation success', 'success', 3000, 'Success');
       } catch (error) {
         showSnackbar(error as string, 'error', 3000, 'Error');
       } finally {
@@ -75,7 +75,7 @@ export const useFacbookStore = defineStore(
           pages.value[index] = { ...res, loading: false };
         }
 
-        showSnackbar(`Your ${page.name} are unsubscribed`, 'success', 3000, 'Success');
+        showSnackbar(`Unasubscripation success`, 'success', 3000, 'Success');
       } catch (error) {
         console.log(error);
         showSnackbar('Something went wrong, please try again.', 'error', 3000, 'Error');

@@ -3,6 +3,7 @@ import { useInstagramStore } from '@/stores/apps/instagramStore';
 import { toRefs } from 'vue';
 import { mdiPowerPlug, mdiPowerPlugOff } from '@mdi/js';
 const store = useInstagramStore();
+
 const { account } = toRefs(store);
 </script>
 <template>
@@ -14,7 +15,9 @@ const { account } = toRefs(store);
     </template>
     <v-card-text> Connect your Toelbot to your Instagram <b>Creator/Business</b> Account to chat with your customer 24/7.</v-card-text>
     <v-card-actions>
-      <v-btn color="pink" block variant="elevated" @click="store.connectInstagram">Connect</v-btn>
+      <v-btn color="pink" variant="flat" block @click="store.connectInstagram">{{
+        account ? 'Reconnect' : 'Connect'
+      }}</v-btn>
     </v-card-actions>
     <v-card-text v-if="account">
       <v-list-item
