@@ -18,8 +18,8 @@ class InstagramChatService {
 				var senderId = messaging.sender().id();
 				var recipientId = messaging.recipient().id();
 				var message = messaging.message();
-				log.info("Message : {}", message.text());
-				if (StringUtils.isNotEmpty(message.text())) {
+				if (message.text() != null) {
+					log.info("Message : {}", message.text());
 					sendTyping(recipientId, senderId);
 					sendReply(recipientId, senderId, "Thanks for your message: " + message.text());
 				}
@@ -28,8 +28,9 @@ class InstagramChatService {
 	}
 
 	public void sendReply(String igId, String userId, String text) {
-		final InstagramAccount account = repository.findByUserId(userId).orElse(null);
+		final InstagramAccount account = repository.findByUserId(igId).orElse(null);
 		if (account == null) {
+			log.info("Account not found for : {}", userId);
 			return;
 		}
 		Instagram.InstagramSendMessageRequest request = new Instagram.InstagramSendMessageRequest(
@@ -46,7 +47,7 @@ class InstagramChatService {
 	}
 
 	void sendTyping(String igId, String userId) {
-		final InstagramAccount account = repository.findByUserId(userId).orElse(null);
+		final InstagramAccount account = repository.findByUserId(igId).orElse(null);
 		if (account == null) {
 			return;
 		}

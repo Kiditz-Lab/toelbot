@@ -82,7 +82,7 @@ logging:
     com.github.benmanes.caffeine.cache: TRACE
     com.toelbox.chatbot: DEBUG
     feign: DEBUG
-    me.bvn13.openfeign.logger.NormalizedFeignLogger: INFO
+    me.bvn13.openfeign.logger.NormalizedFeignLogger: DEBUG
 
 facebook:
   verify-token: 41khv7YTZhT7A71SVcUqtx071KSP8IFZeUWACjkhmL5tvyWPvHrKbyC4LDQCYSkA
