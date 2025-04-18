@@ -20,7 +20,7 @@ class InstagramChatService {
 				var message = messaging.message();
 				if (message.text() != null) {
 					log.info("Message : {}", message.text());
-					sendTyping(recipientId, senderId);
+//					sendTyping(recipientId, senderId);
 					sendReply(recipientId, senderId, "Thanks for your message: " + message.text());
 				}
 			}
