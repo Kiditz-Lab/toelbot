@@ -41,7 +41,6 @@ class InstagramChatService {
 		instagramClient.sendMessage(
 				igId,
 				"Bearer " + account.getToken(),
-				"application/json",
 				request
 		);
 	}
@@ -58,7 +57,6 @@ class InstagramChatService {
 		instagramClient.sendTyping(
 				igId,
 				"Bearer " + account.getToken(),
-				"application/json",
 				request
 		);
 	}
