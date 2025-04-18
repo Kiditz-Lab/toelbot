@@ -75,6 +75,13 @@ rag:
     processed: file:///Users/rifkyaditya/Playground/data/processed
 
 logging:
+  file:
+    name: logs/app.log
+  logback:
+    rollingpolicy:
+      clean-history-on-start: true
+      max-history: 30
+      file-name-pattern: logs/app-%d{yyyy-MM-dd}.log
   level:
     org.springframework.jdbc.core: ERROR
     io.modelcontextprotocol.client: TRACE
