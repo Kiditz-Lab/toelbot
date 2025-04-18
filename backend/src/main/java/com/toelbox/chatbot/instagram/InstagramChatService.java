@@ -1,11 +1,13 @@
 package com.toelbox.chatbot.instagram;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 class InstagramChatService {
 	private final InstagramAccountRepository repository;
 	private final InstagramClient instagramClient;
@@ -16,6 +18,7 @@ class InstagramChatService {
 				var senderId = messaging.sender().id();
 				var recipientId = messaging.recipient().id();
 				var message = messaging.message();
+				log.info("Message : {}", message.text());
 				if (StringUtils.isNotEmpty(message.text())) {
 					sendTyping(recipientId, senderId);
 					sendReply(recipientId, senderId, "Thanks for your message: " + message.text());
