@@ -37,8 +37,13 @@ class InstagramChatService {
 	@Async
 	@EventListener
 	void replyMessage(InstagramReplyMessageEvent event) {
-		sendReply(event.recipientId(), event.senderId(), event.text());
+		String limitedText = event.text();
+		if (limitedText.length() > 1000) {
+			limitedText = limitedText.substring(0, 1000);
+		}
+		sendReply(event.recipientId(), event.senderId(), limitedText);
 	}
+
 
 	public void sendReply(String igId, String userId, String text) {
 		final InstagramAccount account = repository.findByUserId(igId).orElse(null);
