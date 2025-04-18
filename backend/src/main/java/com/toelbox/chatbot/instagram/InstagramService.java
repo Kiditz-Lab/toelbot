@@ -85,5 +85,4 @@ class InstagramService {
 	List<InstagramAccount> findByAgentId(UUID agentId) {
 		return repository.findByAgentId(agentId);
 	}
-
 }

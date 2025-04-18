@@ -3,6 +3,8 @@ package com.toelbox.chatbot.instagram;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.util.List;
+
 class Instagram {
 
 	@lombok.Data
@@ -29,4 +31,43 @@ class Instagram {
 		@JsonProperty("username")
 		private String username;
 	}
+
+
+	record InstagramWebhookPayload(
+			String object,
+			List<Entry> entry
+	) {
+	}
+
+	record Entry(
+			long time,
+			String id,
+			List<Messaging> messaging
+	) {
+	}
+
+	record Messaging(
+			Sender sender,
+			Recipient recipient,
+			long timestamp,
+			Message message
+	) {
+	}
+
+	record Sender(
+			String id
+	) {
+	}
+
+	record Recipient(
+			String id
+	) {
+	}
+
+	record Message(
+			String mid,
+			String text
+	) {
+	}
+
 }
