@@ -70,17 +70,12 @@ class AgentChatService {
 		});
 
 		ChatClient client = chatClientCache.get(chat.chatId(), id -> buildChatClient(agent, chatId, country));
-		var response = client.prompt()
+		return client.prompt()
 				.user(chat.chat())
 				.advisors(a -> a
 						.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chat.chatId())
 						.param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 500))
-				.call().chatResponse();
-
-		assert response != null;
-		List<AssistantMessage.ToolCall> toolCalls = response.getResult().getOutput().getToolCalls();
-		log.info("Tool calls : {}", toolCalls);
-		return response.getResult().getOutput().getText();
+				.call().content();
 	}
 
 	public void parseToolCalls(List<AssistantMessage.ToolCall> toolCalls) {
