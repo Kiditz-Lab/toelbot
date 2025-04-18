@@ -11,6 +11,7 @@ import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.ai.chat.memory.InMemoryChatMemory;
+import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
@@ -69,12 +70,22 @@ class AgentChatService {
 		});
 
 		ChatClient client = chatClientCache.get(chat.chatId(), id -> buildChatClient(agent, chatId, country));
-		return client.prompt()
+		var response = client.prompt()
 				.user(chat.chat())
 				.advisors(a -> a
 						.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chat.chatId())
 						.param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 500))
-				.call().content();
+				.call();
+		parseToolCalls(Objects.requireNonNull(response.chatResponse()).getResult().getOutput().getToolCalls());
+		return response.content();
+	}
+
+	public void parseToolCalls(List<AssistantMessage.ToolCall> toolCalls) {
+		for (AssistantMessage.ToolCall toolCall : toolCalls) {
+			String toolName = toolCall.name();
+			String args = toolCall.arguments();
+			System.out.println("Tool: " + toolName + ", Arguments: " + args);
+		}
 	}
 
 	List<Map<String, String>> aiModels() {
