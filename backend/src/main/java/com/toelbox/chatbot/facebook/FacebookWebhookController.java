@@ -36,7 +36,7 @@ class FacebookWebhookController {
 	@PostMapping
 	ResponseEntity<Void> receiveMessage(@RequestBody String payload) throws JsonProcessingException {
 		System.out.println("Incoming webhook: " + payload);
-		FacebookWebhookResponse response = mapper.readValue(payload, FacebookWebhookResponse.class);
+		FacebookWebhookPayload response = mapper.readValue(payload, FacebookWebhookPayload.class);
 		service.messageReceived(response);
 		return ResponseEntity.ok().build();
 	}

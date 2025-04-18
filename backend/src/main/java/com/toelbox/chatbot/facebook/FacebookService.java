@@ -86,12 +86,12 @@ class FacebookService {
 		return repository.save(page);
 	}
 
-	void messageReceived(FacebookWebhookResponse response) {
+	void messageReceived(FacebookWebhookPayload response) {
 		log.info("Message received: {}", response);
-		for (FacebookWebhookResponse.Entry entry : response.entry()) {
+		for (FacebookWebhookPayload.Entry entry : response.entry()) {
 			var page = repository.findByPageId(entry.id()).orElse(null);
 			if (page != null) {
-				for (FacebookWebhookResponse.Messaging messaging : entry.messaging()) {
+				for (FacebookWebhookPayload.Messaging messaging : entry.messaging()) {
 					if (messaging.message() != null) {
 						Map<String, Object> body = Map.of(
 								"recipient", Map.of("id", messaging.sender().id()),

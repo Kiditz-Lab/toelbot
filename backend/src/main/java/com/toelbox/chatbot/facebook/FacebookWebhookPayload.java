@@ -2,7 +2,7 @@ package com.toelbox.chatbot.facebook;
 
 import java.util.List;
 
-record FacebookWebhookResponse(List<Entry> entry) {
+record FacebookWebhookPayload(List<Entry> entry) {
 
 	record Entry(String id, long time, List<Messaging> messaging) {
 	}
