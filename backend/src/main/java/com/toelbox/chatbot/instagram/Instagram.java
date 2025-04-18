@@ -1,9 +1,12 @@
 package com.toelbox.chatbot.instagram;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.List;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 class Instagram {
 
@@ -35,6 +38,13 @@ class Instagram {
 	record InstagramSendMessageRequest(
 			Recipient recipient,
 			Message message
+	) {
+	}
+
+	record InstagramTypingRequest(
+			Recipient recipient,
+			@JsonProperty("sender_action")
+			String senderAction
 	) {
 	}
 
@@ -71,6 +81,7 @@ class Instagram {
 	}
 
 	record Message(
+			@JsonInclude(Include.NON_NULL)
 			String mid,
 			String text
 	) {

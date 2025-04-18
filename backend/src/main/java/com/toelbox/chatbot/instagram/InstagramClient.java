@@ -50,5 +50,13 @@ interface InstagramClient {
 			@RequestBody Instagram.InstagramSendMessageRequest body
 	);
 
+	@PostMapping("/{igId}/messages")
+	void sendTyping(
+			@PathVariable("igId") String igId,
+			@RequestHeader("Authorization") String authorization,
+			@RequestHeader("Content-Type") String contentType,
+			@RequestBody Instagram.InstagramTypingRequest body
+	);
+
 
 }

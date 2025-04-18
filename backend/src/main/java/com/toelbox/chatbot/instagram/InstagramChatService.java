@@ -17,6 +17,7 @@ class InstagramChatService {
 				var recipientId = messaging.recipient().id();
 				var message = messaging.message();
 				if (StringUtils.isNotEmpty(message.text())) {
+					sendTyping(recipientId, senderId);
 					sendReply(recipientId, senderId, "Thanks for your message: " + message.text());
 				}
 			}
@@ -40,5 +41,23 @@ class InstagramChatService {
 				request
 		);
 	}
+
+	void sendTyping(String igId, String userId) {
+		final InstagramAccount account = repository.findByUserId(userId).orElse(null);
+		if (account == null) {
+			return;
+		}
+		Instagram.InstagramTypingRequest request = new Instagram.InstagramTypingRequest(
+				new Instagram.Recipient(userId),
+				"typing_on"
+		);
+		instagramClient.sendTyping(
+				igId,
+				"Bearer " + account.getToken(),
+				"application/json",
+				request
+		);
+	}
+
 
 }
