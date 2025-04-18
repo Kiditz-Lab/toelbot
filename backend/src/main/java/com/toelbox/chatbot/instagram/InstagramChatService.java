@@ -19,7 +19,7 @@ class InstagramChatService {
 		for (Instagram.Entry entry : payload.entry()) {
 			final InstagramAccount account = repository.findByUserId(entry.id()).orElse(null);
 			if (account == null) {
-				log.info("account not found for id {}", entry.id());
+				log.info("Account not found for id {}", entry.id());
 				continue;
 			}
 			for (Instagram.Messaging messaging : entry.messaging()) {
@@ -43,7 +43,7 @@ class InstagramChatService {
 	public void sendReply(String igId, String userId, String text) {
 		final InstagramAccount account = repository.findByUserId(igId).orElse(null);
 		if (account == null) {
-			log.info("Account not found for : {}", userId);
+			log.info("Account not found for : {}", igId);
 			return;
 		}
 		Instagram.InstagramSendMessageRequest request = new Instagram.InstagramSendMessageRequest(
