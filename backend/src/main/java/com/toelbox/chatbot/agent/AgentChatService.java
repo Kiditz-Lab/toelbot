@@ -75,9 +75,12 @@ class AgentChatService {
 				.advisors(a -> a
 						.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chat.chatId())
 						.param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 500))
-				.call();
-		parseToolCalls(Objects.requireNonNull(response.chatResponse()).getResult().getOutput().getToolCalls());
-		return response.content();
+				.call().chatResponse();
+
+		assert response != null;
+		List<AssistantMessage.ToolCall> toolCalls = response.getResult().getOutput().getToolCalls();
+		log.info("Tool calls : {}", toolCalls);
+		return response.getResult().getOutput().getText();
 	}
 
 	public void parseToolCalls(List<AssistantMessage.ToolCall> toolCalls) {
