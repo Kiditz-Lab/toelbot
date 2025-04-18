@@ -26,7 +26,7 @@ onMounted(async () => {
     <v-col cols="8">
       <v-card :title="selectedTool.name" :prepend-avatar="selectedTool.imageUrl" variant="flat" elevation="0" density="comfortable">
         <template #append v-if="agentTools.includes(selectedTool.id)">
-          <v-btn color="error" @click="dialog = true" :prepend-icon="mdiDelete" text="Delete"></v-btn>
+          <v-btn color="error" variant="tonal" @click="dialog = true" :prepend-icon="mdiDelete" text="Disconnect"></v-btn>
         </template>
         <v-card-text>
           {{ selectedTool.shortDescription }}
@@ -116,7 +116,7 @@ onMounted(async () => {
   <DeleteDialog
     v-model:show="dialog"
     title="Warning!"
-    :message="`Are you sure you want to remove this tool??`"
+    :message="`Are you sure you want to disconnect to this tool??`"
     @confirm="deleteConnection"
   />
 </template>
