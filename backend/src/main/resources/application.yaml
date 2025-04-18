@@ -79,10 +79,10 @@ logging:
     name: logs/app.log
   logback:
     rollingpolicy:
-      clean-history-on-start: true
       max-history: 30
       file-name-pattern: logs/app-%d{yyyy-MM-dd}.log
   level:
+    root: INFO
     org.springframework.jdbc.core: ERROR
     io.modelcontextprotocol.client: TRACE
     org.springframework.cache: DEBUG
