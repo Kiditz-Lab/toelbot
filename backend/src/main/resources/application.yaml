@@ -80,6 +80,7 @@ logging:
     io.modelcontextprotocol.client: TRACE
     org.springframework.cache: DEBUG
     com.github.benmanes.caffeine.cache: TRACE
+    com.toelbox.chatbot: DEBUG
     feign: DEBUG
     me.bvn13.openfeign.logger.NormalizedFeignLogger: INFO
 
