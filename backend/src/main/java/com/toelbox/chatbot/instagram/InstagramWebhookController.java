@@ -1,6 +1,5 @@
 package com.toelbox.chatbot.instagram;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -33,10 +32,8 @@ class InstagramWebhookController {
 	}
 
 	@PostMapping
-	ResponseEntity<Void> receiveMessage(@RequestBody String payload) throws JsonProcessingException {
+	ResponseEntity<Void> receiveMessage(@RequestBody String payload) {
 		System.out.println("Incoming webhook: " + payload);
-//		FacebookWebhookResponse response = mapper.readValue(payload, FacebookWebhookResponse.class);
-//		service.messageReceived(response);
 		return ResponseEntity.ok().build();
 	}
 
