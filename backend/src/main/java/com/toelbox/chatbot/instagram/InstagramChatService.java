@@ -27,8 +27,9 @@ class InstagramChatService {
 				var recipientId = messaging.recipient().id();
 				var message = messaging.message();
 				if (message.text() != null) {
-					log.info("Message : {}", message.text());
-					publisher.publishEvent(new InstagramIncomingMessageEvent(account.getAgentId(), recipientId, senderId, message.text()));
+					String text = message.text();
+					text += "\n Please reply with no more than 1000 char";
+					publisher.publishEvent(new InstagramIncomingMessageEvent(account.getAgentId(), recipientId, senderId, text));
 				}
 			}
 		}
