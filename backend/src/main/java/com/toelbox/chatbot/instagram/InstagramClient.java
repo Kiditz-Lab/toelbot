@@ -3,8 +3,6 @@ package com.toelbox.chatbot.instagram;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @FeignClient(name = "instagramClient", url = "https://graph.instagram.com/v22.0", configuration = FeignConfig.class)
 interface InstagramClient {
 
@@ -46,7 +44,6 @@ interface InstagramClient {
 	void sendMessage(
 			@PathVariable("igId") String igId,
 			@RequestHeader("Authorization") String authorization,
-			@RequestHeader("Content-Type") String contentType,
 			@RequestBody Instagram.InstagramSendMessageRequest body
 	);
 
@@ -54,7 +51,6 @@ interface InstagramClient {
 	void sendTyping(
 			@PathVariable("igId") String igId,
 			@RequestHeader("Authorization") String authorization,
-			@RequestHeader("Content-Type") String contentType,
 			@RequestBody Instagram.InstagramTypingRequest body
 	);
 
