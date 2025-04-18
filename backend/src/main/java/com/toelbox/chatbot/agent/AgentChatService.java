@@ -18,7 +18,6 @@ import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
@@ -33,10 +32,8 @@ import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvis
 @Slf4j
 @RequiredArgsConstructor
 class AgentChatService {
-	private final AgentQueryService service;
 	private final VectorStore vectorStore;
 	private final AIConfigProperties configProperties;
-	private final ApplicationEventPublisher publisher;
 	private final McpQueryService mcpService;
 	private final InMemoryChatMemory chatMemory;
 	private final Cache<String, ChatClient> chatClientCache;
