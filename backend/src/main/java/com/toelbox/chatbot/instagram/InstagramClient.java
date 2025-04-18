@@ -42,4 +42,13 @@ interface InstagramClient {
 			@RequestParam("subscribed_fields") String subscribedFields
 	);
 
+	@PostMapping("/{igId}/messages")
+	void sendMessage(
+			@PathVariable("igId") String igId,
+			@RequestHeader("Authorization") String authorization,
+			@RequestHeader("Content-Type") String contentType,
+			@RequestBody Instagram.InstagramSendMessageRequest body
+	);
+
+
 }

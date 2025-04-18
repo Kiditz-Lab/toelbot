@@ -32,6 +32,12 @@ class Instagram {
 		private String username;
 	}
 
+	record InstagramSendMessageRequest(
+			Recipient recipient,
+			Message message
+	) {
+	}
+
 
 	record InstagramWebhookPayload(
 			String object,

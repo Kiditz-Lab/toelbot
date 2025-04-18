@@ -61,4 +61,6 @@ export const useInstagramStore = defineStore('instagramStore', () => {
   };
 
   return { connectInstagram, account, setAccount, subscribe, unsubscribe, fetchByAgent };
+}, {
+  persist: true
 });
