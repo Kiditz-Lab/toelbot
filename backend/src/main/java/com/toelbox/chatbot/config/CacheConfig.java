@@ -36,7 +36,7 @@ public class CacheConfig {
     @Bean
     public Caffeine<Object, Object> caffeineConfig() {
         return Caffeine.newBuilder()
-                .expireAfterWrite(10, TimeUnit.MINUTES)
+                .expireAfterWrite(2, TimeUnit.HOURS)
                 .maximumSize(1000);
     }
 
