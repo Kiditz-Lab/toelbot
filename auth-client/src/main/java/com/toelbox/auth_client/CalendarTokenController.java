@@ -18,22 +18,25 @@ public class CalendarTokenController {
         this.clientService = clientService;
     }
 
-    @GetMapping("/{userId}")
-    public Map<String, ?> getCalendarToken(@PathVariable String userId) {
+    @GetMapping("/{email}")
+    public Map<String, ?> getCalendarToken(@PathVariable String email) {
         String provider = "google-calendar";
-        OAuth2AuthorizedClient client = clientService.loadAuthorizedClient(provider, userId);
+
+        // Assuming that the email is used as the principal identifier for the user
+        OAuth2AuthorizedClient client = clientService.loadAuthorizedClient(provider, email);
 
         if (client == null) {
-            throw new RuntimeException("No Calendar token found for userId: " + userId);
+            throw new RuntimeException("No Calendar token found for user with email: " + email);
         }
 
         OAuth2AccessToken accessToken = client.getAccessToken();
 
         return Map.of(
-            "access_token", accessToken.getTokenValue(),
-            "token_type", accessToken.getTokenType().getValue(),
-            "expires_at", Objects.requireNonNull(accessToken.getExpiresAt()),
-            "scopes", accessToken.getScopes()
+                "access_token", accessToken.getTokenValue(),
+                "token_type", accessToken.getTokenType().getValue(),
+                "expires_at", Objects.requireNonNull(accessToken.getExpiresAt()),
+                "scopes", accessToken.getScopes()
         );
     }
+
 }
