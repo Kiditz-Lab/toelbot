@@ -18,15 +18,15 @@ public class CalendarTokenController {
         this.clientService = clientService;
     }
 
-    @GetMapping("/{email}")
-    public Map<String, ?> getCalendarToken(@PathVariable String email) {
+    @GetMapping("/{userId}")
+    public Map<String, ?> getCalendarToken(@PathVariable String userId) {
         String provider = "google-calendar";
 
         // Assuming that the email is used as the principal identifier for the user
-        OAuth2AuthorizedClient client = clientService.loadAuthorizedClient(provider, email);
+        OAuth2AuthorizedClient client = clientService.loadAuthorizedClient(provider, userId);
 
         if (client == null) {
-            throw new RuntimeException("No Calendar token found for user with email: " + email);
+            throw new RuntimeException("No Calendar token found for user with email: " + userId);
         }
 
         OAuth2AccessToken accessToken = client.getAccessToken();
