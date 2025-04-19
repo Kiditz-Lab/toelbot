@@ -1,0 +1,45 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google-calendar:
+            client-id: 853330087183-ih8cmpcn8udha7v05g9rskauggm3l4aj.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - openid
+              - profile
+              - email
+              - https://www.googleapis.com/auth/calendar
+            redirect-uri: "{baseUrl}/login/oauth2/code/google-calendar"
+            authorization-grant-type: authorization_code
+            client-name: Google Calendar
+            provider: google-calendar-provider
+
+          google-drive:
+            client-id: 853330087183-ih8cmpcn8udha7v05g9rskauggm3l4aj.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - openid
+              - profile
+              - email
+              - https://www.googleapis.com/auth/drive
+            redirect-uri: "{baseUrl}/login/oauth2/code/google-drive"
+            authorization-grant-type: authorization_code
+            client-name: Google Drive
+            provider: google-drive-provider
+
+        provider:
+          google-calendar-provider:
+            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&prompt=consent
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+            user-name-attribute: sub
+            jwk-set-uri: https://www.googleapis.com/oauth2/v3/certs
+
+          google-drive-provider:
+            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&prompt=consent
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+            user-name-attribute: sub
+            jwk-set-uri: https://www.googleapis.com/oauth2/v3/certs
