@@ -1,0 +1,2 @@
+ALTER TABLE tools ADD COLUMN active BOOLEAN;
+ALTER TABLE tools ADD COLUMN source_file TEXT;
