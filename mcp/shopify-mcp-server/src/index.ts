@@ -634,11 +634,11 @@ server.tool(
     handle: z.string().optional().describe("URL-friendly handle for the product"),
     vendor: z.string().optional().describe("Vendor/manufacturer of the product"),
     productType: z.string().optional().describe("Type/category of the product"),
-    status: z.enum(['ACTIVE', 'DRAFT']).optional().describe("Product status"),
+    status: z.enum(['ACTIVE', 'DRAFT']).default('ACTIVE').describe("Product status"),
     images: z.array(z.object({
       src: z.string(),
       altText: z.string().optional()
-    })).optional().describe("Product images"),
+    })).optional().default([]).describe("Product images"),
     variants: z.array(z.object({
       price: z.string(),
       sku: z.string().optional(),
@@ -649,11 +649,11 @@ server.tool(
       weight: z.number().optional(),
       weightUnit: z.enum(['KILOGRAMS', 'GRAMS', 'POUNDS', 'OUNCES']).optional(),
       options: z.array(z.string()).optional()
-    })).optional().describe("Product variants"),
+    })).optional().default([]).describe("Product variants"),
     options: z.array(z.object({
       name: z.string(),
       values: z.array(z.string())
-    })).optional().describe("Product options (e.g., Size, Color)")
+    })).optional().default([]).describe("Product options (e.g., Size, Color)")
   },
   async ({ title, description, handle, vendor, productType, status, images, variants, options }) => {
     const client = new ShopifyClient();
