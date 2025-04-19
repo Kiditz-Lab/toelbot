@@ -50,7 +50,10 @@ onMounted(async () => {
                   {{ tool.name }}
                 </v-expansion-panel-title>
                 <v-expansion-panel-text>
-                  <div class="text-subtitle-1 text-grey my-3">{{ tool.description }}</div>
+                  <div class="text-subtitle-1 text-grey my-3">
+                     <!-- {{ tool.description }} -->
+                       <MdPreview :model-value="tool.description" preview-theme="github" language="en"></MdPreview>
+                  </div>
                   <v-form @submit.prevent="testConnection(tool)" v-model="tool.isValid">
                     <template v-for="field in getFields(tool)" :key="field.name">
                       <v-text-field

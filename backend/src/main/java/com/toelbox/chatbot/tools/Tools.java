@@ -38,7 +38,7 @@ public class Tools {
 				.build();
 		var transport = new StdioClientTransport(params);
 		var client = McpClient.sync(transport)
-				.requestTimeout(Duration.ofSeconds(20))
+				.requestTimeout(Duration.ofSeconds(60))
 				.build();
 		client.initialize();
 		return client;
