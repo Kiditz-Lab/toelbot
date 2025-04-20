@@ -50,9 +50,8 @@ public class CustomSyncMcpToolCallbackProvider implements ToolCallbackProvider {
 					.toList());
 		});
 
-		var array = toolCallbacks.toArray(new ToolCallback[0]);
-		validateToolCallbacks(array);
-		return array;
+		//		validateToolCallbacks(array);
+		return toolCallbacks.toArray(new ToolCallback[0]);
 	}
 
 	private String findCustomDescription(String toolName) {

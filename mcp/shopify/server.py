@@ -1,9 +1,9 @@
 import os
 from typing import Optional
 from mcp.server.fastmcp import FastMCP
+from input import CustomerCreate, CustomerUpdate, ProductCreate, ProductUpdate
 from shopify import ShopifyClient
 from dotenv import load_dotenv
-import json
 mcp = FastMCP(
     "shopify",
     dependencies=["requests"],
@@ -43,16 +43,16 @@ def get_product(product_id: str) -> dict:
 
 
 @mcp.tool(description="Create a new product on Shopify")
-def create_product(product_data: dict) -> dict:
+def create_product(product: ProductCreate) -> dict:
     client = get_shopify_client()
-    product = client.create_product(product_data)
+    product = client.create_product(product.model_dump(exclude_none=True))
     return {"product": product}
 
 
 @mcp.tool(description="Update an existing product on Shopify")
-def update_product(product_id: str, update_data: dict) -> dict:
+def update_product(product_id: str, update_data: ProductUpdate) -> dict:
     client = get_shopify_client()
-    product = client.update_product(product_id, update_data)
+    product = client.update_product(product_id, update_data.model_dump(exclude_none=True))
     return {"product": product}
 
 
@@ -98,14 +98,14 @@ def get_customer(customer_id: str) -> dict:
 
 
 @mcp.tool(description="Create a new customer on Shopify")
-def create_customer(customer_data: dict) -> dict:
+def create_customer(customer_data: CustomerCreate) -> dict:
     client = get_shopify_client()
     customer = client.create_customer(customer_data)
     return {"customer": customer}
 
 
 @mcp.tool(description="Update an existing customer on Shopify")
-def update_customer(customer_id: str, update_data: dict) -> dict:
+def update_customer(customer_id: str, update_data: CustomerUpdate) -> dict:
     client = get_shopify_client()
     customer = client.update_customer(customer_id, update_data)
     return {"customer": customer}

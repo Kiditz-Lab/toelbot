@@ -1,7 +1,6 @@
 import requests
 from typing import Optional, Dict, Any
 
-
 class ShopifyClient:
     def __init__(self, store_url: str, access_token: str, api_version: str = "2024-04"):
         self.store_url = store_url
