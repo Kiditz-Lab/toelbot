@@ -67,6 +67,17 @@ export const useToolStore = defineStore(
         }
         const response = await api.get<McpServer>(`/mcp/agent/${agent.value?.id}/tools/${toolsId}`);
         envValues.value = response.env;
+        const usedTools = response.usedTools;
+        if (usedTools?.length) {
+          usedTools.forEach((usedTool) => {
+            const tool = selectedTool.value.tools.find((t) => t.name === usedTool.name);
+            if (tool) {
+              tool.description = usedTool.description;
+            }
+          });
+        }
+        selectedToolNames.value = usedTools.map((tool) => tool.name);
+        disableTestConnection.value = false;
       } catch (error) {
         console.error('Error fetching MCP server:', error);
       }
@@ -156,20 +167,19 @@ export const useToolStore = defineStore(
         toolsId: selectedTool.value.id,
         usedTools
       } as McpConnectCommand;
-      console.log(connectionRequest);
+
       const agentId = route.params.id;
       await api.post(`/mcp/agent/${agentId}/tools`, connectionRequest);
-      router.back();
       showSnackbar('Tools saved successfully.', 'success', 3000, 'Success');
+      router.back();
     };
 
     const updateConnection = async () => {
-      // const usedTools = 
-      // console.log(envValues.value);
-      // const agentId = route.params.id;
-      // await api.put(`/mcp/agent/${agentId}/tools/${selectedTool.value.id}/env`, envValues.value);
-      // showSnackbar('Tool updated successfully.', 'success', 3000, 'Success');
-      // router.back();
+      const usedTools = selectedToolObjects.value.map((tool) => ({ name: tool.name, description: tool.description }));
+      const agentId = route.params.id;
+      await api.put(`/mcp/agent/${agentId}/tools/${selectedTool.value.id}/env`, { usedTools, env: envValues.value } as McpConnectCommand);
+      showSnackbar('Tool updated successfully.', 'success', 3000, 'Success');
+      router.back();
     };
 
     const deleteConnection = async () => {

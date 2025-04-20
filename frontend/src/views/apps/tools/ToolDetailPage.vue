@@ -14,22 +14,6 @@ const dialog = ref(false);
 
 const { selectedTool, loading, agentTools, toolId, selectedToolNames, selectedToolObjects } = toRefs(useToolStore());
 const { testConnection, getFields, deleteConnection, fetchMcp, findToolById } = useToolStore();
-// const selectedToolNames = ref<string[]>([] as string[]);
-
-// const selectedToolObjects = computed(() => {
-//   return selectedTool.value.tools.filter((t) => selectedToolNames.value.includes(t.name)) || [];
-// });
-
-// watch(
-//   () => selectedTool.value,
-//   (newVal) => {
-//     if (newVal?.tools?.length && selectedToolNames.value.length === 0) {
-//       selectedToolNames.value = [newVal.tools[0].name];
-//     }
-//   },
-//   { immediate: true }
-// );
-
 onMounted(async () => {
   import('md-editor-v3/lib/style.css');
   await findToolById(toolId.value);
@@ -70,7 +54,7 @@ onMounted(async () => {
                   multiple
                   clearable
                 />
-                <v-expansion-panels variant="accordion" class="mb-4" v-for="tool in selectedToolObjects" :key="tool.name" elevation="0">
+                <v-expansion-panels variant="accordion" class="mb-2" v-for="tool in selectedToolObjects" :key="tool.name" elevation="0">
                   <v-expansion-panel>
                     <v-expansion-panel-title>
                       {{ tool.name }}

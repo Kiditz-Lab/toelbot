@@ -58,10 +58,16 @@ export interface McpConnectCommand {
   command: string;
   args: string[];
   env: Record<string, string>;
+  usedTools: UsedTool[];
 }
 
 export interface ParsedArgField {
   key: string;
   type: string;
   value?: string;
+}
+
+export interface UsedTool {
+  name: string;
+  description: string;
 }

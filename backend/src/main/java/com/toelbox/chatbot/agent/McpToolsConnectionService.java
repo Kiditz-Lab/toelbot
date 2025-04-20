@@ -57,10 +57,13 @@ class McpToolsConnectionService {
 				.orElseThrow(() -> new NotFoundException("Agent not found"));
 
 		List<String> tools = agent.getTools();
-		if (tools != null && tools.remove(toolsId.toString())) {
-			agent.setTools(tools);
-			agentRepository.save(agent);
+		if (tools == null) {
+			tools = new ArrayList<>();
 		}
+
+		tools.remove(toolsId.toString());
+		agent.setTools(tools);
+		agentRepository.save(agent);
 
 	}
 }
