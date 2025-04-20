@@ -6,7 +6,7 @@ from shopify import ShopifyClient
 from dotenv import load_dotenv
 mcp = FastMCP(
     "shopify",
-    dependencies=["requests"],
+    dependencies=["requests", "pydantic[email]"],
 )
 
 
