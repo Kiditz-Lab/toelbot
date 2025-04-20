@@ -122,12 +122,7 @@ onMounted(async () => {
       </v-card>
     </v-col>
     <v-col cols="4">
-      <v-card
-        title="Credentials"
-        :text="'Important: Test the connection in the Tools tab before saving your credentials.'"
-        variant="flat"
-      />
-
+      <v-card title="Credentials" :text="'Important: Test the connection in the Tools tab before saving your credentials.'" variant="flat">
         <v-divider />
         <v-card-text>
           <tool-form />
