@@ -103,7 +103,6 @@ class ShopifyClient:
             }}
         }}
         """
-        print(graphql_query)
 
         title_filter = f"title:*{search_title}*" if search_title else ""
         variables = {
@@ -115,7 +114,6 @@ class ShopifyClient:
         result = self._graphql_request(graphql_query, variables)
         
         # Debugging the response
-        print(result)
 
         data = result.get('data', {}).get('products', {})
         edges = data.get('edges', [])

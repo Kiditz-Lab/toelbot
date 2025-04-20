@@ -3,7 +3,7 @@ from typing import Optional
 from mcp.server.fastmcp import FastMCP
 from shopify import ShopifyClient
 from dotenv import load_dotenv
-
+import json
 mcp = FastMCP(
     "shopify",
     dependencies=["requests"],
@@ -32,10 +32,7 @@ def list_products(limit: int = 10) -> dict:
 def search_products(query: str = "", limit: int = 10) -> dict:
     client = get_shopify_client()
     products = client.search_products(search_title=query, limit=limit)
-    # if not products.get("products"):
-    #     return {"message": "No products found"}
-
-    return {"products": products}
+    return products
 
 
 @mcp.tool(description="Get product by ID from Shopify")
@@ -198,8 +195,8 @@ def custom_shopify_request(
 
 
 def main():
-    # print(search_products(query='snow', limit=10))
-    mcp.run()
+    print(search_products(query='snow', limit=10))
+    # mcp.run()
 
 
 if __name__ == "__main__":
