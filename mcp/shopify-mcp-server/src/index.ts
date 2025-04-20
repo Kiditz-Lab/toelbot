@@ -121,9 +121,9 @@ server.tool(
         searchTitle ?? null,
         limit
       );
-      // const formattedProducts = products.products.map(formatProduct);
+      const formattedProducts = products.products.map(formatProduct);
       return {
-        content: [{ type: "text", text: products.products }],
+        content: [{ type: "text", text: formattedProducts.join("\n") }],
       };
     } catch (error) {
       return handleError("Failed to retrieve products data", error);

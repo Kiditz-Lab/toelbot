@@ -7,13 +7,28 @@ import { JsonViewer } from 'vue3-json-viewer';
 import ToolForm from './ToolForm.vue';
 // import ToolDelete from './ToolDelete.vue';
 
-import { onMounted, ref, toRefs } from 'vue';
+import { onMounted, ref, toRefs, computed, watch } from 'vue';
 import { mdiDelete } from '@mdi/js';
 const tab = ref('overview');
 const dialog = ref(false);
 
 const { selectedTool, loading, agentTools, toolId } = toRefs(useToolStore());
 const { testConnection, getFields, deleteConnection, fetchMcp, findToolById } = useToolStore();
+const selectedToolNames = ref([]);
+
+const selectedToolObjects = computed(() => {
+  return selectedTool.value?.tools.filter((t) => selectedToolNames.value.includes(t.name)) || [];
+});
+
+watch(
+  () => selectedTool.value,
+  (newVal) => {
+    if (newVal?.tools?.length && selectedToolNames.value.length === 0) {
+      selectedToolNames.value = [newVal.tools[0].name];
+    }
+  },
+  { immediate: true }
+);
 
 onMounted(async () => {
   import('md-editor-v3/lib/style.css');
@@ -24,7 +39,7 @@ onMounted(async () => {
 <template>
   <v-row>
     <v-col cols="8">
-      <v-card :title="selectedTool.name" :prepend-avatar="selectedTool.imageUrl" variant="flat" elevation="0" density="comfortable">
+      <v-card :title="selectedTool.name" :prepend-avatar="selectedTool.imageUrl">
         <template #append v-if="agentTools.includes(selectedTool.id)">
           <v-btn color="error" variant="tonal" @click="dialog = true" :prepend-icon="mdiDelete" text="Disconnect"></v-btn>
         </template>
@@ -44,14 +59,91 @@ onMounted(async () => {
           </v-window-item>
 
           <v-window-item value="tools">
-            <v-expansion-panels variant="accordion">
+            <v-row justify="center" class="pa-4">
+              <v-col cols="12">
+                <v-select
+                  v-model="selectedToolNames"
+                  :items="selectedTool?.tools.map((t) => t.name) || []"
+                  label="Select Tools"
+                  variant="outlined"
+                  dense
+                  multiple
+                  clearable
+                />
+
+                <template v-for="tool in selectedToolObjects" :key="tool.name">
+                  <v-card variant="outlined" class="pa-4 mb-4">
+                    <v-card-title class="text-h6">
+                      {{ tool.name }}
+                    </v-card-title>
+
+                    <v-card-text>
+                      <div class="text-subtitle-1 text-grey my-3">
+                        <!-- <MdPreview :model-value="tool.description" preview-theme="github" language="en" /> -->
+                        <v-textarea v-model="tool.description" label="Used When" auto-grow variant="outlined" rows="3" class="mb-4" />
+                      </div>
+
+                      <v-form @submit.prevent="testConnection(tool)" v-model="tool.isValid">
+                        <v-row>
+                          <template v-for="field in getFields(tool)" :key="field.name">
+                            <v-col cols="12" md="6">
+                              <v-text-field
+                                v-if="field.type === 'number'"
+                                variant="outlined"
+                                v-model.number="tool.formData[field.name]"
+                                :placeholder="field.title"
+                                type="number"
+                                :rules="[field.required ? (v) => !!v || 'Required' : () => true]"
+                              />
+                              <v-text-field
+                                v-else
+                                variant="outlined"
+                                v-model="tool.formData[field.name]"
+                                :placeholder="field.title"
+                                type="text"
+                                :rules="[field.required ? (v) => !!v || 'Required' : () => true]"
+                              />
+                            </v-col>
+                          </template>
+                        </v-row>
+
+                        <v-divider class="my-4" />
+
+                        <v-btn :loading="loading" :disabled="!tool.isValid" type="submit" color="primary" variant="elevated" block>
+                          Test Connection
+                        </v-btn>
+
+                        <v-divider class="my-4" v-if="tool.testResult" />
+
+                        <div v-if="tool.testResult">
+                          <v-card
+                            v-for="content in tool.testResult.content"
+                            :key="content.type"
+                            outlined
+                            class="my-2"
+                            color="primarys"
+                            density="compact"
+                          >
+                            <v-card-text>
+                              <json-viewer :value="content" theme="light" />
+                            </v-card-text>
+                          </v-card>
+                        </div>
+                      </v-form>
+                    </v-card-text>
+                  </v-card>
+                </template>
+              </v-col>
+            </v-row>
+
+            <!-- <v-expansion-panels variant="accordion">
               <v-expansion-panel v-for="tool in selectedTool.tools" :key="tool.name">
                 <v-expansion-panel-title>
                   {{ tool.name }}
                 </v-expansion-panel-title>
                 <v-expansion-panel-text>
                   <div class="text-subtitle-1 text-grey my-3">
-                     <!-- {{ tool.description }} -->
+                     
                        <MdPreview :model-value="tool.description" preview-theme="github" language="en"></MdPreview>
                   </div>
                   <v-form @submit.prevent="testConnection(tool)" v-model="tool.isValid">
@@ -96,7 +188,7 @@ onMounted(async () => {
                   </v-form>
                 </v-expansion-panel-text>
               </v-expansion-panel>
-            </v-expansion-panels>
+            </v-expansion-panels> -->
           </v-window-item>
         </v-window>
         <!-- </v-card-text> -->

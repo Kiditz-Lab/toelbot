@@ -12,13 +12,14 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
-
 
 @Data
 @Builder
@@ -35,6 +36,8 @@ class McpServer {
 	private String command;
 	private List<String> args;
 	private Map<String, String> env;
+	@MappedCollection(idColumn = "server_id")
+	private Set<UsedTool> usedTools;
 
 	@Transient
 	McpSyncClient toSyncClient() {
@@ -64,3 +67,4 @@ class McpServer {
 		return client;
 	}
 }
+

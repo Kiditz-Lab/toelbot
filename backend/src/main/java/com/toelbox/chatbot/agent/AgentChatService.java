@@ -3,6 +3,7 @@ package com.toelbox.chatbot.agent;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.toelbox.chatbot.core.AIConfigProperties;
 import com.toelbox.chatbot.core.Country;
+import io.modelcontextprotocol.client.McpSyncClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -12,7 +13,6 @@ import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.ai.chat.memory.InMemoryChatMemory;
 import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.openai.api.OpenAiApi;
@@ -93,8 +93,13 @@ class AgentChatService {
 		var model = config.getAiModel();
 		var api = openAiApi(isGrooq(model));
 
-		var clients = mcpService.findAllByAgentClientSync(agent.getId());
-		var tools = SyncMcpToolCallbackProvider.syncToolCallbacks(clients);
+//		var clients = mcpService.findAllByAgentClientSync(agent.getId());
+		var servers = mcpService.findByAgentId(agent.getId());
+		List<McpSyncClient> clients = servers.stream().map(McpServer::toSyncClient).toList();
+		var usedTools = servers.stream()
+				.flatMap(server -> server.getUsedTools().stream())
+				.collect(Collectors.toSet());
+		var tools = new CustomSyncMcpToolCallbackProvider(clients, usedTools);
 		var options = OpenAiChatOptions.builder()
 				.model(model.getVersion())
 				.temperature(config.getTemperature())

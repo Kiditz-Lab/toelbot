@@ -40,6 +40,7 @@ public class Tools {
 		var client = McpClient.sync(transport)
 				.requestTimeout(Duration.ofSeconds(60))
 				.build();
+
 		client.initialize();
 		return client;
 	}

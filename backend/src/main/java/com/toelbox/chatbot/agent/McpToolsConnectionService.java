@@ -25,6 +25,7 @@ class McpToolsConnectionService {
 				.command(command.command())
 				.args(command.args())
 				.env(command.env())
+				.usedTools(command.usedTools())
 				.agentId(agentId)
 				.build();
 		Agent agent = agentRepository.findById(agentId).orElseThrow(() -> new NotFoundException("Agent not found"));

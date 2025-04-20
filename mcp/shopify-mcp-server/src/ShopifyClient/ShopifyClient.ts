@@ -1877,7 +1877,7 @@ export class ShopifyClient implements ShopifyClientPort {
       }
       throw new GeneralShopifyClientError({
         message: "Failed to create product",
-        innerError: error,
+        // innerError: error,
       });
     }
   }

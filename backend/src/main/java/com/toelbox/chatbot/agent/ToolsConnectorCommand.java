@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 record ToolsConnectorCommand(
@@ -15,6 +16,7 @@ record ToolsConnectorCommand(
 		String command,
 		@NotEmpty
 		List<String> args,
-		Map<String, String> env
+		Map<String, String> env,
+		Set<UsedTool> usedTools
 ) {
 }

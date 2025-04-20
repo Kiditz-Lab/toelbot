@@ -128,9 +128,9 @@ export const useToolStore = defineStore(
           showSnackbar('Tool tested successfully.', 'success', 3000, 'Success');
           disableTestConnection.value = false;
         }
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (error: Error | any) {
-        tool.testResult = error;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (error) {
+        tool.testResult = { isError: true, content: [{ text: 'Tool tested failed.', type: 'text' }] };
         showSnackbar('Tool tested failed.', 'error', 3000, 'Error');
         disableTestConnection.value = false;
       }

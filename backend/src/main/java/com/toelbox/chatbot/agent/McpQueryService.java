@@ -25,6 +25,10 @@ class McpQueryService {
 		)).collect(Collectors.toList());
 	}
 
+	List<McpServer> findByAgentId(UUID agentId) {
+		return repository.findByAgentId(agentId);
+	}
+
 	List<McpSyncClient> findAllByAgentClientSync(UUID agentId) {
 		var mcpServers = repository.findByAgentId(agentId);
 		return mcpServers.stream().map(McpServer::toSyncClient).collect(Collectors.toList());
