@@ -61,10 +61,11 @@ onMounted(async () => {
                     </v-expansion-panel-title>
 
                     <v-expansion-panel-text>
-                      <div class="text-subtitle-1 text-grey my-3">
-                        <v-label class="mb-2">Used When</v-label>
-                        <span class="text-subtitle-1">Explain details about when to use this tool</span>
-                        <v-textarea v-model="tool.description" label="Used When" auto-grow variant="outlined" rows="4" class="mb-4" />
+                      <div class="my-3">
+                        <v-label class="mb-2 text-subtitle-1">Used When</v-label>
+                        <br>
+                        <span class="text-subtitle-2 text-grey">Provide a detailed description explaining when this tool is used. Include examples of the data to use this tools with user query, it will help LLM to understand</span>
+                        <v-textarea v-model="tool.description" auto-grow variant="outlined" rows="4" class="mb-4" />
                       </div>
 
                       <v-form @submit.prevent="testConnection(tool)" v-model="tool.isValid">
