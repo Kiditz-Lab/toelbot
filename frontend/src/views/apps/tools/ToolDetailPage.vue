@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="js">
 import DeleteDialog from '@/components/shared/DeleteDialog.vue';
 import { useToolStore } from '@/stores/apps/toolStore';
 import { MdPreview } from 'md-editor-v3';
