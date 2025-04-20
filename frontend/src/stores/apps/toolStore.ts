@@ -16,7 +16,6 @@ export const useToolStore = defineStore(
     const { fetchAgent } = useAgentStore();
     const agentTools = computed(() => agent.value?.tools ?? []);
     const selectedTool = ref<Tools>({} as Tools);
-    // const testToolResult = ref<TestToolResult | undefined>();
     const { showSnackbar } = useSnackbarStore();
     const api = useApi();
     const loading = computed(() => api.loading);
@@ -30,6 +29,17 @@ export const useToolStore = defineStore(
     const toolId = ref('');
 
     const envValues = ref<Record<string, string | number>>({});
+    const selectedToolNames = ref<string[]>([]);
+    const selectedToolObjects = computed(() => {
+      const tools = selectedTool.value.tools;
+      const toolNames = selectedToolNames.value;
+
+      if (!Array.isArray(tools) || !Array.isArray(toolNames)) {
+        return [];
+      }
+
+      return tools.filter((tool) => toolNames.includes(tool.name));
+    });
 
     watchEffect(() => {
       const env = selectedTool.value?.env;
@@ -87,7 +97,7 @@ export const useToolStore = defineStore(
     const initToolFormData = (tool: Tool) => {
       if (!tool.formData) {
         tool.formData = {};
-        tool.isValid = false;
+        tool.isValid = true;
       }
       tool.testResult = undefined;
       const properties = tool.inputSchema?.properties ?? {};
@@ -128,7 +138,7 @@ export const useToolStore = defineStore(
           showSnackbar('Tool tested successfully.', 'success', 3000, 'Success');
           disableTestConnection.value = false;
         }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         tool.testResult = { isError: true, content: [{ text: 'Tool tested failed.', type: 'text' }] };
         showSnackbar('Tool tested failed.', 'error', 3000, 'Error');
@@ -137,13 +147,16 @@ export const useToolStore = defineStore(
     };
 
     const saveConnection = async () => {
+      const usedTools = selectedToolObjects.value.map((tool) => ({ name: tool.name, description: tool.description }));
       const connectionRequest = {
         args: selectedTool.value.args,
         command: selectedTool.value.command,
         env: envValues.value,
         serverName: selectedTool.value.name,
-        toolsId: selectedTool.value.id
+        toolsId: selectedTool.value.id,
+        usedTools
       } as McpConnectCommand;
+      console.log(connectionRequest);
       const agentId = route.params.id;
       await api.post(`/mcp/agent/${agentId}/tools`, connectionRequest);
       router.back();
@@ -151,11 +164,12 @@ export const useToolStore = defineStore(
     };
 
     const updateConnection = async () => {
-      console.log(envValues.value);
-      const agentId = route.params.id;
-      await api.put(`/mcp/agent/${agentId}/tools/${selectedTool.value.id}/env`, envValues.value);
-      showSnackbar('Tool updated successfully.', 'success', 3000, 'Success');
-      router.back();
+      // const usedTools = 
+      // console.log(envValues.value);
+      // const agentId = route.params.id;
+      // await api.put(`/mcp/agent/${agentId}/tools/${selectedTool.value.id}/env`, envValues.value);
+      // showSnackbar('Tool updated successfully.', 'success', 3000, 'Success');
+      // router.back();
     };
 
     const deleteConnection = async () => {
@@ -183,7 +197,9 @@ export const useToolStore = defineStore(
       argsValues,
       fetchMcp,
       findToolById,
-      toolId
+      toolId,
+      selectedToolNames,
+      selectedToolObjects
     };
   },
   {

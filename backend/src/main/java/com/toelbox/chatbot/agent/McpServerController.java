@@ -29,9 +29,9 @@ class McpServerController {
 	public void updateEnv(
 			@PathVariable UUID agentId,
 			@PathVariable UUID toolsId,
-			@RequestBody Map<String, String> newEnv
+			@RequestBody McpServerUpdate update
 	) {
-		connectionService.updateEnv(agentId, toolsId, newEnv);
+		connectionService.updateEnv(agentId, toolsId, update);
 	}
 
 	@DeleteMapping("/agent/{agentId}/tools/{toolsId}")

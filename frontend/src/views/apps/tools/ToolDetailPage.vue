@@ -1,4 +1,4 @@
-<script setup lang="js">
+<script setup lang="ts">
 import DeleteDialog from '@/components/shared/DeleteDialog.vue';
 import { useToolStore } from '@/stores/apps/toolStore';
 import { MdPreview } from 'md-editor-v3';
@@ -7,28 +7,28 @@ import { JsonViewer } from 'vue3-json-viewer';
 import ToolForm from './ToolForm.vue';
 // import ToolDelete from './ToolDelete.vue';
 
-import { onMounted, ref, toRefs, computed, watch } from 'vue';
+import { onMounted, ref, toRefs } from 'vue';
 import { mdiDelete } from '@mdi/js';
 const tab = ref('overview');
 const dialog = ref(false);
 
-const { selectedTool, loading, agentTools, toolId } = toRefs(useToolStore());
+const { selectedTool, loading, agentTools, toolId, selectedToolNames, selectedToolObjects } = toRefs(useToolStore());
 const { testConnection, getFields, deleteConnection, fetchMcp, findToolById } = useToolStore();
-const selectedToolNames = ref([]);
+// const selectedToolNames = ref<string[]>([] as string[]);
 
-const selectedToolObjects = computed(() => {
-  return selectedTool.value?.tools.filter((t) => selectedToolNames.value.includes(t.name)) || [];
-});
+// const selectedToolObjects = computed(() => {
+//   return selectedTool.value.tools.filter((t) => selectedToolNames.value.includes(t.name)) || [];
+// });
 
-watch(
-  () => selectedTool.value,
-  (newVal) => {
-    if (newVal?.tools?.length && selectedToolNames.value.length === 0) {
-      selectedToolNames.value = [newVal.tools[0].name];
-    }
-  },
-  { immediate: true }
-);
+// watch(
+//   () => selectedTool.value,
+//   (newVal) => {
+//     if (newVal?.tools?.length && selectedToolNames.value.length === 0) {
+//       selectedToolNames.value = [newVal.tools[0].name];
+//     }
+//   },
+//   { immediate: true }
+// );
 
 onMounted(async () => {
   import('md-editor-v3/lib/style.css');
@@ -70,17 +70,16 @@ onMounted(async () => {
                   multiple
                   clearable
                 />
-
-                <template v-for="tool in selectedToolObjects" :key="tool.name">
-                  <v-card variant="outlined" class="pa-4 mb-4">
-                    <v-card-title class="text-h6">
+                <v-expansion-panels variant="accordion" class="mb-4" v-for="tool in selectedToolObjects" :key="tool.name" elevation="0">
+                  <v-expansion-panel>
+                    <v-expansion-panel-title>
                       {{ tool.name }}
-                    </v-card-title>
+                    </v-expansion-panel-title>
 
-                    <v-card-text>
+                    <v-expansion-panel-text>
                       <div class="text-subtitle-1 text-grey my-3">
                         <!-- <MdPreview :model-value="tool.description" preview-theme="github" language="en" /> -->
-                        <v-textarea v-model="tool.description" label="Used When" auto-grow variant="outlined" rows="3" class="mb-4" />
+                        <v-textarea v-model="tool.description" label="Used When" auto-grow variant="outlined" rows="4" class="mb-4" />
                       </div>
 
                       <v-form @submit.prevent="testConnection(tool)" v-model="tool.isValid">
@@ -110,7 +109,67 @@ onMounted(async () => {
                         <v-divider class="my-4" />
 
                         <v-btn :loading="loading" :disabled="!tool.isValid" type="submit" color="primary" variant="elevated" block>
-                          Test Connection
+                          Try
+                        </v-btn>
+
+                        <v-divider class="my-4" v-if="tool.testResult" />
+
+                        <div v-if="tool.testResult">
+                          <v-expansion-panels multiple variant="popout" elevation="0">
+                            <v-expansion-panel v-for="content in tool.testResult.content" :key="content.type" class="my-2">
+                              <v-expansion-panel-title>
+                                {{ content.type }}
+                              </v-expansion-panel-title>
+                              <v-expansion-panel-text>
+                                <json-viewer :value="content" theme="light" />
+                              </v-expansion-panel-text>
+                            </v-expansion-panel>
+                          </v-expansion-panels>
+                        </div>
+                      </v-form>
+                    </v-expansion-panel-text>
+                  </v-expansion-panel>
+                </v-expansion-panels>
+
+                <!-- <template v-for="tool in selectedToolObjects" :key="tool.name">
+                  <v-card variant="outlined" class="pa-4 mb-4">
+                    <v-card-title class="text-h6">
+                      {{ tool.name }}
+                    </v-card-title>
+
+                    <v-card-text>
+                      <div class="text-subtitle-1 text-grey my-3">
+                        <v-textarea v-model="tool.description" label="Used When" auto-grow variant="outlined" rows="4" class="mb-4" />
+                      </div>
+
+                      <v-form @submit.prevent="testConnection(tool)" v-model="tool.isValid">
+                        <v-row>
+                          <template v-for="field in getFields(tool)" :key="field.name">
+                            <v-col cols="12" md="6">
+                              <v-text-field
+                                v-if="field.type === 'number'"
+                                variant="outlined"
+                                v-model.number="tool.formData[field.name]"
+                                :placeholder="field.title"
+                                type="number"
+                                :rules="[field.required ? (v) => !!v || 'Required' : () => true]"
+                              />
+                              <v-text-field
+                                v-else
+                                variant="outlined"
+                                v-model="tool.formData[field.name]"
+                                :placeholder="field.title"
+                                type="text"
+                                :rules="[field.required ? (v) => !!v || 'Required' : () => true]"
+                              />
+                            </v-col>
+                          </template>
+                        </v-row>
+
+                        <v-divider class="my-4" />
+
+                        <v-btn :loading="loading" :disabled="!tool.isValid" type="submit" color="primary" variant="elevated" block>
+                          Try
                         </v-btn>
 
                         <v-divider class="my-4" v-if="tool.testResult" />
@@ -132,7 +191,7 @@ onMounted(async () => {
                       </v-form>
                     </v-card-text>
                   </v-card>
-                </template>
+                </template> -->
               </v-col>
             </v-row>
 

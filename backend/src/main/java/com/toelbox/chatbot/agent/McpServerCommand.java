@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 record McpServerCommand(
 		@NotBlank
@@ -15,4 +16,11 @@ record McpServerCommand(
 		List<String> args,
 		Map<String, String> env
 ) {
+}
+
+record McpServerUpdate(
+		Map<String, String> env,
+		Set<UsedTool> usedTools
+){
+
 }

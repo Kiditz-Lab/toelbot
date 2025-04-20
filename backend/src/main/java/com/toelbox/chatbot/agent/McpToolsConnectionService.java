@@ -41,9 +41,10 @@ class McpToolsConnectionService {
 		return mcpServerRepository.findByAgentIdAndToolsId(agentId, toolsId).orElseThrow(() -> new NotFoundException("Mcp server not found"));
 	}
 
-	void updateEnv(UUID agentId, UUID toolsId, Map<String, String> newEnv) {
+	void updateEnv(UUID agentId, UUID toolsId, McpServerUpdate update) {
 		McpServer server = findByAgentIdAndToolsId(agentId, toolsId);
-		server.setEnv(newEnv);
+		server.setUsedTools(update.usedTools());
+		server.setEnv(update.env());
 		chatService.invalidateCacheByAgentId(agentId);
 		mcpServerRepository.save(server);
 	}
