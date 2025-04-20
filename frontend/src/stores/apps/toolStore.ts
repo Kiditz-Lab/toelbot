@@ -215,7 +215,7 @@ export const useToolStore = defineStore(
   {
     persist: {
       storage: sessionStorage,
-      pick: ['disableTestConnection', 'tools', 'selectedTool']
+      pick: ['disableTestConnection', 'tools', 'selectedTool', 'toolId', 'envValues', 'selectedToolNames']
     }
   }
 );
