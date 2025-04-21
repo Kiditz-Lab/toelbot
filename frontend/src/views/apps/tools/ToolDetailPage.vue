@@ -3,9 +3,7 @@ import DeleteDialog from '@/components/shared/DeleteDialog.vue';
 import { useToolStore } from '@/stores/apps/toolStore';
 import { MdPreview } from 'md-editor-v3';
 import { JsonViewer } from 'vue3-json-viewer';
-import JsonEditorVue from 'json-editor-vue'
-
-
+import JsonEditorVue from 'json-editor-vue';
 
 import ToolForm from './ToolForm.vue';
 // import ToolDelete from './ToolDelete.vue';
@@ -93,6 +91,13 @@ onMounted(async () => {
                                 :placeholder="field.title"
                                 :rules="[field.required ? (v) => !!v || 'Required' : () => true]"
                               />
+                              <v-checkbox
+                                v-else-if="field.type === 'boolean'"
+                                v-model="tool.formData[field.name]"
+                                :label="field.title"
+                                :rules="[field.required ? (v) => v !== null || 'Required' : () => true]"
+                              />
+
                               <v-text-field
                                 v-else
                                 variant="outlined"
