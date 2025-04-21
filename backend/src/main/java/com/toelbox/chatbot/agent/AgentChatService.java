@@ -21,6 +21,7 @@ import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -50,6 +51,11 @@ class AgentChatService {
 
 		ChatClient client = chatClientCache.get(chat.chatId(), id -> buildChatClient(agent, chatId, country));
 		return client.prompt()
+				.system(s ->
+						s.param("current_date", LocalDateTime.now().toString())
+								.param("agent_id", agent.getId().toString())
+								.param("chat_id", chatId)
+				)
 				.user(chat.chat())
 				.advisors(a -> a
 						.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chat.chatId())
@@ -68,6 +74,11 @@ class AgentChatService {
 
 		ChatClient client = chatClientCache.get(chat.chatId(), id -> buildChatClient(agent, chatId, country));
 		return client.prompt()
+				.system(s ->
+						s.param("current_date", LocalDateTime.now().toString())
+								.param("agent_id", agent.getId().toString())
+								.param("chat_id", chatId)
+				)
 				.user(chat.chat())
 				.advisors(a -> a
 						.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chat.chatId())
@@ -123,7 +134,7 @@ class AgentChatService {
 		var builder = ChatClient.builder(chatModel)
 				.defaultTools(tools)
 				.defaultAdvisors(advisors);
-		var prompt = config.getPrompt();
+		var prompt = config.getPrompt() + "\n Today is {current_date}.\n Agent Id is {agent_id}.\n chat id is {chat_id}";
 		if (StringUtils.isNoneBlank(prompt)) {
 			builder = builder.defaultSystem(prompt);
 		}
