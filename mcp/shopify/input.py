@@ -86,7 +86,7 @@ class CustomCollectionCreate(BaseModel):
     published: Optional[bool] = True  # Default to True, if needed
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "title": "Summer Collection",
                 "body_html": "<strong>Summer Collection 2024</strong>",

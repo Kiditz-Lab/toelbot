@@ -1,4 +1,5 @@
 <script setup lang="js">
+import { mdiClose } from '@mdi/js';
 import DeleteDialog from '@/components/shared/DeleteDialog.vue';
 import { useToolStore } from '@/stores/apps/toolStore';
 import { MdPreview } from 'md-editor-v3';
@@ -85,18 +86,49 @@ onMounted(async () => {
                                 type="number"
                                 :rules="[field.required ? (v) => !!v || 'Required' : () => true]"
                               />
-                              <JsonEditorVue
-                                v-else-if="field.type === 'object'"
-                                v-model="tool.formData[field.name]"
-                                :placeholder="field.title"
-                                :rules="[field.required ? (v) => !!v || 'Required' : () => true]"
-                              />
+                              <div v-else-if="field.type === 'object'">
+                                <v-label class="mb-2 text-subtitle-1">{{ field.title }}</v-label>
+                                <JsonEditorVue
+                                  :modelValue="tool.formData[field.name]"
+                                  @update:modelValue="(value) => (tool.formData[field.name] = JSON.parse(value))"
+                                  :placeholder="field.title"
+                                  :rules="[field.required ? (v) => !!v || 'Required' : () => true]"
+                                />
+                              </div>
                               <v-checkbox
                                 v-else-if="field.type === 'boolean'"
                                 v-model="tool.formData[field.name]"
                                 :label="field.title"
                                 :rules="[field.required ? (v) => v !== null || 'Required' : () => true]"
                               />
+                              <div v-else-if="field.type === 'array'">
+                                <div class="d-flex align-center mb-2">
+                                  <span class="text-subtitle-1">{{ field.title }}</span>
+                                  <v-btn
+                                    small
+                                    color="primary"
+                                    variant="text"
+                                    class="ml-2"
+                                    @click="
+                                      tool.formData[field.name] = tool.formData[field.name] || [];
+                                      tool.formData[field.name].push('');
+                                    "
+                                  >
+                                    Add
+                                  </v-btn>
+                                </div>
+                                <v-text-field
+                                  v-for="(item, index) in tool.formData[field.name]"
+                                  :key="index"
+                                  v-model="tool.formData[field.name][index]"
+                                  :placeholder="`${field.title} #${index + 1}`"
+                                  variant="outlined"
+                                  class="mb-2"
+                                  :rules="[field.required ? (v) => !!v || 'Required' : () => true]"
+                                  :append-inner-icon="mdiClose"
+                                  @click:append-inner="tool.formData[field.name].splice(index, 1)"
+                                />
+                              </div>
 
                               <v-text-field
                                 v-else

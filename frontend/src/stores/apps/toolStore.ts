@@ -115,10 +115,31 @@ export const useToolStore = defineStore(
       const properties = tool.inputSchema?.properties ?? {};
       for (const [key, prop] of Object.entries(properties)) {
         if (!(key in tool.formData)) {
-          tool.formData[key] = prop.default !== undefined ? prop.default : prop.type === 'integer' ? 0 : '';
+          if (prop.default !== undefined) {
+            tool.formData[key] = prop.default;
+          } else {
+            switch (prop.type) {
+              case 'integer':
+              case 'number':
+                tool.formData[key] = 0;
+                break;
+              case 'boolean':
+                tool.formData[key] = false;
+                break;
+              case 'array':
+                tool.formData[key] = [];
+                break;
+              case 'object':
+                tool.formData[key] = {};
+                break;
+              default:
+                tool.formData[key] = '';
+            }
+          }
         }
       }
     };
+
     const getFields = (tool: Tool) => {
       const properties = tool.inputSchema.properties;
       const required = tool.inputSchema.required || [];
