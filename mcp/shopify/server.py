@@ -1,7 +1,13 @@
 import os
 from typing import Optional
 from mcp.server.fastmcp import FastMCP
-from input import CustomCollectionCreate, CustomerCreate, CustomerUpdate, ProductCreate, ProductUpdate
+from input import (
+    CustomCollectionCreate,
+    CustomerCreate,
+    CustomerUpdate,
+    ProductCreate,
+    ProductUpdate,
+)
 from shopify import ShopifyClient
 from dotenv import load_dotenv
 
@@ -355,7 +361,22 @@ def create_price_rule(price_rule_data: dict) -> dict:
     return {"price_rule": price_rule}
 
 
-@mcp.tool(description="Create a new discount code under a price rule on Shopify")
+@mcp.tool(
+    description="""
+Create a new discount code under a price rule on Shopify.
+
+To create a discount code, you must provide:
+- `price_rule_id` (required): The ID of the existing price rule under which the discount code will be created.
+- `code` (required): A unique discount code string that customers will use at checkout.
+
+Example:
+{
+  "code": "SUMMER2025"
+}
+
+Make sure the discount code is unique and meets Shopify's discount code requirements (e.g., no spaces, case insensitive).
+"""
+)
 def create_discount_code(price_rule_id: str, discount_data: dict) -> dict:
     client = get_shopify_client()
     discount_code = client.create_discount_code(price_rule_id, discount_data)

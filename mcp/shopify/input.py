@@ -98,3 +98,6 @@ class CustomCollectionCreate(BaseModel):
                 "published": True
             }
         }
+
+class DiscountCodeCreate(BaseModel):
+    code: str
