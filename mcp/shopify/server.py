@@ -1,9 +1,10 @@
 import os
 from typing import Optional
 from mcp.server.fastmcp import FastMCP
-from input import CustomerCreate, CustomerUpdate, ProductCreate, ProductUpdate
+from input import CustomCollectionCreate, CustomerCreate, CustomerUpdate, ProductCreate, ProductUpdate
 from shopify import ShopifyClient
 from dotenv import load_dotenv
+
 mcp = FastMCP(
     "shopify",
     dependencies=["requests", "pydantic[email]"],
@@ -87,10 +88,59 @@ def create_product(product: ProductCreate) -> dict:
     return {"product": product}
 
 
-@mcp.tool(description="Update an existing product on Shopify")
+@mcp.tool(
+    description="""
+Update an existing product on Shopify.
+
+To update a product, you need two things:
+1. The `product_id` (the ID of the product you want to update) — provided separately.
+2. The `update_data` (the fields you want to update) — provided as a JSON object.
+
+You can update any fields you want, such as:
+- `title`: Update the product's name.
+- `body_html`: Update the rich text description (supports HTML formatting).
+- `vendor`: Update the brand or manufacturer name.
+- `product_type`: Update the category of the product.
+- `tags`: Update the list of tags.
+- `variants`: Update or add product variants (sizes, colors, etc.).
+- `images`: Update product images (each needs a direct URL `src`).
+
+Example:
+
+Input:
+- `product_id`: "1234567890"
+- `update_data`:
+  {
+    "title": "Awesome T-Shirt (Updated)",
+    "body_html": "<strong>Now even softer!</strong>",
+    "tags": ["Summer", "Cotton", "Men", "Updated"],
+    "variants": [
+      {
+        "option1": "Medium",
+        "price": "21.99",
+        "sku": "TSHIRT-MEDIUM"
+      }
+    ],
+    "images": [
+      {
+        "src": "https://your-new-image-url.com/shirt-new.jpg"
+      }
+    ]
+  }
+
+Important:
+- You don't need to send all fields — just the fields you want to change.
+- If updating images, ensure the image URLs are public.
+- If updating variants, you can either modify existing ones (with their `id`) or add new ones.
+
+This function only updates the fields you provide (fields not included stay unchanged).
+"""
+)
 def update_product(product_id: str, update_data: ProductUpdate) -> dict:
     client = get_shopify_client()
-    product = client.update_product(product_id, update_data.model_dump(exclude_none=True))
+    product = client.update_product(
+        product_id, update_data.model_dump(exclude_none=True)
+    )
     return {"product": product}
 
 
@@ -135,14 +185,83 @@ def get_customer(customer_id: str) -> dict:
     return {"customer": customer}
 
 
-@mcp.tool(description="Create a new customer on Shopify")
+@mcp.tool(
+    description="""
+Create a new customer on Shopify.
+
+To create a customer, provide the customer's information as a JSON object.
+
+You can include fields such as:
+- `first_name`: Customer's first name.
+- `last_name`: Customer's last name.
+- `email`: Customer's email address (required and must be valid).
+- `phone`: Customer's phone number (optional).
+- `verified_email`: Whether the email is verified (true or false).
+- `tags`: Tags to help categorize or group customers (optional).
+- `note`: An internal note about the customer (optional).
+
+Example input:
+
+{
+  "first_name": "John",
+  "last_name": "Doe",
+  "email": "john.doe@example.com",
+  "phone": "+15555555555",
+  "verified_email": true,
+  "tags": ["VIP", "Newsletter Subscriber"],
+  "note": "Loyal customer since 2020"
+}
+
+Important:
+- `email` must be unique across all customers.
+- If `verified_email` is true, Shopify treats the email as confirmed.
+- Tags help for segmentation (e.g., for marketing purposes).
+
+"""
+)
 def create_customer(customer_data: CustomerCreate) -> dict:
     client = get_shopify_client()
     customer = client.create_customer(customer_data)
     return {"customer": customer}
 
 
-@mcp.tool(description="Update an existing customer on Shopify")
+@mcp.tool(
+    description="""
+Update an existing customer on Shopify.
+
+To update a customer, you need two things:
+1. The `customer_id` (the ID of the customer you want to update) — provided separately.
+2. The `update_data` (the fields you want to update) — provided as a JSON object.
+
+You can update fields such as:
+- `first_name`
+- `last_name`
+- `email` (must still be valid and unique)
+- `phone`
+- `verified_email`
+- `tags`
+- `note`
+
+Example input:
+
+- `customer_id`: "9876543210"
+- `update_data`:
+  {
+    "first_name": "Jane",
+    "last_name": "Smith",
+    "phone": "+16666666666",
+    "tags": ["Returning Customer", "Special Discount"]
+  }
+
+Important:
+- You only need to include the fields you want to change.
+- Fields left out will not be modified.
+- Email updates must still meet Shopify's requirements (valid, unique).
+
+This function updates only the specified fields and leaves others unchanged.
+
+"""
+)
 def update_customer(customer_id: str, update_data: CustomerUpdate) -> dict:
     client = get_shopify_client()
     customer = client.update_customer(customer_id, update_data)
@@ -166,8 +285,34 @@ def list_custom_collections(limit: int = 10) -> dict:
     return {"collections": collections}
 
 
-@mcp.tool(description="Create a new custom collection on Shopify")
-def create_custom_collection(collection_data: dict) -> dict:
+@mcp.tool(
+    description="""
+Create a new custom collection on Shopify.
+
+To create a custom collection, you need to provide at least the collection's title.
+You can optionally include a description, image, handle, and sorting preferences. Custom collections allow you to group and categorize your products, making it easier to organize and present them on your store.
+
+- `title` (required): The name of the custom collection.
+- `body_html` (optional): A rich text description of the collection.
+- `image` (optional): A URL to an image that represents the collection.
+- `handle` (optional): A unique URL-friendly identifier for the collection (defaults to the title).
+- `sort_order` (optional): The sort order of the collection (e.g., "manual", "best-selling", "price-ascending", etc.).
+
+Example:
+{
+  "title": "Summer Collection",
+  "body_html": "<strong>A collection of summer clothing</strong>",
+  "image": {
+    "src": "https://your-image-url.com/summer-collection.jpg"
+  },
+  "handle": "summer-collection",
+  "sort_order": "manual"
+}
+
+Make sure the `image` URL is publicly accessible, and `handle` is unique across collections. The `sort_order` can be left as the default "manual" unless you have a specific sorting preference.
+"""
+)
+def create_custom_collection(collection_data: CustomCollectionCreate) -> dict:
     client = get_shopify_client()
     collection = client.create_custom_collection(collection_data)
     return {"collection": collection}
@@ -233,7 +378,7 @@ def custom_shopify_request(
 
 
 def main():
-    print(search_products(query='snow', limit=10))
+    print(search_products(query="snow", limit=10))
     # mcp.run()
 
 

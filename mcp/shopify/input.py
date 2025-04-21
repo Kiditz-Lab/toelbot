@@ -75,3 +75,26 @@ class CustomerUpdate(BaseModel):
     tags: Optional[str] = None
     note: Optional[str] = None
     accepts_marketing: Optional[bool] = None
+
+class CustomCollectionCreate(BaseModel):
+    title: str
+    body_html: Optional[str] = None
+    handle: Optional[str] = None
+    image: Optional[dict] = None  # You can further structure this if needed
+    sort_order: Optional[str] = None  # Example: 'manual', 'best-selling', etc.
+    template_suffix: Optional[str] = None
+    published: Optional[bool] = True  # Default to True, if needed
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "title": "Summer Collection",
+                "body_html": "<strong>Summer Collection 2024</strong>",
+                "handle": "summer-collection",
+                "image": {
+                    "src": "https://your-image-url.com/summer-collection.jpg"
+                },
+                "sort_order": "manual",
+                "published": True
+            }
+        }
