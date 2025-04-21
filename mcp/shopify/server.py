@@ -42,7 +42,45 @@ def get_product(product_id: str) -> dict:
     return {"product": product}
 
 
-@mcp.tool(description="Create a new product on Shopify")
+@mcp.tool(
+    description="""
+Create a new product on Shopify.
+
+To create a product, you must provide at least the product's title.
+You can optionally include a description (body_html), vendor name, product type, tags, variants (such as size or color options), and images.
+
+- `title` (required): The name of the product.
+- `body_html` (optional): A rich text description of the product.
+- `vendor` (optional): The name of the brand or manufacturer.
+- `product_type` (optional): A category or type for the product.
+- `tags` (optional): A list of tags to help organize or filter the product.
+- `variants` (optional): List of different product versions (like sizes or colors). Each variant must include at least `option1` (name) and `price`.
+- `images` (optional): List of images for the product. Each image requires a direct URL (`src`).
+
+Example:
+{
+  "title": "Awesome T-Shirt",
+  "body_html": "<strong>Good quality cotton shirt</strong>",
+  "vendor": "MyBrand",
+  "product_type": "Shirts",
+  "tags": ["Summer", "Cotton", "Men"],
+  "variants": [
+    {
+      "option1": "Small",
+      "price": "19.99",
+      "sku": "TSHIRT-SMALL"
+    }
+  ],
+  "images": [
+    {
+      "src": "https://your-image-url.com/shirt.jpg"
+    }
+  ]
+}
+
+Make sure URLs for images are accessible (publicly hosted) and that fields like price are strings (not numbers).
+"""
+)
 def create_product(product: ProductCreate) -> dict:
     client = get_shopify_client()
     product = client.create_product(product.model_dump(exclude_none=True))

@@ -3,6 +3,9 @@ import DeleteDialog from '@/components/shared/DeleteDialog.vue';
 import { useToolStore } from '@/stores/apps/toolStore';
 import { MdPreview } from 'md-editor-v3';
 import { JsonViewer } from 'vue3-json-viewer';
+import JsonEditorVue from 'json-editor-vue'
+import 'vanilla-jsoneditor/themes/jse-theme-dark.css'
+
 
 import ToolForm from './ToolForm.vue';
 // import ToolDelete from './ToolDelete.vue';
@@ -63,21 +66,30 @@ onMounted(async () => {
                     <v-expansion-panel-text>
                       <div class="my-3">
                         <v-label class="mb-2 text-subtitle-1">Used When</v-label>
-                        <br>
-                        <span class="text-subtitle-2 text-grey">Provide a detailed description explaining when this tool is used. Include examples of the data to use this tools with user query, it will help LLM to understand</span>
+                        <br />
+                        <span class="text-subtitle-2 text-grey"
+                          >Provide a detailed description explaining when this tool is used. Include examples of the data to use this tools
+                          with user query, it will help LLM to understand</span
+                        >
                         <v-textarea v-model="tool.description" auto-grow variant="outlined" rows="4" class="mb-4" />
                       </div>
 
                       <v-form @submit.prevent="testConnection(tool)" v-model="tool.isValid">
                         <v-row>
                           <template v-for="field in getFields(tool)" :key="field.name">
-                            <v-col cols="12" md="6">
+                            <v-col cols="12">
                               <v-text-field
                                 v-if="field.type === 'number'"
                                 variant="outlined"
                                 v-model.number="tool.formData[field.name]"
                                 :placeholder="field.title"
                                 type="number"
+                                :rules="[field.required ? (v) => !!v || 'Required' : () => true]"
+                              />
+                              <JsonEditorVue
+                                v-else-if="field.type === 'object'"
+                                v-model="tool.formData[field.name]"
+                                :placeholder="field.title"
                                 :rules="[field.required ? (v) => !!v || 'Required' : () => true]"
                               />
                               <v-text-field

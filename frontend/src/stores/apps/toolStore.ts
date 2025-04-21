@@ -125,7 +125,7 @@ export const useToolStore = defineStore(
       return Object.entries(properties).map(([key, val]) => ({
         name: key,
         title: val.title || key,
-        type: val.type || 'string',
+        type: val.type || 'object',
         required: required.includes(key)
       }));
     };
