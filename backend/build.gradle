@@ -2,8 +2,8 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.4.4'
 	id 'io.spring.dependency-management' version '1.1.7'
-//	id 'org.graalvm.buildtools.native' version '0.10.6'
-	id 'idea'
+	id 'org.graalvm.buildtools.native' version '0.10.6'
+//	id 'idea'
 
 }
 
@@ -74,9 +74,9 @@ dependencies {
 //	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 	runtimeOnly 'org.postgresql:postgresql'
 
-	implementation "com.querydsl:querydsl-core:${querydslVersion}"
+//	implementation "com.querydsl:querydsl-core:${querydslVersion}"
 //	implementation "com.querydsl:querydsl-apt:${querydslVersion}"
-	implementation "com.querydsl:querydsl-sql-spring:${querydslVersion}"
+//	implementation "com.querydsl:querydsl-sql-spring:${querydslVersion}"
 	implementation "com.github.ben-manes.caffeine:caffeine"
 //	annotationProcessor "com.querydsl:querydsl-apt:${querydslVersion}:general"
 //	annotationProcessor "jakarta.annotation:jakarta.annotation-api:2.1.1"
