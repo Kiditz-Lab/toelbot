@@ -16,7 +16,7 @@ const { pages } = toRefs(store);
     <v-card-text> Connect your Toelbot to your Facebook Pages to chat with your customer 24/7.</v-card-text>
     <v-card-actions>
       <v-btn  color="primary" variant="flat" block @click="store.connectFacebook"
-        >{{ pages.length >= 0 ? 'Reconnect' : 'Connect' }}</v-btn
+        >{{ pages.length > 0 ? 'Reconnect' : 'Connect' }}</v-btn
       >
     </v-card-actions>
     <v-card-text class="ma-0">
