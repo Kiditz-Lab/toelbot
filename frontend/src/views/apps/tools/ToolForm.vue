@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useToolStore } from '@/stores/apps/toolStore';
 // import type { ParsedArgField } from '@/types/tool';
-import { computed, ref, toRef } from 'vue';
+import { ref, toRef } from 'vue';
 const toolStore = useToolStore();
 const tool = toRef(toolStore, 'selectedTool');
 const envValues = toRef(toolStore, 'envValues');
@@ -9,7 +9,7 @@ const envValues = toRef(toolStore, 'envValues');
 const agentTools = toRef(toolStore, 'agentTools');
 const loading = toRef(toolStore, 'loading');
 
-const disableTestConnection = computed(() => toolStore.disableTestConnection);
+// const disableTestConnection = computed(() => toolStore.disableTestConnection);
 
 const { saveConnection, updateConnection } = useToolStore();
 const isValid = ref<boolean>(true);

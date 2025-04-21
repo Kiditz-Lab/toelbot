@@ -5,12 +5,15 @@ import { useToolStore } from '@/stores/apps/toolStore';
 import { MdPreview } from 'md-editor-v3';
 import { JsonViewer } from 'vue3-json-viewer';
 import JsonEditorVue from 'json-editor-vue';
+import { Mode } from 'vanilla-jsoneditor';
 
 import ToolForm from './ToolForm.vue';
+
 // import ToolDelete from './ToolDelete.vue';
 
 import { onMounted, ref, toRefs } from 'vue';
 import { mdiDelete } from '@mdi/js';
+import { capitalize } from '@/utils/helpers/text';
 const tab = ref('overview');
 const dialog = ref(false);
 
@@ -73,42 +76,45 @@ onMounted(async () => {
                         >
                         <v-textarea v-model="tool.description" auto-grow variant="outlined" rows="4" class="mb-4" />
                       </div>
-
+                      <v-divider class="mb-4" />
                       <v-form @submit.prevent="testConnection(tool)" v-model="tool.isValid">
                         <v-row>
                           <template v-for="field in getFields(tool)" :key="field.name">
                             <v-col cols="12">
-                              <v-text-field
-                                v-if="field.type === 'number'"
-                                variant="outlined"
-                                v-model.number="tool.formData[field.name]"
-                                :placeholder="field.title"
-                                type="number"
-                                :rules="[field.required ? (v) => !!v || 'Required' : () => true]"
-                              />
-                              <div v-else-if="field.type === 'object'">
-                                <v-label class="mb-2 text-subtitle-1">{{ field.title }}</v-label>
-                                <JsonEditorVue
-                                  :modelValue="tool.formData[field.name]"
-                                  @update:modelValue="(value) => (tool.formData[field.name] = JSON.parse(value))"
+                              <template v-if="field.type === 'number'">
+                                <v-label class="mb-2 text-subtitle-1">{{ capitalize(field.title) }}</v-label>
+                                <v-text-field
+                                  variant="outlined"
+                                  v-model.number="tool.formData[field.name]"
                                   :placeholder="field.title"
+                                  type="number"
+                                  :rules="[field.required ? (v) => !!v || 'Required' : () => true]"
+                                />
+                              </template>
+                              <div v-else-if="field.type === 'object'">
+                                <v-label class="mb-4 text-subtitle-1">{{ capitalize(field.title) }}</v-label>
+                                <JsonEditorVue
+                                  :model-value="tool.formData[field.name]"
+                                  @update:model-value="(value) => (tool.formData[field.name] = JSON.parse(value))"
+                                  class="jse-theme-light"
+                                  :mode="Mode.text"
                                   :rules="[field.required ? (v) => !!v || 'Required' : () => true]"
                                 />
                               </div>
                               <v-checkbox
                                 v-else-if="field.type === 'boolean'"
                                 v-model="tool.formData[field.name]"
-                                :label="field.title"
+                                :label="capitalize(field.title)"
                                 :rules="[field.required ? (v) => v !== null || 'Required' : () => true]"
                               />
-                              <div v-else-if="field.type === 'array'">
-                                <div class="d-flex align-center mb-2">
-                                  <span class="text-subtitle-1">{{ field.title }}</span>
+                              <template v-else-if="field.type === 'array'">
+                                <div class="d-flex justify-space-between align-center mb-2">
+                                  <span class="text-subtitle-1 mb-2">{{ capitalize(field.title) }}</span>
                                   <v-btn
                                     small
-                                    color="primary"
-                                    variant="text"
-                                    class="ml-2"
+                                    color="black"
+                                    variant="flat"
+                                    size="small"
                                     @click="
                                       tool.formData[field.name] = tool.formData[field.name] || [];
                                       tool.formData[field.name].push('');
@@ -118,7 +124,7 @@ onMounted(async () => {
                                   </v-btn>
                                 </div>
                                 <v-text-field
-                                  v-for="(item, index) in tool.formData[field.name]"
+                                  v-for="(_, index) in tool.formData[field.name]"
                                   :key="index"
                                   v-model="tool.formData[field.name][index]"
                                   :placeholder="`${field.title} #${index + 1}`"
@@ -128,16 +134,17 @@ onMounted(async () => {
                                   :append-inner-icon="mdiClose"
                                   @click:append-inner="tool.formData[field.name].splice(index, 1)"
                                 />
-                              </div>
-
-                              <v-text-field
-                                v-else
-                                variant="outlined"
-                                v-model="tool.formData[field.name]"
-                                :placeholder="field.title"
-                                type="text"
-                                :rules="[field.required ? (v) => !!v || 'Required' : () => true]"
-                              />
+                              </template>
+                              <template v-else>
+                                <v-label class="mb-2 text-subtitle-1">{{ capitalize(field.title) }}</v-label>
+                                <v-text-field
+                                  variant="outlined"
+                                  v-model="tool.formData[field.name]"
+                                  :placeholder="field.title"
+                                  type="text"
+                                  :rules="[field.required ? (v) => !!v || 'Required' : () => true]"
+                                />
+                              </template>
                             </v-col>
                           </template>
                         </v-row>

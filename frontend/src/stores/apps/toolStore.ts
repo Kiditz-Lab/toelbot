@@ -102,6 +102,7 @@ export const useToolStore = defineStore(
     const selectTool = async (info: Tools) => {
       selectedTool.value = info;
       toolId.value = info.id;
+      envValues.value = {};
       selectedToolNames.value = [];
       router.push({ name: 'ToolDetail', params: route.params });
     };
