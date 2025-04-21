@@ -6,7 +6,7 @@ WORKDIR /app
 RUN npm install -g serve
 
 # Copy only the built files
-COPY dist/ .
+COPY dist/* .
 
 ARG VITE_API_URL
 ARG VITE_WS_URL
