@@ -93,7 +93,7 @@ const handleSaveOrUpdate = async () => {
       text="Connect Now"
       color="primary"
       block
-      :disabled="disableTestConnection"
+      
     ></v-btn>
     <v-btn :loading="loading" v-else type="submit" text="Update Connection" color="success" block ></v-btn>
   </v-form>
