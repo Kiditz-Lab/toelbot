@@ -76,11 +76,11 @@ rag:
 
 logging:
   file:
-    name: logs/app.log
+    name: ./logs/app.log
   logback:
     rollingpolicy:
       max-history: 30
-      file-name-pattern: logs/app-%d{yyyy-MM-dd}.log
+      file-name-pattern: ./logs/app-%d{yyyy-MM-dd}.log
   level:
     root: INFO
     org.springframework.jdbc.core: ERROR
