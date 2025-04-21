@@ -10,9 +10,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.ai.chat.memory.InMemoryChatMemory;
-import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.openai.api.OpenAiApi;
@@ -120,6 +120,7 @@ class AgentChatService {
 				)
 		);
 		advisors.add(new MessageChatMemoryAdvisor(chatMemory));
+		advisors.add(new SimpleLoggerAdvisor());
 //		var info = new ChatLoggingAdvisor.AdvisorInfo(country, agent.getConfig().getAiModel().getVersion(), chatId, agent.getId());
 //		advisors.add(new ChatLoggingAdvisor(info, publisher));
 

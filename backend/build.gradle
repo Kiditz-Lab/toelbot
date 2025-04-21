@@ -59,7 +59,7 @@ dependencies {
 	implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter'
 	implementation 'org.springframework.ai:spring-ai-pgvector-store-spring-boot-starter'
 	implementation 'org.springframework.ai:spring-ai-mcp-client-spring-boot-starter'
-	implementation 'me.bvn13.openfeign.logger:feign-normalized-logger:0.1.4'
+//	implementation 'me.bvn13.openfeign.logger:feign-normalized-logger:0.1.4'
 //	implementation 'org.springframework.ai:spring-ai-mistral-ai-spring-boot-starter'
 	implementation 'com.vladsch.flexmark:flexmark-html2md-converter:0.50.42'
 	implementation 'commons-codec:commons-codec'

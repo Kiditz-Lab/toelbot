@@ -1,9 +1,7 @@
 package com.toelbox.chatbot.instagram;
 
 import feign.Logger;
-import feign.codec.Encoder;
-import feign.form.spring.SpringFormEncoder;
-import me.bvn13.openfeign.logger.normalized.NormalizedFeignLogger;
+import feign.slf4j.Slf4jLogger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,7 +10,7 @@ public class FeignConfig {
 
     @Bean
     public Logger logger() {
-        return new NormalizedFeignLogger();
+        return new Slf4jLogger();
     }
 
     @Bean

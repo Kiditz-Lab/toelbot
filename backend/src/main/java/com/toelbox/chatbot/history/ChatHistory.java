@@ -1,6 +1,5 @@
 package com.toelbox.chatbot.history;
 
-import com.querydsl.core.annotations.QueryEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +14,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@QueryEntity
 @Table("chat_history")
 public class ChatHistory {
     

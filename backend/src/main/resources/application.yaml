@@ -75,14 +75,17 @@ rag:
     processed: file:///Users/rifkyaditya/Playground/data/processed
 
 logging:
+  structured:
+    format:
+      console: logstash
+      file: logstash
   file:
-    name: ./logs/app.log
+    name: logs/app.log
   logback:
     rollingpolicy:
       max-history: 30
-      file-name-pattern: ./logs/app-%d{yyyy-MM-dd}.log
+      file-name-pattern: logs/app-%d{yyyy-MM-dd}.log
   level:
-    root: INFO
     org.springframework.jdbc.core: ERROR
     io.modelcontextprotocol.client: TRACE
     org.springframework.cache: DEBUG
@@ -104,25 +107,3 @@ instagram:
   app-secret: 98fb04b7ac79def870b53496c3dfcf7a
   redirect-uri: https://api.toelbox.com/instagram/callback
   target-origin: http://localhost:5173
-
----
-spring:
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            client-id: 853330087183-ih8cmpcn8udha7v05g9rskauggm3l4aj.apps.googleusercontent.com
-            client-secret: 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
-            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
-            scope:
-              - https://www.googleapis.com/auth/calendar.events
-            authorization-grant-type: authorization_code
-            client-name: Google
-        provider:
-          google:
-            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
-            token-uri: https://oauth2.googleapis.com/token
-            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
-            user-name-attribute: sub
-
