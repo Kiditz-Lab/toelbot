@@ -4,7 +4,7 @@ import { useToolStore } from '@/stores/apps/toolStore';
 import { MdPreview } from 'md-editor-v3';
 import { JsonViewer } from 'vue3-json-viewer';
 import JsonEditorVue from 'json-editor-vue'
-import 'vanilla-jsoneditor/themes/jse-theme-dark.css'
+
 
 
 import ToolForm from './ToolForm.vue';
@@ -19,6 +19,7 @@ const { selectedTool, loading, agentTools, toolId, selectedToolNames, selectedTo
 const { testConnection, getFields, deleteConnection, fetchMcp, findToolById } = useToolStore();
 onMounted(async () => {
   import('md-editor-v3/lib/style.css');
+  import('vanilla-jsoneditor/themes/jse-theme-dark.css');
   await findToolById(toolId.value);
   await fetchMcp(toolId.value);
 });
