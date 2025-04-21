@@ -1,4 +1,4 @@
-# Business Plan
+# End Game of Our 2 Years Non Stoped Development Process.
 
 In a world where automation is key to staying ahead, **Toelbot** and **Toelbox** offer tailored solutions for businesses of all sizes — from small startups to large enterprises.
 
@@ -6,8 +6,8 @@ In a world where automation is key to staying ahead, **Toelbot** and **Toelbox**
 
 [Toelbot.com](https://toelbot.com) is our easy-to-use, agentic AI solution that simplifies everyday workflows. It’s designed to automate basic tasks like:
 - Auto-reply on WhatsApp, Instagram, and Facebook.
-- Managing RAG (Retrieval-Augmented Generation) processes.
-- Simple tool integrations and trigger-based workflows.
+- Managing AI knowledget RAG (Retrieval-Augmented Generation) processes with Naive Rag or Context Augmented Generation(CAG) input from user will be website, file, youtube video, text or Q&A.
+- Simple tool integrations and trigger-based use case from user input.
 
 **Toelbot** is perfect for businesses looking to streamline communications and improve customer interactions **without the complexity**. Simply integrate and automate — no tech experience needed.
 
