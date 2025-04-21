@@ -86,14 +86,6 @@ class AgentChatService {
 				.call().content();
 	}
 
-	public void parseToolCalls(List<AssistantMessage.ToolCall> toolCalls) {
-		for (AssistantMessage.ToolCall toolCall : toolCalls) {
-			String toolName = toolCall.name();
-			String args = toolCall.arguments();
-			System.out.println("Tool: " + toolName + ", Arguments: " + args);
-		}
-	}
-
 	List<Map<String, String>> aiModels() {
 		return Arrays.stream(AIModel.values()).map(aiModel -> Map.of("name", aiModel.getName(), "version", aiModel.getVersion(), "value", aiModel.name())).collect(Collectors.toList());
 	}
