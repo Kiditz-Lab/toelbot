@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 class AiConfig {
 	public static final String SYSTEM_PROMPT = """
 			         You are a preprocessing assistant for LLM training from scraped webpages.
-			        \s
+			         \s
 			         Your tasks are:
 			         1. Clean the markdown and retain only useful content (remove ads, navbars, etc.).
 			         2. Preserve the **original information hierarchy** (headings, paragraphs, lists).

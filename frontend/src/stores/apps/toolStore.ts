@@ -1,16 +1,18 @@
 import { useApi } from '@/composables/useApi';
-import { router } from '@/router';
 import type { McpConnectCommand, TestTool, TestToolResult, Tool, Tools } from '@/types/tool';
 import { defineStore } from 'pinia';
 import { computed, onBeforeMount, ref, toRefs, watch, watchEffect } from 'vue';
 import { useSnackbarStore } from '../snackbarStore';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useAgentStore } from './agentStore';
 import type { McpServer } from '@/types/mcp_server';
 
 export const useToolStore = defineStore(
   'toolStore',
   () => {
+    const router = useRouter();
+    const formRef = ref<HTMLFormElement | null>(null);
+    const dialog = ref(false);
     const tools = ref<Tools[]>([]);
     const { agent } = toRefs(useAgentStore());
     const { fetchAgent } = useAgentStore();
@@ -181,6 +183,9 @@ export const useToolStore = defineStore(
     };
 
     const saveConnection = async () => {
+      if(!formRef.value) return;
+      const { valid } = await formRef.value.validate();
+      if (!valid) return;
       const usedTools = selectedToolObjects.value.map((tool) => ({ name: tool.name, description: tool.description }));
       const connectionRequest = {
         args: selectedTool.value.args,
@@ -193,24 +198,33 @@ export const useToolStore = defineStore(
 
       const agentId = route.params.id;
       await api.post(`/mcp/agent/${agentId}/tools`, connectionRequest);
-      showSnackbar('Tools saved successfully.', 'success', 3000, 'Success');
-      router.back();
+      showSnackbar('Tools saved.', 'success', 3000, 'Success');
+      setTimeout(() => {
+        router.back();
+      }, 500);
     };
 
     const updateConnection = async () => {
+      if(!formRef.value) return;
+      const { valid } = await formRef.value.validate();
+      if (!valid) return;
       const usedTools = selectedToolObjects.value.map((tool) => ({ name: tool.name, description: tool.description }));
       const agentId = route.params.id;
       await api.put(`/mcp/agent/${agentId}/tools/${selectedTool.value.id}/env`, { usedTools, env: envValues.value } as McpConnectCommand);
-      showSnackbar('Tool updated successfully.', 'success', 3000, 'Success');
-      router.back();
+      showSnackbar('Tool changed.', 'success', 3000, 'Success');
+      setTimeout(() => {
+        router.back();
+      }, 500);
     };
 
     const deleteConnection = async () => {
-      console.log(envValues.value);
       const agentId = route.params.id;
+      dialog.value = false;
       await api.del(`/mcp/agent/${agentId}/tools/${selectedTool.value.id}`);
       showSnackbar('Tool removed successfully.', 'success', 3000, 'Success');
-      router.back();
+      setTimeout(() => {
+        router.back();
+      }, 100);
     };
 
     return {
@@ -232,7 +246,9 @@ export const useToolStore = defineStore(
       findToolById,
       toolId,
       selectedToolNames,
-      selectedToolObjects
+      selectedToolObjects,
+      dialog,
+      formRef
     };
   },
   {

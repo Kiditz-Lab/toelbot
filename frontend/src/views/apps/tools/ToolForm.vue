@@ -8,6 +8,8 @@ const envValues = toRef(toolStore, 'envValues');
 // const argsValues = toRef(toolStore, 'envValues');
 const agentTools = toRef(toolStore, 'agentTools');
 const loading = toRef(toolStore, 'loading');
+const formRef = toRef(toolStore, 'formRef');
+
 
 // const disableTestConnection = computed(() => toolStore.disableTestConnection);
 
@@ -26,25 +28,6 @@ const getComponent = (type: string) => {
   }
 };
 
-// const parseArgs = (args: string[]): ParsedArgField[] => {
-//   return args.flatMap((arg) => {
-//     try {
-//       const parsed = JSON.parse(arg);
-//       if (typeof parsed === 'object' && parsed !== null) {
-//         return Object.entries(parsed).map(([key, value]) => ({
-//           key,
-//           type: value as string
-//         }));
-//       }
-    
-//     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-//     } catch (error) {
-//       // skip static or invalid JSON args
-//     }
-//     return []; // fallback
-//   });
-// };
-
 const formatLabel = (key: string) => {
   return key
     .toLowerCase()
@@ -60,7 +43,7 @@ const handleSaveOrUpdate = async () => {
 };
 </script>
 <template>
-  <v-form v-model="isValid" @submit.prevent="handleSaveOrUpdate">
+  <v-form ref="formRef" v-model="isValid" @submit.prevent="handleSaveOrUpdate">
     <v-row dense>
       <v-col v-for="(type, key) in tool.env" :key="key" cols="12">
         <component

@@ -15,9 +15,9 @@ import { onMounted, ref, toRefs } from 'vue';
 import { mdiDelete } from '@mdi/js';
 import { capitalize } from '@/utils/helpers/text';
 const tab = ref('overview');
-const dialog = ref(false);
 
-const { selectedTool, loading, agentTools, toolId, selectedToolNames, selectedToolObjects } = toRefs(useToolStore());
+
+const { selectedTool, loading, agentTools, toolId, selectedToolNames, selectedToolObjects, dialog } = toRefs(useToolStore());
 const { testConnection, getFields, deleteConnection, fetchMcp, findToolById } = useToolStore();
 onMounted(async () => {
   import('md-editor-v3/lib/style.css');

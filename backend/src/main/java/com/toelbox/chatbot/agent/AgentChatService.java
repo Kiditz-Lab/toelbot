@@ -150,7 +150,7 @@ class AgentChatService {
 
 	boolean isGrooq(AIModel model) {
 		return switch (model) {
-			case GEMMA2_9B_IT, LLAMA_3_8B_8192, LLAMA_3_70B_8192 -> true;
+			case LLAMA_3_70B_8192 -> true;
 			case GPT_4O, GPT_4O_MINI, GPT_3_5_TURBO, GPT_4_5_PREVIEW -> false;
 		};
 	}
