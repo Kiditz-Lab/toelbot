@@ -106,6 +106,7 @@ export const useToolStore = defineStore(
       toolId.value = info.id;
       envValues.value = {};
       selectedToolNames.value = [];
+      
       router.push({ name: 'ToolDetail', params: route.params });
     };
 
@@ -198,10 +199,10 @@ export const useToolStore = defineStore(
 
       const agentId = route.params.id;
       await api.post(`/mcp/agent/${agentId}/tools`, connectionRequest);
-      showSnackbar('Tools saved.', 'success', 3000, 'Success');
+      showSnackbar('Tools saved.', 'success');
       setTimeout(() => {
         router.back();
-      }, 500);
+      }, 300);
     };
 
     const updateConnection = async () => {
@@ -211,20 +212,21 @@ export const useToolStore = defineStore(
       const usedTools = selectedToolObjects.value.map((tool) => ({ name: tool.name, description: tool.description }));
       const agentId = route.params.id;
       await api.put(`/mcp/agent/${agentId}/tools/${selectedTool.value.id}/env`, { usedTools, env: envValues.value } as McpConnectCommand);
-      showSnackbar('Tool changed.', 'success', 3000, 'Success');
+      showSnackbar('Tool changed.', 'success');
       setTimeout(() => {
         router.back();
-      }, 500);
+      }, 300);
     };
 
     const deleteConnection = async () => {
       const agentId = route.params.id;
       dialog.value = false;
       await api.del(`/mcp/agent/${agentId}/tools/${selectedTool.value.id}`);
-      showSnackbar('Tool removed successfully.', 'success', 3000, 'Success');
+      showSnackbar('Tool removed.', 'success');
       setTimeout(() => {
         router.back();
-      }, 100);
+      }, 300);
+      
     };
 
     return {
