@@ -1,6 +1,6 @@
 package com.toelbox.chatbot.rag;
 
-import com.toelbox.chatbot.core.AIConfigProperties;
+import com.toelbox.chatbot.core.ModelConfigProp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.document.MetadataMode;
 import org.springframework.ai.embedding.EmbeddingModel;
@@ -20,7 +20,7 @@ import static org.springframework.ai.vectorstore.pgvector.PgVectorStore.PgIndexT
 @Configuration
 @RequiredArgsConstructor
 class VectorStoreConfig {
-	private final AIConfigProperties configProperties;
+	private final ModelConfigProp configProperties;
 
 	OpenAiApi openAiApi() {
 		return OpenAiApi.builder()

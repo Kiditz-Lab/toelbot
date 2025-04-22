@@ -6,11 +6,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties(prefix = "bot")
+@ConfigurationProperties(prefix = "model")
 @Data
 @ToString
-public class AIConfigProperties {
+public class ModelConfigProp {
 	private String grooqBaseUrl;
+	private String deepseekApiKey;
+	private String deepseekBaseUrl;
 	private String grooqApiKey;
 	private String openAiApiKey;
 }

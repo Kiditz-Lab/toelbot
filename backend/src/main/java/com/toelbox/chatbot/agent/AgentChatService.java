@@ -1,7 +1,7 @@
 package com.toelbox.chatbot.agent;
 
 import com.github.benmanes.caffeine.cache.Cache;
-import com.toelbox.chatbot.core.AIConfigProperties;
+import com.toelbox.chatbot.core.ModelConfigProp;
 import com.toelbox.chatbot.core.Country;
 import io.modelcontextprotocol.client.McpSyncClient;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +34,7 @@ import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvis
 @RequiredArgsConstructor
 class AgentChatService {
 	private final VectorStore vectorStore;
-	private final AIConfigProperties configProperties;
+	private final ModelConfigProp configProperties;
 	private final McpQueryService mcpService;
 	private final InMemoryChatMemory chatMemory;
 	private final Cache<String, ChatClient> chatClientCache;
@@ -65,7 +65,7 @@ class AgentChatService {
 
 	String syncChat(Agent agent, AgentChat chat, Country country) {
 		String chatId = chat.chatId();
-		log.info("CHATID >>>> {}", chatId);
+//		log.info("CHATID >>>> {}", chatId);
 		agentIdToChatIdsMap.compute(agent.getId(), (key, existingSet) -> {
 			Set<String> newSet = existingSet == null ? ConcurrentHashMap.newKeySet() : existingSet;
 			newSet.add(chat.chatId());
@@ -102,7 +102,9 @@ class AgentChatService {
 		var usedTools = servers.stream()
 				.flatMap(server -> server.getUsedTools().stream())
 				.collect(Collectors.toSet());
+
 		var tools = new CustomSyncMcpToolCallbackProvider(clients, usedTools);
+
 		var options = OpenAiChatOptions.builder()
 				.model(model.getVersion())
 				.temperature(config.getTemperature())

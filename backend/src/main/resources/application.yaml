@@ -50,10 +50,12 @@ spring:
     exclude:
       - org.springframework.ai.autoconfigure.openai.OpenAiAutoConfiguration
       - org.springframework.ai.autoconfigure.vectorstore.pgvector.PgVectorStoreAutoConfiguration
-bot:
+model:
   grooq-base-url: https://api.groq.com/openai
   grooq-api-key: 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
   open-ai-api-key: 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
+  deepseek-api-key: sk-df060054a7dd4f838da7520e52870fa4
+  deepseek-base-url: https://api.deepseek.com
 
 springdoc:
   swagger-ui:
@@ -75,10 +77,6 @@ rag:
     processed: file:///Users/rifkyaditya/Playground/data/processed
 
 logging:
-  structured:
-    format:
-      console: logstash
-      file: logstash
   file:
     name: logs/app.log
   logback:
