@@ -1,0 +1,2 @@
+ALTER TABLE model ADD COLUMN credit smallint DEFAULT 1;
+ALTER TABLE model ADD COLUMN description TEXT NOT NULL DEFAULT '';
