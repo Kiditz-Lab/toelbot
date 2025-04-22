@@ -50,7 +50,7 @@ class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(NotFoundException.class)
-	public ResponseEntity<ErrorResponse> handleNotFoundException(
+	ResponseEntity<ErrorResponse> handleNotFoundException(
 			NotFoundException ex,
 			WebRequest request) {
 
@@ -65,7 +65,7 @@ class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(Exception.class)
-	public ResponseEntity<ErrorResponse> handleGenericException(
+	ResponseEntity<ErrorResponse> handleGenericException(
 			Exception ex,
 			WebRequest request) {
 
@@ -84,7 +84,7 @@ class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
-	public ResponseEntity<ErrorResponse> handleMediaTypeNotAcceptable(
+	ResponseEntity<ErrorResponse> handleMediaTypeNotAcceptable(
 			HttpMediaTypeNotAcceptableException ex,
 			HttpServletRequest request) {
 
@@ -103,7 +103,7 @@ class GlobalExceptionHandler {
 
 
 	@ExceptionHandler(DataIntegrityViolationException.class)
-	public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(
+	ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(
 			DataIntegrityViolationException ex,
 			WebRequest request, HttpServletRequest servletRequest) {
 		log.warn("Data Integrity: {} {}", servletRequest.getMethod(), servletRequest.getRequestURI());
@@ -132,7 +132,7 @@ class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(NoResourceFoundException.class)
-	public ResponseEntity<ErrorResponse> handleNoResourceFoundException(NoResourceFoundException ex, HttpServletRequest request) {
+	ResponseEntity<ErrorResponse> handleNoResourceFoundException(NoResourceFoundException ex, HttpServletRequest request) {
 		log.warn("Not Found: {} {}", request.getMethod(), request.getRequestURI());
 
 		ErrorResponse error = ErrorResponse.builder()

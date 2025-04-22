@@ -14,37 +14,37 @@ import java.util.concurrent.TimeUnit;
 
 @Configuration
 @EnableCaching
-public class CacheConfig {
+class CacheConfig {
 
-    @Bean
-    public Cache<String, ChatClient> chatClientCache() {
-        return Caffeine.newBuilder()
-                .expireAfterAccess(Duration.ofHours(1))
-                .maximumSize(100)
-                .build();
-    }
+	@Bean
+	Cache<String, ChatClient> chatClientCache() {
+		return Caffeine.newBuilder()
+				.expireAfterAccess(Duration.ofHours(1))
+				.maximumSize(100)
+				.build();
+	}
 
-    @Bean
-    public Cache<String, String> accessTokenCache() {
-        return Caffeine.newBuilder()
-                .expireAfterAccess(Duration.ofHours(1))
-                .maximumSize(100)
-                .build();
-    }
+	@Bean
+	Cache<String, String> accessTokenCache() {
+		return Caffeine.newBuilder()
+				.expireAfterAccess(Duration.ofHours(1))
+				.maximumSize(100)
+				.build();
+	}
 
 
-    @Bean
-    public Caffeine<Object, Object> caffeineConfig() {
-        return Caffeine.newBuilder()
-                .expireAfterWrite(2, TimeUnit.HOURS)
-                .maximumSize(1000);
-    }
+	@Bean
+	Caffeine<Object, Object> caffeineConfig() {
+		return Caffeine.newBuilder()
+				.expireAfterWrite(2, TimeUnit.HOURS)
+				.maximumSize(1000);
+	}
 
-    @Bean
-    public CacheManager cacheManager(Caffeine<Object, Object> caffeine) {
-        CaffeineCacheManager cacheManager = new CaffeineCacheManager();
-        cacheManager.setCaffeine(caffeine);
-        return cacheManager;
-    }
+	@Bean
+	CacheManager cacheManager(Caffeine<Object, Object> caffeine) {
+		CaffeineCacheManager cacheManager = new CaffeineCacheManager();
+		cacheManager.setCaffeine(caffeine);
+		return cacheManager;
+	}
 
 }
