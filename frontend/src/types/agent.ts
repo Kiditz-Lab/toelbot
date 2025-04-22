@@ -6,6 +6,7 @@ export interface Agent {
     config: {
       aiModel: string;
       prompt: string;
+      vendor: string;
       temperature: number;
     };
     timing: {

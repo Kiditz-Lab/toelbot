@@ -1,5 +1,6 @@
 export interface AIModel{
+    id: string;
     name: string;
-    version: string;
-    value: string;
+    vendor: string;
+    model: string;
 }

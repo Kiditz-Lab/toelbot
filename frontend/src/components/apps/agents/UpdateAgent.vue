@@ -14,7 +14,7 @@
 
     <v-btn :loading="loading" type="submit" color="primary" class="mt-3" variant="tonal">Save</v-btn>
     <v-snackbar v-model="snackbar" timeout="3000" color="info" variant="flat">
-      <v-row align="center">
+      <v-row>
         <v-col cols="auto">
           <v-icon :icon="mdiCheckCircle" color="white"></v-icon>
           <!-- Icon check -->

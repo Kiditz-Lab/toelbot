@@ -17,7 +17,7 @@ const props = defineProps({
     </v-card-item>
     <v-divider></v-divider>
     <v-card-text :class="props.class">
-      <slot />
+      <slot></slot>
     </v-card-text>
   </v-card>
 </template>

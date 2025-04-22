@@ -2,19 +2,18 @@
   <v-form ref="formRef" @submit.prevent="save">
     <UiParentCard title="Model">
       <template #action>
-        <v-btn color="primary" variant="tonal" type="submit" :loading="loading"> Save </v-btn>
+        <v-btn color="primary" variant="tonal" type="submit" :loading="loading" size="small"> Save </v-btn>
       </template>
       <v-label>Model</v-label>
       <v-autocomplete
-        v-model="form.aiModel"
+        v-model="form.model"
         :items="models"
         item-title="name"
-        item-value="value"
+        :item-value="itemValue"
         variant="outlined"
         class="mt-2"
       ></v-autocomplete>
 
-      <!-- Prompt Textarea -->
       <v-label>Prompt</v-label>
       <v-textarea v-model="form.prompt" variant="outlined" rows="12" auto-grow class="mt-2"></v-textarea>
 
@@ -23,7 +22,7 @@
     </UiParentCard>
   </v-form>
   <v-snackbar v-model="snackbar" timeout="3000" color="info" variant="flat">
-    <v-row align="center">
+    <v-row>
       <v-col cols="auto">
         <v-icon :icon="mdiCheckCircle" color="white"></v-icon>
         <!-- Icon check -->
@@ -42,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { mdiCheckCircle } from '@mdi/js'
+import { mdiCheckCircle } from '@mdi/js';
 
 import UiParentCard from '@/components/shared/UiParentCard.vue';
 import { useApi } from '@/composables/useApi';
@@ -54,15 +53,22 @@ const { updateAgentConfig } = useAgentStore();
 const loading = ref(false);
 const formRef = ref<HTMLFormElement | null>(null);
 const form = ref({
-  aiModel: '',
+  model: { model: '', vendor: '' },
   prompt: '',
-  temperature: 0.0
+  temperature: 0.0,
+  vendor: ''
 });
+
+const itemValue = (item: AIModel) => {
+  return item ? { model: item.model, vendor: item.vendor } : null;
+};
+
 watch(
   () => agent.value,
   (newAgent) => {
     if (newAgent) {
-      form.value.aiModel = newAgent.config.aiModel;
+      form.value.model = { model: newAgent.config.aiModel, vendor: newAgent.config.vendor };
+      form.value.vendor = newAgent.config.vendor;
       form.value.prompt = newAgent.config.prompt;
       form.value.temperature = newAgent.config.temperature;
     }
@@ -75,24 +81,29 @@ const models = ref([] as AIModel[]);
 const api = useApi();
 
 const fetchModels = async () => {
-  const response = await api.get<AIModel[]>('/agents/models');
+  const response = await api.get<AIModel[]>('/models');
   models.value = response;
-  if (!form.value.aiModel) {
-    const defaultModel = models.value.find((model) => model.version === 'gpt-4o-mini');
-    form.value.aiModel = defaultModel ? defaultModel.value : models.value[0]?.value || '';
-  }
+  // if (!form.value.model) {
+  //   const defaultModel = models.value.find((model) => model.model === 'gpt-4o-mini');
+  //   form.value.model = defaultModel ? defaultModel.model : models.value[0]?.model || '';
+  // }
 };
-onMounted(fetchModels);
-// Submit function
+
 const save = async () => {
   if (formRef.value) {
     snackbar.value = false;
     loading.value = true;
     const { valid } = await formRef.value.validate();
     if (!valid) return;
-    await updateAgentConfig(form.value);
+    await updateAgentConfig({
+      ...form.value,
+      aiModel: form.value.model.model,
+      vendor: form.value.model.vendor
+    });
     loading.value = false;
     snackbar.value = true;
   }
 };
+
+onMounted(fetchModels);
 </script>
