@@ -1,0 +1,1 @@
+ALTER TABLE agent ADD COLUMN vendor VARCHAR(20);

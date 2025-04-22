@@ -1,10 +1,22 @@
-
 spring:
   application:
     name: chatbot
   ai:
     mistralai:
       api-key: Wk6KxCcPSdjLdlS0akpkgsIQg5jfN7g6
+    openai:
+      api-key: ${model.open-ai-api-key}
+      deepseek-api-key: sk-df060054a7dd4f838da7520e52870fa4
+      deepseek-base-url: https://api.deepseek.com
+    vertex:
+      ai:
+        gemini:
+          projectId: toelbox-db989
+          location: us-central1
+  openai:
+    embedding:
+      options:
+        model: text-embedding-3-small
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -48,8 +60,10 @@ spring:
           jwk-set-uri: https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com
   autoconfigure:
     exclude:
-      - org.springframework.ai.autoconfigure.openai.OpenAiAutoConfiguration
-      - org.springframework.ai.autoconfigure.vectorstore.pgvector.PgVectorStoreAutoConfiguration
+#      - org.springframework.ai.autoconfigure.openai.OpenAiAutoConfiguration
+#      - org.springframework.ai.model.openai.autoconfigure.OpenAiAudioSpeechAutoConfiguration
+      - org.springframework.ai.vectorstore.pgvector.autoconfigure.PgVectorStoreAutoConfiguration
+      - org.springframework.ai.model.openai.autoconfigure.OpenAiEmbeddingAutoConfiguration
 model:
   grooq-base-url: https://api.groq.com/openai
   grooq-api-key: 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
@@ -85,12 +99,13 @@ logging:
       file-name-pattern: logs/app-%d{yyyy-MM-dd}.log
   level:
     org.springframework.jdbc.core: ERROR
-    io.modelcontextprotocol.client: TRACE
-    org.springframework.cache: DEBUG
-    com.github.benmanes.caffeine.cache: TRACE
-    com.toelbox.chatbot: DEBUG
-    feign: DEBUG
-    me.bvn13.openfeign.logger.NormalizedFeignLogger: DEBUG
+    org.springframework.ai.chat.client.advisor: TRACE
+#    io.modelcontextprotocol.client: TRACE
+#    org.springframework.cache: DEBUG
+#    com.github.benmanes.caffeine.cache: TRACE
+#    com.toelbox.chatbot: DEBUG
+#    feign: DEBUG
+#    me.bvn13.openfeign.logger.NormalizedFeignLogger: DEBUG
 
 facebook:
   verify-token: 41khv7YTZhT7A71SVcUqtx071KSP8IFZeUWACjkhmL5tvyWPvHrKbyC4LDQCYSkA

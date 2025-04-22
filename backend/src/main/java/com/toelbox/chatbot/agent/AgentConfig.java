@@ -1,9 +1,10 @@
 package com.toelbox.chatbot.agent;
 
+import com.toelbox.chatbot.core.ModelVendor;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 
 @Data
 @Builder
@@ -11,7 +12,8 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 class AgentConfig {
 
-	private AIModel aiModel;
+	private String aiModel;
+	private ModelVendor vendor;
 	private String prompt;
 	private double temperature;
 }

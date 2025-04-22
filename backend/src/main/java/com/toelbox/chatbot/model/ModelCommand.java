@@ -1,4 +1,6 @@
-package com.toelbox.chatbot.agent;
+package com.toelbox.chatbot.model;
+
+import com.toelbox.chatbot.core.ModelVendor;
 
 record ModelCommand(
     String name,

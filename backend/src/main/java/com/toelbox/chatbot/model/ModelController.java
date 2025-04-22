@@ -1,4 +1,4 @@
-package com.toelbox.chatbot.agent;
+package com.toelbox.chatbot.model;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ class ModelController {
 	private final ModelService modelService;
 
 	@GetMapping
-	List<Model> getAll() {
+	Iterable<Model> getAll() {
 		return modelService.findAll();
 	}
 
@@ -31,16 +31,6 @@ class ModelController {
 	void create(@RequestBody List<ModelCommand> model) {
 		modelService.save(model);
 	}
-
-//	@PutMapping("/{id}")
-//	ResponseEntity<Model> update(@PathVariable UUID id, @RequestBody Model model) {
-//		return modelService.findById(id)
-//				.map(existing -> {
-//					model.setId(id);
-//					return ResponseEntity.ok(modelService.save(model));
-//				})
-//				.orElse(ResponseEntity.notFound().build());
-//	}
 
 	@DeleteMapping("/{id}")
 	ResponseEntity<Void> delete(@PathVariable UUID id) {

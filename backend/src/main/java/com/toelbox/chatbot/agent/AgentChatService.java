@@ -1,20 +1,19 @@
 package com.toelbox.chatbot.agent;
 
 import com.github.benmanes.caffeine.cache.Cache;
-import com.toelbox.chatbot.core.ModelConfigProp;
 import com.toelbox.chatbot.core.Country;
+import com.toelbox.chatbot.core.ModelConfigProp;
 import io.modelcontextprotocol.client.McpSyncClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
-import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
+import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.InMemoryChatMemory;
-import org.springframework.ai.openai.OpenAiChatModel;
-import org.springframework.ai.openai.OpenAiChatOptions;
+import org.springframework.ai.mcp.AsyncMcpToolCallbackProvider;
 import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
@@ -37,6 +36,7 @@ class AgentChatService {
 	private final ModelConfigProp configProperties;
 	private final McpQueryService mcpService;
 	private final InMemoryChatMemory chatMemory;
+	private final ChatModelService modelService;
 	private final Cache<String, ChatClient> chatClientCache;
 	private final ConcurrentHashMap<UUID, Set<String>> agentIdToChatIdsMap = new ConcurrentHashMap<>();
 
@@ -94,7 +94,7 @@ class AgentChatService {
 		log.info("DATA : {}, {}", chatId, country);
 		var config = agent.getConfig();
 		var model = config.getAiModel();
-		var api = openAiApi(isGrooq(model));
+//		var api = openAiApi(isGrooq(model));
 
 //		var clients = mcpService.findAllByAgentClientSync(agent.getId());
 		var servers = mcpService.findByAgentId(agent.getId());
@@ -104,16 +104,6 @@ class AgentChatService {
 				.collect(Collectors.toSet());
 
 		var tools = new CustomSyncMcpToolCallbackProvider(clients, usedTools);
-
-		var options = OpenAiChatOptions.builder()
-				.model(model.getVersion())
-				.temperature(config.getTemperature())
-				.build();
-		var chatModel = OpenAiChatModel
-				.builder()
-				.openAiApi(api)
-				.defaultOptions(options)
-				.build();
 		List<Advisor> advisors = new ArrayList<>();
 		advisors.add(
 				new QuestionAnswerAdvisor(vectorStore, SearchRequest.builder()
@@ -126,7 +116,7 @@ class AgentChatService {
 //		var info = new ChatLoggingAdvisor.AdvisorInfo(country, agent.getConfig().getAiModel().getVersion(), chatId, agent.getId());
 //		advisors.add(new ChatLoggingAdvisor(info, publisher));
 
-		var builder = ChatClient.builder(chatModel)
+		var builder = ChatClient.builder(modelService.getChatModel(agent.getConfig().getVendor(), agent.getConfig().getAiModel(), agent.getConfig().getTemperature()))
 				.defaultTools(tools)
 				.defaultAdvisors(advisors);
 		var prompt = config.getPrompt() + "\n Today is {current_date}.\n Agent Id is {agent_id}.\n chat id is {chat_id}";

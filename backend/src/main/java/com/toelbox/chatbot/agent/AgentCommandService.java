@@ -1,5 +1,6 @@
 package com.toelbox.chatbot.agent;
 
+import com.toelbox.chatbot.core.ModelVendor;
 import com.toelbox.chatbot.core.NotFoundException;
 import com.toelbox.chatbot.core.Timing;
 import lombok.RequiredArgsConstructor;
@@ -43,8 +44,9 @@ class AgentCommandService {
 				.name(command.name())
 				.agentKey(agentKey)
 				.config(AgentConfig.builder()
-						.aiModel(AIModel.GPT_4O_MINI)
+						.aiModel("gpt-4o-mini")
 						.prompt("")
+						.vendor(ModelVendor.OPEN_AI)
 						.temperature(0)
 						.build())
 				.timing(Timing.builder().createdAt(LocalDateTime.now()).build())
@@ -56,7 +58,7 @@ class AgentCommandService {
 	Agent addConfig(UUID id, ConfigCommand command) {
 		chatService.invalidateCacheByAgentId(id);
 		return repository.findById(id).map(agent -> {
-			var config = new AgentConfig(command.aiModel(), command.prompt(), command.temperature());
+			var config = new AgentConfig(command.aiModel(), command.vendor(), command.prompt(), command.temperature());
 			agent.setConfig(config);
 			var model = agent.getTiming();
 			model.setUpdatedAt(LocalDateTime.now());

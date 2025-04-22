@@ -1,21 +1,24 @@
-package com.toelbox.chatbot.agent;
+package com.toelbox.chatbot.model;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 class ModelService {
 	private final ModelRepository modelRepository;
 
-	List<Model> findAll() {
-		return (List<Model>) modelRepository.findAll();
+	Iterable<Model> findAll() {
+		return modelRepository.findAll(Sort.by("name"));
 	}
+
+
 
 	Optional<Model> findById(UUID id) {
 		return modelRepository.findById(id);
