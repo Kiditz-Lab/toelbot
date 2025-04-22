@@ -19,7 +19,7 @@ const { pages } = toRefs(store);
         >{{ pages.length > 0 ? 'Reconnect' : 'Connect' }}</v-btn
       >
     </v-card-actions>
-    <v-card-text class="ma-0">
+    <v-card-text class="ma-0" v-if="pages.length > 0">
       <v-list-item
         divider="bottom"
         v-for="page in pages"

@@ -45,7 +45,7 @@
     <v-divider></v-divider>
 
     <v-card-actions class="d-flex align-center">
-      <v-text-field
+      <v-textarea
         variant="outlined"
         bg-color="grey-lighten-4"
         v-model="userInput"
@@ -54,9 +54,10 @@
         placeholder="Type your message..."
         :disabled="chatStore.isLoading"
         class="flex-grow-1 custom-text-field"
-        style="height: 40px"
-        @keydown.enter.prevent="handleEnter"
-      ></v-text-field>
+        rows="1"
+        auto-grow
+        @keydown="handleEnter"
+      ></v-textarea>
 
       <v-btn
         color="primary"
@@ -81,14 +82,21 @@ const { agent } = toRefs(useAgentStore());
 const chatStore = useChatStore();
 const userInput = ref('');
 const chatContainer = ref<HTMLElement | null>(null);
-import { marked } from "marked";
+import { marked } from 'marked';
 
 import { onUnmounted } from 'vue';
 
 const handleEnter = (event: KeyboardEvent) => {
-  if (!event.shiftKey && userInput.value.trim()) {
-    sendMessage();
+  if (event.shiftKey) {
+    return;
   }
+  if (!event.shiftKey && event.key === 'Enter') {
+    event.preventDefault(); // Prevent form submission
+    if (userInput.value.trim()) {
+      sendMessage(); // Send the message
+    }
+  }
+
 };
 
 const sendMessage = async () => {
@@ -114,7 +122,7 @@ const scrollToBottom = () => {
 // Auto-scroll when new messages are added
 onMounted(() => {
   chatStore.clearChat();
-  if(chatStore.messages.length === 0){
+  if (chatStore.messages.length === 0) {
     chatStore.addMessage({
       sender: 'bot',
       text: 'Hi, How can I help you today?',
