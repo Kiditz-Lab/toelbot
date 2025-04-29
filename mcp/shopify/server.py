@@ -39,7 +39,7 @@ def list_products(limit: int = 10) -> dict:
 def search_products(query: str = "", limit: int = 10) -> dict:
     client = get_shopify_client()
     products = client.search_products(search_title=query, limit=limit)
-    return products
+    return {"products": products}
 
 
 @mcp.tool(description="Get product by ID from Shopify")

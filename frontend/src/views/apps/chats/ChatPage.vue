@@ -1,6 +1,6 @@
 <template>
   <v-row >
-    <v-col cols="12" md="12">
+    <v-col cols="12" md="5">
       <ChatCard/>
     </v-col>
   </v-row>

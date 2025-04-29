@@ -1,10 +1,16 @@
 <template>
   <v-card class="px-4 d-flex flex-column" rounded="lg" style="height: 86vh">
-    <v-card-title class="d-flex align-center">
-      <v-avatar size="40" class="mr-3">
-        <v-icon :icon="mdiRobotOutline"></v-icon>
-      </v-avatar>
-      <span>{{ agent?.name }}</span>
+    <v-card-title class="d-flex align-center justify-space-between">
+      <div class="d-flex align-center">
+        <v-avatar size="40" class="mr-3">
+          <v-icon :icon="mdiRobotOutline"></v-icon>
+        </v-avatar>
+        <span>{{ agent?.name }}</span>
+      </div>
+
+      <v-btn icon variant="tonal" size="small" @click="reset">
+        <v-icon :icon="mdiRefresh"></v-icon>
+      </v-btn>
     </v-card-title>
 
     <v-divider></v-divider>
@@ -47,7 +53,7 @@
     <v-card-actions class="d-flex align-center">
       <v-textarea
         variant="outlined"
-        bg-color="grey-lighten-4"
+        bg-color="grey-lighten-5"
         v-model="userInput"
         density="default"
         hide-details
@@ -55,6 +61,7 @@
         :disabled="chatStore.isLoading"
         class="flex-grow-1 custom-text-field"
         rows="1"
+        max-rows="3"
         auto-grow
         @keydown="handleEnter"
       ></v-textarea>
@@ -65,9 +72,9 @@
         @click="sendMessage"
         :loading="chatStore.isLoading"
         :disabled="!userInput"
-        variant="tonal"
+        variant="flat"
       >
-        <v-icon :icon="mdiSend"></v-icon>
+        <v-icon :icon="mdiSendOutline"></v-icon>
       </v-btn>
     </v-card-actions>
   </v-card>
@@ -75,7 +82,7 @@
 
 <script setup lang="ts">
 import { ref, nextTick, onMounted, toRefs } from 'vue';
-import { mdiAccountCircle, mdiRobot, mdiRobotOutline, mdiSend } from '@mdi/js';
+import { mdiAccountCircle, mdiRefresh, mdiRobot, mdiRobotOutline, mdiSendOutline } from '@mdi/js';
 import { useChatStore } from '@/stores/apps/chatStore';
 import { useAgentStore } from '@/stores/apps/agentStore';
 const { agent } = toRefs(useAgentStore());
@@ -96,7 +103,6 @@ const handleEnter = (event: KeyboardEvent) => {
       sendMessage(); // Send the message
     }
   }
-
 };
 
 const sendMessage = async () => {
@@ -121,6 +127,9 @@ const scrollToBottom = () => {
 
 // Auto-scroll when new messages are added
 onMounted(() => {
+  reset();
+});
+const reset = () => {
   chatStore.clearChat();
   if (chatStore.messages.length === 0) {
     chatStore.addMessage({
@@ -131,7 +140,7 @@ onMounted(() => {
     });
   }
   scrollToBottom();
-});
+};
 
 // Cleanup when component unmounts
 onUnmounted(() => {
