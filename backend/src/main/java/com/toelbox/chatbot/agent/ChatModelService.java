@@ -3,6 +3,9 @@ package com.toelbox.chatbot.agent;
 import com.google.cloud.vertexai.VertexAI;
 import com.toelbox.chatbot.core.ModelVendor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.ai.anthropic.AnthropicChatModel;
+import org.springframework.ai.anthropic.AnthropicChatOptions;
+import org.springframework.ai.anthropic.api.AnthropicApi;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
@@ -29,6 +32,9 @@ public class ChatModelService {
 	@Value("${spring.ai.openai.deepseek-base-url}")
 	private String deepseekBaseUrl;
 
+	@Value("${spring.ai.anthropic.api-key}")
+	private String anthropicApiKey;
+
 	@Value("${spring.ai.vertex.ai.gemini.location}")
 	private String location;
 
@@ -36,8 +42,20 @@ public class ChatModelService {
 		return switch (vendor) {
 			case GOOGLE -> getVertexChatModel(name, temperature);
 			case OPEN_AI -> getOpenAiChatModel(vendor, name, temperature);
+			case ANTHROPIC -> getAnthropicChatModel(name, temperature);
 			default -> null;
 		};
+	}
+
+	private ChatModel getAnthropicChatModel(String name, double temperature) {
+		AnthropicApi anthropicApi = new AnthropicApi(anthropicApiKey);
+		return AnthropicChatModel.builder()
+				.anthropicApi(anthropicApi)
+				.defaultOptions(AnthropicChatOptions.builder()
+						.model(name)
+						.temperature(temperature)
+						.build())
+				.build();
 	}
 
 	private ChatModel getVertexChatModel(String name, double temperature) {

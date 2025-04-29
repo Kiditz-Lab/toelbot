@@ -4,6 +4,8 @@ spring:
   ai:
     mistralai:
       api-key: Wk6KxCcPSdjLdlS0akpkgsIQg5jfN7g6
+    anthropic:
+      api-key: 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
     openai:
       api-key: ${model.open-ai-api-key}
       deepseek-api-key: sk-df060054a7dd4f838da7520e52870fa4

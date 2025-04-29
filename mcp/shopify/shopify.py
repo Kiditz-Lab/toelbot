@@ -21,7 +21,7 @@ class ShopifyClient:
     ) -> Dict[str, Any]:
         url = f"{self.base_url}/{endpoint}"
         response = requests.request(
-            method, url, headers=self.headers, params=params, json=data
+            method, url, headers=self.headers, params=params, json=data, verify=False
         )
         response.raise_for_status()
         if response.content:
