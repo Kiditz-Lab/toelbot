@@ -17,4 +17,5 @@ class Model {
 	private String name;
 	private ModelVendor vendor;
 	private String model;
+	private Boolean active;
 }

@@ -12,7 +12,7 @@ import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
-import org.springframework.ai.chat.memory.InMemoryChatMemory;
+import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
@@ -24,17 +24,17 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor.CHAT_MEMORY_CONVERSATION_ID_KEY;
-import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor.CHAT_MEMORY_RETRIEVE_SIZE_KEY;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 class AgentChatService {
+	public static final String CHAT_MEMORY_CONVERSATION_ID_KEY = "CHAT_MEMORY_CONVERSATION_ID_KEY";
+	public static final String CHAT_MEMORY_RETRIEVE_SIZE_KEY = "CHAT_MEMORY_RETRIEVE_SIZE_KEY";
 	private final VectorStore vectorStore;
 	private final ModelConfigProp configProperties;
 	private final McpQueryService mcpService;
-	private final InMemoryChatMemory chatMemory;
+	private final ChatMemory chatMemory;
 	private final ChatModelService modelService;
 	private final Cache<String, ChatClient> chatClientCache;
 	private final ConcurrentHashMap<UUID, Set<String>> agentIdToChatIdsMap = new ConcurrentHashMap<>();
@@ -105,12 +105,13 @@ class AgentChatService {
 		var tools = new CustomSyncMcpToolCallbackProvider(clients, usedTools);
 		List<Advisor> advisors = new ArrayList<>();
 		advisors.add(
-				new QuestionAnswerAdvisor(vectorStore, SearchRequest.builder()
-						.filterExpression("agentId == '%s'".formatted(agent.getId().toString()))
+				QuestionAnswerAdvisor.builder(vectorStore)
+						.searchRequest(SearchRequest.builder()
+								.filterExpression("agentId == '%s'".formatted(agent.getId().toString()))
+								.build())
 						.build()
-				)
 		);
-		advisors.add(new MessageChatMemoryAdvisor(chatMemory));
+		advisors.add(MessageChatMemoryAdvisor.builder(chatMemory).build());
 		advisors.add(new SimpleLoggerAdvisor());
 //		var info = new ChatLoggingAdvisor.AdvisorInfo(country, agent.getConfig().getAiModel().getVersion(), chatId, agent.getId());
 //		advisors.add(new ChatLoggingAdvisor(info, publisher));

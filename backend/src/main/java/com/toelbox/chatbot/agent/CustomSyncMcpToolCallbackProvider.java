@@ -1,18 +1,16 @@
 package com.toelbox.chatbot.agent;
 
+import io.modelcontextprotocol.client.McpSyncClient;
+import io.modelcontextprotocol.spec.McpSchema;
+import org.springframework.ai.mcp.SyncMcpToolCallback;
+import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.tool.ToolCallbackProvider;
+import org.springframework.ai.tool.support.ToolUtils;
+import org.springframework.util.CollectionUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-import io.modelcontextprotocol.client.McpSyncClient;
-
-import io.modelcontextprotocol.spec.McpSchema;
-import org.springframework.ai.mcp.SyncMcpToolCallback;
-import org.springframework.ai.model.ModelOptionsUtils;
-import org.springframework.ai.tool.ToolCallback;
-import org.springframework.ai.tool.ToolCallbackProvider;
-import org.springframework.ai.tool.util.ToolUtils;
-import org.springframework.util.CollectionUtils;
 
 /**
  * Implementation of {@link ToolCallbackProvider} that discovers and provides MCP tools

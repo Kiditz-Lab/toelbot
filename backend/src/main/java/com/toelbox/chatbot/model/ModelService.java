@@ -1,7 +1,6 @@
 package com.toelbox.chatbot.model;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +14,8 @@ class ModelService {
 	private final ModelRepository modelRepository;
 
 	Iterable<Model> findAll() {
-		return modelRepository.findAll(Sort.by("name"));
+		return modelRepository.findAllByActive(true, Sort.by("name"));
 	}
-
 
 
 	Optional<Model> findById(UUID id) {

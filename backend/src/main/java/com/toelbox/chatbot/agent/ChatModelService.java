@@ -48,7 +48,7 @@ public class ChatModelService {
 	}
 
 	private ChatModel getAnthropicChatModel(String name, double temperature) {
-		AnthropicApi anthropicApi = new AnthropicApi(anthropicApiKey);
+		AnthropicApi anthropicApi = AnthropicApi.builder().apiKey(anthropicApiKey).build();
 		return AnthropicChatModel.builder()
 				.anthropicApi(anthropicApi)
 				.defaultOptions(AnthropicChatOptions.builder()
