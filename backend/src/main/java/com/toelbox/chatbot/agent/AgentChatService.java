@@ -117,11 +117,13 @@ class AgentChatService {
 //		advisors.add(new ChatLoggingAdvisor(info, publisher));
 
 		var builder = ChatClient.builder(modelService.getChatModel(agent.getConfig().getVendor(), agent.getConfig().getAiModel(), agent.getConfig().getTemperature()))
-				.defaultTools(tools)
 				.defaultAdvisors(advisors);
 		var prompt = config.getPrompt() + "\n Today is {current_date}.\n Agent Id is {agent_id}.\n chat id is {chat_id}";
 		if (StringUtils.isNoneBlank(prompt)) {
 			builder = builder.defaultSystem(prompt);
+		}
+		if(tools.getToolCallbacks().length != 0){
+			builder = builder.defaultTools(tools);
 		}
 		return builder.build();
 	}
