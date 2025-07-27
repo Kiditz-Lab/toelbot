@@ -28,7 +28,7 @@ class ConversationChatController {
 
 
 	@PostMapping("/{id}/chats")
-	Flux<String> chat(@PathVariable UUID id, @Valid @RequestBody AgentChat chat, HttpServletRequest request, Principal principal) throws Exception {
+	Flux<String> chat(@PathVariable UUID id, @Valid @RequestBody Conversation chat, HttpServletRequest request, Principal principal) throws Exception {
 		Agent agent = queryService.findById(id);
 		if (principal == null && !agent.isPublic()) {
 			throw new AccessDeniedException("Your agent is not public");

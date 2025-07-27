@@ -64,6 +64,7 @@ dependencies {
 	implementation 'org.springframework.ai:spring-ai-starter-vector-store-pgvector'
 	implementation 'org.springframework.ai:spring-ai-advisors-vector-store'
 	implementation 'org.springframework.ai:spring-ai-starter-mcp-client'
+//	implementation 'org.springframework.ai:spring-ai-starter-model-chat-memory-repository-jdbc'
 //	implementation 'me.bvn13.openfeign.logger:feign-normalized-logger:0.1.4'
 //	implementation 'org.springframework.ai:spring-ai-mistral-ai-spring-boot-starter'
 	implementation 'com.vladsch.flexmark:flexmark-html2md-converter:0.50.42'

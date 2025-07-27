@@ -16,7 +16,6 @@ import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
@@ -38,11 +37,10 @@ class ConversationChatService {
 	private final ChatMemory chatMemory;
 	private final ChatModelService modelService;
 	private final Cache<String, ChatClient> chatClientCache;
-	private final ApplicationEventPublisher publisher;
 	private final ConcurrentHashMap<UUID, Set<String>> agentIdToChatIdsMap = new ConcurrentHashMap<>();
 
 
-	Flux<String> asyncChat(Agent agent, AgentChat chat, Country country) {
+	Flux<String> asyncChat(Agent agent, Conversation chat, Country country) {
 		String chatId = chat.chatId();
 		agentIdToChatIdsMap.compute(agent.getId(), (key, existingSet) -> {
 			Set<String> newSet = existingSet == null ? ConcurrentHashMap.newKeySet() : existingSet;
@@ -64,7 +62,7 @@ class ConversationChatService {
 				.stream().content();
 	}
 
-	String syncChat(Agent agent, AgentChat chat, Country country) {
+	String syncChat(Agent agent, Conversation chat, Country country) {
 		String chatId = chat.chatId();
 		agentIdToChatIdsMap.compute(agent.getId(), (key, existingSet) -> {
 			Set<String> newSet = existingSet == null ? ConcurrentHashMap.newKeySet() : existingSet;
@@ -93,10 +91,6 @@ class ConversationChatService {
 	ChatClient buildChatClient(Agent agent, String chatId, Country country) {
 		log.info("DATA : {}, {}", chatId, country);
 		var config = agent.getConfig();
-		var model = config.getAiModel();
-//		var api = openAiApi(isGrooq(model));
-
-//		var clients = mcpService.findAllByAgentClientSync(agent.getId());
 		var servers = mcpService.findByAgentId(agent.getId());
 		List<McpSyncClient> clients = servers.stream().map(McpServer::toSyncClient).toList();
 		var usedTools = servers.stream()
@@ -105,6 +99,7 @@ class ConversationChatService {
 
 		var tools = new CustomSyncMcpToolCallbackProvider(clients, usedTools);
 		List<Advisor> advisors = new ArrayList<>();
+
 		advisors.add(
 				QuestionAnswerAdvisor.builder(vectorStore)
 						.searchRequest(SearchRequest.builder()
@@ -112,12 +107,9 @@ class ConversationChatService {
 								.build())
 						.build()
 		);
+
 		advisors.add(MessageChatMemoryAdvisor.builder(chatMemory).build());
 		advisors.add(new SimpleLoggerAdvisor());
-//		advisors.add(new ChatAdvisor());
-
-//		var info = new ChatLoggingAdvisor.AdvisorInfo(country, agent.getConfig().getAiModel().getVersion(), chatId, agent.getId());
-//		advisors.add(new ChatLoggingAdvisor(info, publisher));
 
 		var builder = ChatClient.builder(modelService.getChatModel(agent.getConfig().getVendor(), agent.getConfig().getAiModel(), agent.getConfig().getTemperature()))
 				.defaultAdvisors(advisors);

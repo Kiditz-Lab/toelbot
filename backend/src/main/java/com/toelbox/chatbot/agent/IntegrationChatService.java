@@ -22,7 +22,7 @@ class IntegrationChatService {
 	@EventListener
 	void facebookChat(FacebookIncomingMessageEvent event) {
 		var agent = queryService.findById(event.agentId());
-		var agentChat = new AgentChat(event.text(), event.senderId());
+		var agentChat = new Conversation(event.text(), event.senderId());
 		String response = chatService.syncChat(agent, agentChat, new Country());
 		publisher.publishEvent(new FacebookReplyMessageEvent(event.pageId(), event.senderId(), response));
 	}
@@ -31,7 +31,7 @@ class IntegrationChatService {
 	@EventListener
 	void instagramChat(InstagramIncomingMessageEvent event) {
 		var agent = queryService.findById(event.agentId());
-		var agentChat = new AgentChat(event.text(), event.senderId());
+		var agentChat = new Conversation(event.text(), event.senderId());
 		String response = chatService.syncChat(agent, agentChat, new Country());
 		publisher.publishEvent(new InstagramReplyMessageEvent(event.recipientId(), event.senderId(), response));
 	}

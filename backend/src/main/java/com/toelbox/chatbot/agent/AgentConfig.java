@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 class AgentConfig {
-
 	private String aiModel;
 	private ModelVendor vendor;
 	private String prompt;

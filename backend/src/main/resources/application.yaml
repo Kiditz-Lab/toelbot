@@ -2,6 +2,11 @@ spring:
   application:
     name: chatbot
   ai:
+    chat:
+      memory:
+        repository:
+          jdbc:
+            initialize-schema: always
     model:
       chat: none
     mistralai:
