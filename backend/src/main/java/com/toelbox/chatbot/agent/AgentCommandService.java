@@ -19,7 +19,7 @@ import java.util.UUID;
 class AgentCommandService {
 
 	private final AgentRepository repository;
-	private final AgentChatService chatService;
+	private final ConversationChatService chatService;
 
 	Agent createBot(AgentCommand command) {
 		boolean isUnique;

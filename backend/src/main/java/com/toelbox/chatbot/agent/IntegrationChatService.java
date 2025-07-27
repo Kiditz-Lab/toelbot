@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 class IntegrationChatService {
-	private final AgentChatService chatService;
+	private final ConversationChatService chatService;
 	private final AgentQueryService queryService;
 	private final ApplicationEventPublisher publisher;
 

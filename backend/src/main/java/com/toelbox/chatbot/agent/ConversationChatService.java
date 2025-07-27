@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-class AgentChatService {
+class ConversationChatService {
 	public static final String CHAT_MEMORY_CONVERSATION_ID_KEY = "CHAT_MEMORY_CONVERSATION_ID_KEY";
 	public static final String CHAT_MEMORY_RETRIEVE_SIZE_KEY = "CHAT_MEMORY_RETRIEVE_SIZE_KEY";
 	private final VectorStore vectorStore;
@@ -66,7 +66,6 @@ class AgentChatService {
 
 	String syncChat(Agent agent, AgentChat chat, Country country) {
 		String chatId = chat.chatId();
-//		log.info("CHATID >>>> {}", chatId);
 		agentIdToChatIdsMap.compute(agent.getId(), (key, existingSet) -> {
 			Set<String> newSet = existingSet == null ? ConcurrentHashMap.newKeySet() : existingSet;
 			newSet.add(chat.chatId());

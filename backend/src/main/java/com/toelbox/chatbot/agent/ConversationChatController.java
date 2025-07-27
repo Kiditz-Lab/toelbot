@@ -21,8 +21,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Tag(name = "Agents")
 @Slf4j
-class AgentChatController {
-	private final AgentChatService service;
+class ConversationChatController {
+	private final ConversationChatService service;
 	private final AgentQueryService queryService;
 	private final IpApiService ipApiService;
 
@@ -33,12 +33,6 @@ class AgentChatController {
 		if (principal == null && !agent.isPublic()) {
 			throw new AccessDeniedException("Your agent is not public");
 		}
-//		String ipAddress = IpAddress.getClientIp(request);
-//		String countryCode = "";
-//		try {
-//			countryCode = .getCountryCode();
-//		} catch (Exception ignored) {
-//		}
 		return service.asyncChat(agent, chat, new Country());
 	}
 

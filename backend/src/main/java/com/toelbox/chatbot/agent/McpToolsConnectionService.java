@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -16,7 +15,7 @@ import java.util.UUID;
 class McpToolsConnectionService {
 	private final McpServerRepository mcpServerRepository;
 	private final AgentRepository agentRepository;
-	private final AgentChatService chatService;
+	private final ConversationChatService chatService;
 
 	void connectTools(UUID agentId, ToolsConnectorCommand command) {
 		var server = McpServer.builder()
