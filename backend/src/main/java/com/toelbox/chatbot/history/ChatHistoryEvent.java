@@ -1,4 +1,4 @@
-package com.toelbox.chatbot.agent;
+package com.toelbox.chatbot.history;
 
 import com.toelbox.chatbot.core.Country;
 

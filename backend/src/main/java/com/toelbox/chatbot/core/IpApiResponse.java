@@ -1,4 +1,4 @@
-package com.toelbox.chatbot.history;
+package com.toelbox.chatbot.core;
 
 import lombok.Data;
 

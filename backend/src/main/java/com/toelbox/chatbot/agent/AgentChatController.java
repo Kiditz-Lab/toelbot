@@ -1,7 +1,7 @@
 package com.toelbox.chatbot.agent;
 
 import com.toelbox.chatbot.core.Country;
-import com.toelbox.chatbot.history.IpApiService;
+import com.toelbox.chatbot.core.IpApiService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;

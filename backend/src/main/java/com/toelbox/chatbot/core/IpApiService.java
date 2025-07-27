@@ -1,4 +1,4 @@
-package com.toelbox.chatbot.history;
+package com.toelbox.chatbot.core;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;

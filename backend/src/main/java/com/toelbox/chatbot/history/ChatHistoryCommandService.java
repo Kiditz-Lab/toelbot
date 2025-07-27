@@ -1,6 +1,6 @@
 package com.toelbox.chatbot.history;
 
-import com.toelbox.chatbot.agent.ChatHistoryEvent;
+import com.toelbox.chatbot.core.IpApiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
