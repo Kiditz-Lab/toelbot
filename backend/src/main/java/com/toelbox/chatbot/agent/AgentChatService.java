@@ -1,7 +1,6 @@
 package com.toelbox.chatbot.agent;
 
 import com.github.benmanes.caffeine.cache.Cache;
-import com.toelbox.chatbot.Application;
 import com.toelbox.chatbot.core.Country;
 import com.toelbox.chatbot.core.ModelConfigProp;
 import io.modelcontextprotocol.client.McpSyncClient;
@@ -116,7 +115,7 @@ class AgentChatService {
 		);
 		advisors.add(MessageChatMemoryAdvisor.builder(chatMemory).build());
 		advisors.add(new SimpleLoggerAdvisor());
-		advisors.add(new ChatAdvisor());
+//		advisors.add(new ChatAdvisor());
 
 //		var info = new ChatLoggingAdvisor.AdvisorInfo(country, agent.getConfig().getAiModel().getVersion(), chatId, agent.getId());
 //		advisors.add(new ChatLoggingAdvisor(info, publisher));

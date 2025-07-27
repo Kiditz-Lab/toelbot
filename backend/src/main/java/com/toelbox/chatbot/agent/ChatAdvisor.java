@@ -1,33 +1,38 @@
 package com.toelbox.chatbot.agent;
 
-import com.toelbox.chatbot.core.Country;
-import com.toelbox.chatbot.history.ChatHistory;
-import com.toelbox.chatbot.history.ChatHistoryEvent;
+import lombok.AllArgsConstructor;
 import org.springframework.ai.chat.client.ChatClientRequest;
 import org.springframework.ai.chat.client.ChatClientResponse;
-import org.springframework.ai.chat.client.advisor.api.AdvisorChain;
-import org.springframework.ai.chat.client.advisor.api.BaseAdvisor;
+import org.springframework.ai.chat.client.advisor.api.CallAdvisor;
+import org.springframework.ai.chat.client.advisor.api.CallAdvisorChain;
+import org.springframework.ai.chat.client.advisor.api.StreamAdvisor;
+import org.springframework.ai.chat.client.advisor.api.StreamAdvisorChain;
 import org.springframework.context.ApplicationEventPublisher;
+import reactor.core.publisher.Flux;
 
-import java.util.UUID;
-
-class ChatAdvisor implements BaseAdvisor {
-	private ApplicationEventPublisher publisher;
-	@Override
-	public ChatClientRequest before(ChatClientRequest chatClientRequest, AdvisorChain advisorChain) {
-		var history = new ChatHistory();
-		history.setId(UUID.randomUUID());
-		history.setBotMessage(chatClientRequest.prompt().getContents());
-		return null;
-	}
-
-	@Override
-	public ChatClientResponse after(ChatClientResponse chatClientResponse, AdvisorChain advisorChain) {
-		return null;
-	}
+@AllArgsConstructor
+class ChatAdvisor implements CallAdvisor, StreamAdvisor {
+	private final ApplicationEventPublisher publisher;
 
 	@Override
 	public int getOrder() {
 		return 0;
+	}
+
+	@Override
+	public ChatClientResponse adviseCall(ChatClientRequest chatClientRequest, CallAdvisorChain callAdvisorChain) {
+		ChatClientResponse chatClientResponse = callAdvisorChain.nextCall(chatClientRequest);
+
+		return chatClientResponse;
+	}
+
+	@Override
+	public Flux<ChatClientResponse> adviseStream(ChatClientRequest chatClientRequest, StreamAdvisorChain streamAdvisorChain) {
+		return null;
+	}
+
+	@Override
+	public String getName() {
+		return "";
 	}
 }
